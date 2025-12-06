@@ -177,7 +177,7 @@ This project is licensed under the **MIT License**.
 
 **Saurabh Vishwakarma**  
 B.Tech CSE • Lovely Professional University  
-📧 Email: *(add your mail here)*  
+📧 Email: saurabhkv412@gmail.com
 🌐 LinkedIn: *(add link here)*
 
 ---
