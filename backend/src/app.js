@@ -1,21 +1,15 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import patientRoutes from "./routes/patientRoutes.js";
-
-dotenv.config();
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
 
 const app = express();
 
-// Middlewares
 app.use(cors());
 app.use(express.json());
+app.use(`/${process.env.UPLOAD_PATH}`, express.static(path.join(process.cwd(), process.env.UPLOAD_PATH)));
 
-// Routes
-app.use("/api/patients", patientRoutes);
+app.use("/api/patients", require("./routes/authRoutes"));
+app.use("/api/cases", require("./routes/caseRoutes"));
+app.use("/api/doctors", require("./routes/doctorRoutes"));
 
-app.get("/", (req, res) => {
-  res.send("Pediatric Teledermatology API Working");
-});
-
-export default app;
+module.exports = app;
