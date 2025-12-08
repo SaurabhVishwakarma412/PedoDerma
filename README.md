@@ -154,7 +154,6 @@ Parent Sees Diagnosis Report
 
 🚧 **In Progress**  
 More features coming soon including:
-- AI-based skin condition prediction
 - Real-time chat with dermatologists
 - Appointment scheduling system
 
