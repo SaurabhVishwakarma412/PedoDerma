@@ -1,7 +1,9 @@
+// backend/routes/caseRoutes.js
 const router = require("express").Router();
 const upload = require("../config/multer");
 const auth = require("../middleware/authMiddleware");
 const role = require("../middleware/roleMiddleware");
+
 const {
   submitCase,
   getMyCases,
@@ -10,12 +12,15 @@ const {
   reviewCase,
 } = require("../controllers/caseController");
 
+// Parent
 router.post("/", auth, role(["parent"]), upload.single("image"), submitCase);
 router.get("/my", auth, role(["parent"]), getMyCases);
 
-router.get("/:id", auth, getCaseById);
-
-router.get("/", auth, role(["doctor"]), getAllCases);
+// Doctor
+router.get("/all", auth, role(["doctor"]), getAllCases);
 router.patch("/:id/review", auth, role(["doctor"]), reviewCase);
+
+// Common
+router.get("/:id", auth, getCaseById);
 
 module.exports = router;

@@ -7,7 +7,6 @@ import Footer from "./components/Footer";
 
 import Home from "./pages/Home";
 import About from "./pages/About";
-
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -18,6 +17,7 @@ import DoctorLogin from "./pages/DoctorLogin";
 import DoctorDashboard from "./pages/DoctorDashboard";
 import CaseReview from "./pages/CaseReview";
 import BookOnline from "./pages/BookOnline";
+import DoctorsList from "./pages/DoctorsList";
 
 import { AuthProvider, useAuth } from "./context/AuthContext";
 
@@ -43,22 +43,19 @@ const AppContent = () => {
       <Navbar />
       <div className="flex-1">
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<Home />} />
-
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/book-online" element={<BookOnline />} />
+          <Route path="/doctors" element={<DoctorsList />} />
 
-          
-
-          {/* Parent auth */}
+          {/* Authentication Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-
-          {/* Doctor auth */}
           <Route path="/doctor/login" element={<DoctorLogin />} />
 
-          {/* Parent routes */}
+          {/* Parent Routes */}
           <Route
             path="/parent/dashboard"
             element={
@@ -76,7 +73,25 @@ const AppContent = () => {
             }
           />
 
-          {/* Shared details (parent & doctor) */}
+          {/* Doctor Routes */}
+          <Route
+            path="/doctor/dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["doctor"]}>
+                <DoctorDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/cases/:id/review"
+            element={
+              <ProtectedRoute allowedRoles={["doctor"]}>
+                <CaseReview />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Shared Routes (both parent and doctor can access) */}
           <Route
             path="/cases/:id"
             element={
@@ -86,25 +101,7 @@ const AppContent = () => {
             }
           />
 
-          {/* Doctor routes */}
-          <Route
-            path="/doctor/dashboard"
-            element={
-              <ProtectedRoute allowedRoles={["doctor"]}>
-                <DoctorDashboard />
-              </ProtectedRoute>
-            }
-          />
-          {/* <Route
-            path="/cases/:id/review"
-            element{
-              <ProtectedRoute allowedRoles={["doctor"]}>
-                <CaseReview />
-              </ProtectedRoute>
-            }
-          /> */}
-
-          {/* Fallback */}
+          {/* Fallback Route */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>
@@ -115,11 +112,11 @@ const AppContent = () => {
 
 const App = () => {
   return (
-    <AuthProvider>
-      <Router>
+    <Router>
+      <AuthProvider>
         <AppContent />
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 };
 

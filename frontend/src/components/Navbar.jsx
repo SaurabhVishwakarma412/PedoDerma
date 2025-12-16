@@ -1,69 +1,120 @@
 // frontend/src/components/Navbar.jsx
-import React from "react";
+import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const { role, isAuthenticated, logout } = useAuth();
+  const [open, setOpen] = useState(false);
 
-  const activeClass = ({ isActive }) =>
-    isActive
-    ? "text-blue-600 p-2 rounded text-2xl hover:text-blue-800"
-    : "text-gray-700 p-2 rounded hover:text-blue-600 hover:bg-gray-200 transition duration-200";
+  const navClass = ({ isActive }) =>
+    `block px-3 py-2 rounded transition ${
+      isActive
+        ? "text-blue-600 font-bold border-b-2 border-blue-600"
+        : "text-gray-700  hover:text-blue-600"
+    }`;
 
   return (
-    <nav className="flex items-center justify-between px-6 py-6 bg-white shadow">
-      <Link to="/" className="text-3xl font-bold">
-        PedoDerma
-      </Link>
+    <nav className="bg-white shadow-md">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <Link to="/" className="text-2xl font-bold text-blue-800">
+            PedoDerma
+          </Link>
 
-      <div className="flex items-center gap-4 text-lg font-semibold">
-        <NavLink to="/" className={activeClass}>
-          HOME
-        </NavLink>
-        <NavLink to="/book-online" className={activeClass}>
-          BOOK ONLINE
-        </NavLink>
-        <NavLink to="/about" className={activeClass}>
-          ABOUT
-        </NavLink>
-        <NavLink to="/contact" className={activeClass}>
-          CONTACT
-        </NavLink>
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-6">
+            <NavLink to="/" className={navClass}>Home</NavLink>
+            <NavLink to="/book-online" className={navClass}>Book Online</NavLink>
+            <NavLink to="/about" className={navClass}>About</NavLink>
+            <NavLink to="/contact" className={navClass}>Contact</NavLink>
 
-        {!isAuthenticated && (
-          <>
-            <NavLink to="/login" className={activeClass}>
-              Parent Login
-            </NavLink>
-            <NavLink to="/doctor/login" className={activeClass}>
-              Doctor Login
-            </NavLink>
-            <NavLink to="/register" className={activeClass}>
-              Register
-            </NavLink>
-          </>
-        )}
+            {!isAuthenticated ? (
+              <>
+                <NavLink to="/login" className={navClass}>Login</NavLink>
+                <NavLink
+                  to="/register"
+                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                >
+                  Register
+                </NavLink>
+              </>
+            ) : (
+              <>
+                <NavLink
+                  to={role === "parent" ? "/parent/dashboard" : "/doctor/dashboard"}
+                  className={navClass}
+                >
+                  {role === "parent" ? "Dashboard" : "Doctor Dashboard"}
+                </NavLink>
+                <button
+                  onClick={logout}
+                  className="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300"
+                >
+                  Logout
+                </button>
+              </>
+            )}
+          </div>
 
-        {isAuthenticated && role === "parent" && (
-          <NavLink to="/parent/dashboard" className={activeClass}>
-            Parent Dashboard
-          </NavLink>
-        )}
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setOpen(!open)}
+              className="text-gray-700"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
 
-        {isAuthenticated && role === "doctor" && (
-          <NavLink to="/doctor/dashboard" className={activeClass}>
-            Doctor Dashboard
-          </NavLink>
-        )}
+        {/* Mobile Navigation */}
+        {open && (
+          <div className="md:hidden bg-gray-50 border-t">
+            <NavLink to="/" className={navClass} onClick={() => setOpen(false)}>Home</NavLink>
+            <NavLink to="/book-online" className={navClass} onClick={() => setOpen(false)}>Book Online</NavLink>
+            <NavLink to="/about" className={navClass} onClick={() => setOpen(false)}>About</NavLink>
+            <NavLink to="/contact" className={navClass} onClick={() => setOpen(false)}>Contact</NavLink>
 
-        {isAuthenticated && (
-          <button
-            onClick={logout}
-            className="px-3 py-1 border rounded text-sm hover:bg-gray-100"
-          >
-            Logout
-          </button>
+            {!isAuthenticated ? (
+              <>
+                <NavLink to="/login" className={navClass} onClick={() => setOpen(false)}>
+                  Parent Login
+                </NavLink>
+                <NavLink
+                  to="/register"
+                  className="block mx-3 my-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                  onClick={() => setOpen(false)}
+                >
+                  Register
+                </NavLink>
+              </>
+            ) : (
+              <>
+                <NavLink
+                  to={role === "parent" ? "/parent/dashboard" : "/doctor/dashboard"}
+                  className={navClass}
+                  onClick={() => setOpen(false)}
+                >
+                  {role === "parent" ? "Dashboard" : "Doctor Dashboard"}
+                </NavLink>
+                <button
+                  onClick={() => {
+                    logout();
+                    setOpen(false);
+                  }}
+                  className="block w-[90%] mx-auto my-2 bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300"
+                >
+                  Logout
+                </button>
+              </>
+            )}
+          </div>
         )}
       </div>
     </nav>
