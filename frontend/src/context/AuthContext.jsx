@@ -1,63 +1,109 @@
+// frontend/src/context/AuthContext.js
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // contains {_id, name, role, token}
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+  const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Load user from localStorage on app start / refresh
+  // Restore auth on refresh
   useEffect(() => {
-    try {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
+    const initAuth = async () => {
+      try {
+        const storedUser = localStorage.getItem("user");
+        const storedToken = localStorage.getItem("token");
+        const storedRole = localStorage.getItem("role");
+
+        console.log("🔍 Auth restore attempt:", { 
+          hasUser: !!storedUser, 
+          hasToken: !!storedToken, 
+          hasRole: !!storedRole 
+        });
+
+        if (storedToken && storedUser && storedRole) {
+          const parsedUser = JSON.parse(storedUser);
+          setUser(parsedUser);
+          setToken(storedToken);
+          setRole(storedRole);
+          console.log("✅ Auth restored successfully:", { role: storedRole });
+        } else {
+          console.log("⚠️ No auth data found in localStorage");
+        }
+      } catch (err) {
+        console.error("❌ Auth restore failed:", err);
+        localStorage.clear();
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Failed to load auth user:", error);
-      localStorage.removeItem("user");
-    } finally {
-      setLoading(false);
-    }
+    };
+
+    initAuth();
   }, []);
 
-  // Login (parent / doctor)
-  const login = (userData) => {
-    /**
-     * userData must be:
-     * {
-     *   _id,
-     *   name,
-     *   role,   // "parent" | "doctor"
-     *   token
-     * }
-     */
+  // Login function - expects API response format
+  const login = (userData, authToken) => {
+    console.log("🚀 Login called with:", { 
+      userData, 
+      hasToken: !!authToken,
+      userRole: userData?.role 
+    });
+
+    if (!userData || !authToken) {
+      console.error("❌ Login failed: Missing userData or token");
+      return;
+    }
+
+    if (!userData.role) {
+      console.error("❌ Login failed: userData missing role property");
+      return;
+    }
+
+    // Store in state
     setUser(userData);
+    setToken(authToken);
+    setRole(userData.role);
+
+    // Store in localStorage
     localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", authToken);
+    localStorage.setItem("role", userData.role);
+
+    console.log("✅ Login successful. Role set to:", userData.role);
   };
 
-  // Logout
   const logout = () => {
+    console.log("👋 Logging out user:", user?.email);
     setUser(null);
-    localStorage.removeItem("user");
-  };
-
-  const value = {
-    user,
-    role: user?.role || null,
-    token: user?.token || null,
-    isAuthenticated: !!user?.token,
-    loading,
-    login,
-    logout,
+    setToken(null);
+    setRole(null);
+    localStorage.clear();
+    console.log("✅ Logout complete");
   };
 
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        role,
+        loading,
+        isAuthenticated: !!token && !!role,
+        login,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Hook
-export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within AuthProvider");
+  }
+  return context;
+};

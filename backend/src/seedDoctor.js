@@ -12,11 +12,11 @@ async function createDoctor() {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("Connected to DB");
 
-    const hashedPassword = await bcrypt.hash("saurabh", 10);
+    const hashedPassword = await bcrypt.hash("12345678", 10);
 
     await Doctor.create({
       name: "Dr. Saurabh Sharma",
-      email: "saurabh@gmail.com",
+      email: "anuj@gmail.com",
       password: hashedPassword,
       specialization: "Dermatology",
     });

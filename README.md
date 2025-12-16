@@ -166,6 +166,11 @@ For major changes, please open an issue first to discuss what you would like to 
 
 ---
 
+## 📜 License
+
+This project is licensed under the **MIT License**.
+
+---
 
 ## 👤 Author
 
