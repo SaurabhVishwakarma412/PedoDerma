@@ -144,7 +144,7 @@ Parent Sees Diagnosis Report
 ## 🛠️ Installation Steps
 
 ### Clone the repository
-- git clone https://github.com/SaurabhVishwakarma412/PedoDerma
+- git clone https://github.com/SaurabhVishwakarma412/PedoDerma.git
 - cd PedoDerma
 
 
