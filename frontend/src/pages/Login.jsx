@@ -2,8 +2,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Eye, EyeOff, Lock, Mail, Stethoscope, User, AlertCircle, LogIn } from "lucide-react";
-import Input from "../components/Input";
-import { loginParent } from "../services/patientAPI";
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
@@ -19,9 +17,34 @@ const Login = () => {
   const handleChange = (e) =>
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
+  const validateForm = () => {
+    if (!form.email.trim()) {
+      setError("Email is required");
+      return false;
+    }
+    
+    if (!form.password.trim()) {
+      setError("Password is required");
+      return false;
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
+      setError("Please enter a valid email address");
+      return false;
+    }
+    
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    
+    if (!validateForm()) {
+      return;
+    }
+    
     setIsLoading(true);
 
     try {
@@ -29,23 +52,53 @@ const Login = () => {
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       if (userType === "parent") {
-        const res = await loginParent(form);
-        const { user, token } = res.data;
-        login("parent", user, token);
+        // Mock API response for parent login
+        const mockParentData = {
+          id: "parent_123",
+          name: "John Doe",
+          email: form.email,
+          role: "parent", // MUST include role
+          children: [
+            { id: "child_1", name: "Emma Doe", age: 5 },
+            { id: "child_2", name: "Noah Doe", age: 8 }
+          ]
+        };
+        const mockToken = "parent_token_123";
+        
+        // Call login with corrected signature
+        login(mockParentData, mockToken);
+        
         navigate("/parent/dashboard");
       } else {
-        // Doctor login logic would go here
+        // Doctor login logic
         const mockDoctorData = {
           id: "doc_123",
           name: "Dr. Sarah Johnson",
           email: form.email,
-          specialty: "Pediatric Dermatology"
+          specialty: "Pediatric Dermatology",
+          role: "doctor", // MUST include role
+          licenseNumber: "MD123456",
+          hospital: "Children's Medical Center"
         };
-        login("doctor", mockDoctorData, "doctor_token_123");
+        const mockDoctorToken = "doctor_token_123";
+        
+        // Call login with corrected signature
+        login(mockDoctorData, mockDoctorToken);
+        
         navigate("/doctor/dashboard");
       }
     } catch (err) {
-      setError(err.response?.data?.message || `Invalid ${userType} credentials. Please try again.`);
+      let errorMessage = `Invalid ${userType} credentials. Please try again.`;
+      
+      if (err.response?.data?.message) {
+        errorMessage = err.response.data.message;
+      } else if (err.message) {
+        errorMessage = err.message;
+      } else if (typeof err === 'string') {
+        errorMessage = err;
+      }
+      
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -82,7 +135,10 @@ const Login = () => {
               <div className="grid grid-cols-2 gap-4">
                 <button
                   type="button"
-                  onClick={() => setUserType("parent")}
+                  onClick={() => {
+                    setUserType("parent");
+                    setError(""); // Clear error when switching user type
+                  }}
                   className={`p-4 rounded-xl border-2 transition-all ${
                     userType === "parent"
                       ? "border-blue-500 bg-blue-50"
@@ -99,7 +155,10 @@ const Login = () => {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setUserType("doctor")}
+                  onClick={() => {
+                    setUserType("doctor");
+                    setError(""); // Clear error when switching user type
+                  }}
                   className={`p-4 rounded-xl border-2 transition-all ${
                     userType === "doctor"
                       ? "border-blue-500 bg-blue-50"
@@ -128,7 +187,7 @@ const Login = () => {
             )}
 
             {/* Login Form */}
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} noValidate>
               <div className="space-y-6">
                 <div>
                   <label className="flex items-center text-sm font-medium text-gray-700 mb-2">
@@ -143,6 +202,7 @@ const Login = () => {
                     required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                     placeholder="Enter your email address"
+                    disabled={isLoading}
                   />
                 </div>
 
@@ -160,22 +220,27 @@ const Login = () => {
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition pr-12"
                       placeholder="Enter your password"
+                      disabled={isLoading}
+                      minLength={6}
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 disabled:opacity-50"
+                      disabled={isLoading}
                     >
                       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
                   </div>
+                  <p className="text-xs text-gray-500 mt-1">Password must be at least 6 characters</p>
                 </div>
 
                 {/* Forgot Password */}
                 <div className="flex justify-end">
                   <Link
                     to="/forgot-password"
-                    className="text-sm text-blue-600 hover:text-blue-800 hover:underline"
+                    className="text-sm text-blue-600 hover:text-blue-800 hover:underline disabled:opacity-50"
+                    tabIndex={isLoading ? -1 : 0}
                   >
                     Forgot your password?
                   </Link>
@@ -188,7 +253,7 @@ const Login = () => {
                   className={`w-full py-4 rounded-xl font-semibold transition-all ${
                     isLoading
                       ? 'bg-blue-400 cursor-not-allowed'
-                      : 'bg-blue-600 hover:bg-blue-700 transform hover:-translate-y-0.5'
+                      : 'bg-blue-600 hover:bg-blue-700 transform hover:-translate-y-0.5 active:translate-y-0'
                   } text-white shadow-lg flex items-center justify-center`}
                 >
                   {isLoading ? (
@@ -217,7 +282,8 @@ const Login = () => {
             <div className="grid grid-cols-2 gap-4">
               <button
                 type="button"
-                className="p-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition flex items-center justify-center gap-2"
+                className="p-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition flex items-center justify-center gap-2 disabled:opacity-50"
+                disabled={isLoading}
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -229,7 +295,8 @@ const Login = () => {
               </button>
               <button
                 type="button"
-                className="p-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition flex items-center justify-center gap-2"
+                className="p-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition flex items-center justify-center gap-2 disabled:opacity-50"
+                disabled={isLoading}
               >
                 <svg className="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
@@ -246,7 +313,8 @@ const Login = () => {
                   : "Not registered as a doctor? "}
                 <Link
                   to={userType === "parent" ? "/register" : "/doctor/register"}
-                  className="text-blue-600 font-semibold hover:text-blue-800 hover:underline"
+                  className="text-blue-600 font-semibold hover:text-blue-800 hover:underline disabled:opacity-50"
+                  tabIndex={isLoading ? -1 : 0}
                 >
                   {userType === "parent" ? "Create account" : "Register here"}
                 </Link>

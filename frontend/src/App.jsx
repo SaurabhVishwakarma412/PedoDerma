@@ -24,16 +24,27 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { isAuthenticated, role, loading } = useAuth();
 
-  if (loading) return <p className="px-4 py-8 text-sm">Checking auth...</p>;
+  console.log("ProtectedRoute state:", { isAuthenticated, role, loading, allowedRoles });
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
+    console.log("Not authenticated, redirecting to login");
     return <Navigate to="/login" replace />;
   }
 
   if (allowedRoles && !allowedRoles.includes(role)) {
+    console.log(`Role ${role} not allowed. Allowed: ${allowedRoles}`);
     return <Navigate to="/" replace />;
   }
 
+  console.log("Access granted for role:", role);
   return children;
 };
 
