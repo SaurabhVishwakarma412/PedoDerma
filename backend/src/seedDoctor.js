@@ -16,7 +16,7 @@ async function createDoctor() {
 
     await Doctor.create({
       name: "Dr. Saurabh Sharma",
-      email: "anuj@gmail.com",
+      email: "saurabhkv412@gmail.com",
       password: hashedPassword,
       specialization: "Dermatology",
     });
@@ -31,15 +31,4 @@ async function createDoctor() {
 
 createDoctor();
 
-
-// 1...................
-// name: "Dr. Sharma",
-// email: "doctor@test.com",
-// password: password123,
-// specialization: "Dermatology"
-// 2.......................
-// name: "Dr. Saurabh Sharma",
-// email: "saurabh@gmail.com",
-// password: saurabh,
-// specialization: "Dermatology"
 

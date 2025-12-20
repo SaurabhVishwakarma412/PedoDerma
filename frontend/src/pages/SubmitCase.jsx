@@ -494,12 +494,12 @@ const SubmitCase = () => {
                       <p className="text-sm text-gray-500 mb-4">
                         Upload clear, well-lit photos from different angles
                       </p>
-                      <button
+                      <p
                         type="button"
                         className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
                       >
                         Select Photos
-                      </button>
+                      </p>
                       <p className="text-xs text-gray-500 mt-3">
                         Maximum 5 photos, 5MB each (JPG, PNG)
                       </p>

@@ -52,21 +52,41 @@ const ParentDashboard = () => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
+        setError("");
         
-        // Fetch cases
-        const casesRes = await getMyCases();
-        const casesData = casesRes.data || [];
-        setCases(casesData);
+        let casesData = [];
+        let appointmentsData = [];
+        let recordsData = [];
 
-        // Fetch appointments
-        const appointmentsRes = await getUpcomingAppointments();
-        const appointmentsData = appointmentsRes.data || [];
-        setAppointments(appointmentsData);
+        // Fetch cases - REQUIRED
+        try {
+          const casesRes = await getMyCases();
+          casesData = casesRes.data || [];
+          setCases(casesData);
+        } catch (err) {
+          console.error("Error fetching cases:", err);
+          setError("Failed to fetch cases");
+        }
 
-        // Fetch medical records
-        const recordsRes = await getMedicalRecords();
-        const recordsData = recordsRes.data || [];
-        setMedicalRecords(recordsData);
+        // Fetch appointments - OPTIONAL (endpoint may not exist yet)
+        try {
+          const appointmentsRes = await getUpcomingAppointments();
+          appointmentsData = appointmentsRes.data || [];
+          setAppointments(appointmentsData);
+        } catch (err) {
+          console.error("Appointments endpoint not available:", err);
+          setAppointments([]);
+        }
+
+        // Fetch medical records - OPTIONAL (endpoint may not exist yet)
+        try {
+          const recordsRes = await getMedicalRecords();
+          recordsData = recordsRes.data || [];
+          setMedicalRecords(recordsData);
+        } catch (err) {
+          console.error("Medical records endpoint not available:", err);
+          setMedicalRecords([]);
+        }
 
         // Compute stats
         const pending = casesData.filter((c) => c.status === "pending").length;
@@ -85,7 +105,8 @@ const ParentDashboard = () => {
         });
 
       } catch (err) {
-        setError(err.response?.data?.message || "Failed to fetch dashboard data");
+        console.error("Dashboard fetch error:", err);
+        setError("Failed to load dashboard data");
       } finally {
         setLoading(false);
       }
@@ -572,7 +593,7 @@ const ParentDashboard = () => {
                   Contact Support
                 </Link>
                 <Link
-                  to="/faq"
+                  to="/#faq"
                   className="block text-center py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition text-sm font-medium"
                 >
                   View FAQ

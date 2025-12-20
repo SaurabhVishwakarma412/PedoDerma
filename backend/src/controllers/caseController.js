@@ -5,13 +5,14 @@ const Case = require("../models/Case");
 exports.submitCase = async (req, res) => {
   try {
     console.log("BODY:", req.body);
-    console.log("FILE:", req.file);
+    console.log("FILES:", req.files);
 
-    const filePath = req.file ? `/uploads/${req.file.filename}` : "";
+    // Handle multiple files
+    const imagePaths = req.files ? req.files.map(f => `/uploads/cases/${f.filename}`) : [];
 
     const created = await Case.create({
       parentId: req.user._id,
-      imageUrl: filePath,
+      imageUrls: imagePaths,
       ...req.body,
     });
 
