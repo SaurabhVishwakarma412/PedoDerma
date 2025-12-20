@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
         const storedToken = localStorage.getItem("token");
         const storedRole = localStorage.getItem("role");
 
-        console.log("🔍 Auth restore attempt:", { 
+        console.log("Auth restore attempt:", { 
           hasUser: !!storedUser, 
           hasToken: !!storedToken, 
           hasRole: !!storedRole 
@@ -28,12 +28,12 @@ export const AuthProvider = ({ children }) => {
           setUser(parsedUser);
           setToken(storedToken);
           setRole(storedRole);
-          console.log("✅ Auth restored successfully:", { role: storedRole });
+          console.log("Auth restored successfully:", { role: storedRole });
         } else {
-          console.log("⚠️ No auth data found in localStorage");
+          console.log("No auth data found in localStorage");
         }
       } catch (err) {
-        console.error("❌ Auth restore failed:", err);
+        console.error("Auth restore failed:", err);
         localStorage.clear();
       } finally {
         setLoading(false);
@@ -45,19 +45,19 @@ export const AuthProvider = ({ children }) => {
 
   // Login function - expects API response format
   const login = (userData, authToken) => {
-    console.log("🚀 Login called with:", { 
+    console.log("Login called with:", { 
       userData, 
       hasToken: !!authToken,
       userRole: userData?.role 
     });
 
     if (!userData || !authToken) {
-      console.error("❌ Login failed: Missing userData or token");
+      console.error("Login failed: Missing userData or token");
       return;
     }
 
     if (!userData.role) {
-      console.error("❌ Login failed: userData missing role property");
+      console.error("Login failed: userData missing role property");
       return;
     }
 
@@ -71,16 +71,16 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("token", authToken);
     localStorage.setItem("role", userData.role);
 
-    console.log("✅ Login successful. Role set to:", userData.role);
+    console.log("Login successful. Role set to:", userData.role);
   };
 
   const logout = () => {
-    console.log("👋 Logging out user:", user?.email);
+    console.log("Logging out user:", user?.email);
     setUser(null);
     setToken(null);
     setRole(null);
     localStorage.clear();
-    console.log("✅ Logout complete");
+    console.log("Logout complete");
   };
 
   return (

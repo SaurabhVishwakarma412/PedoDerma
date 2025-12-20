@@ -1,6 +1,6 @@
-const router = require("express").Router();
-const { loginDoctor } = require("../controllers/doctorController");
+// const router = require("express").Router();
+// const { loginDoctor } = require("../controllers/doctorController");
 
-router.post("/login", loginDoctor);
+// router.post("/login", loginDoctor);
 
-module.exports = router;
+// module.exports = router;

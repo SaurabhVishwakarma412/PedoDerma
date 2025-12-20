@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import { MessageSquare, Send, Phone, Video, MoreVertical, Search, ArrowLeft } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
@@ -13,6 +13,13 @@ const DoctorMessaging = () => {
   const [loading, setLoading] = useState(false);
   const [socket, setSocket] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [error, setError] = useState("");
+  const messagesEndRef = useRef(null);
+
+  // Scroll to bottom of messages
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   // Initialize Socket.io connection
   useEffect(() => {
@@ -24,42 +31,68 @@ const DoctorMessaging = () => {
     });
 
     newSocket.on("connect", () => {
-      console.log("✅ Doctor connected to socket server with socket ID:", newSocket.id);
+      console.log("Connected to socket server with socket ID:", newSocket.id);
       if (user) {
-        console.log("🔗 Doctor emitting user_join for user:", user._id);
+        console.log("Emitting user_join for user:", user._id);
         newSocket.emit("user_join", user._id);
       }
     });
 
     newSocket.on("receive_message", (data) => {
-      console.log("📨 Doctor received message:", data);
+      console.log("Received message:", data);
       
-      // Add message to current chat if viewing that patient
-      setMessages((prev) => [...prev, {
-        from: data.from,
-        message: data.message,
-        timestamp: new Date(data.timestamp),
-        isOwn: false
-      }]);
+      // FILTER OUT ECHOED MESSAGES - This is the key fix
+      if (data.from === user._id) {
+        console.log("Ignoring echoed message from self");
+        return;
+      }
+      
+      // Check if this is from the currently selected patient
+      const isFromSelectedPatient = selectedPatient && 
+        (data.from === selectedPatient._id || data.from === selectedPatient.userId);
+      
+      if (isFromSelectedPatient) {
+        // Check for duplicate messages before adding
+        setMessages((prev) => {
+          const isDuplicate = prev.some(msg => 
+            msg.message === data.message && 
+            Math.abs(new Date(msg.timestamp).getTime() - new Date(data.timestamp).getTime()) < 1000
+          );
+          
+          if (!isDuplicate) {
+            return [...prev, {
+              from: data.from,
+              message: data.message,
+              timestamp: new Date(data.timestamp),
+              isOwn: false
+            }];
+          }
+          return prev;
+        });
+      }
 
-      // Refetch conversations to show new message in list
-      setLoading(true);
-      API.get(`/messages/doctor/conversations/${user._id}`, {
-        headers: {
-          "x-doctor-id": user._id
-        }
-      })
-        .then(res => setConversations(res.data.data || []))
-        .catch(err => console.error("Error refetching conversations:", err))
-        .finally(() => setLoading(false));
+      // Update conversation list without refetching chat history
+      setConversations(prev => {
+        return prev.map(conv => {
+          if (conv.patientInfo?.[0]?._id === data.from) {
+            return {
+              ...conv,
+              lastMessage: data.message,
+              unreadCount: (conv.unreadCount || 0) + 1,
+              lastMessageTime: data.timestamp
+            };
+          }
+          return conv;
+        });
+      });
     });
 
     newSocket.on("disconnect", () => {
-      console.log("❌ Doctor disconnected from socket server");
+      console.log("Disconnected from socket server");
     });
 
     newSocket.on("connect_error", (error) => {
-      console.error("❌ Doctor Socket.io connection error:", error);
+      console.error("Socket.io connection error:", error);
     });
 
     setSocket(newSocket);
@@ -67,37 +100,44 @@ const DoctorMessaging = () => {
     return () => {
       newSocket.disconnect();
     };
-  }, [user]);
+  }, [user, selectedPatient]);
 
   // Fetch all conversations (patients)
   useEffect(() => {
+    const fetchConversations = async () => {
+      try {
+        setLoading(true);
+        console.log("Fetching conversations...");
+        const response = await API.get(`/messages/doctor/conversations/${user._id}`, {
+          headers: {
+            "x-doctor-id": user._id
+          }
+        });
+        console.log("Conversations response:", response.data);
+        const conversationsList = response.data.data || [];
+        setConversations(conversationsList);
+        setError("");
+        
+        // Auto-select the first conversation if available
+        if (conversationsList.length > 0 && conversationsList[0].patientInfo?.[0]) {
+          console.log("Auto-selecting patient:", conversationsList[0].patientInfo[0]);
+          setSelectedPatient(conversationsList[0].patientInfo[0]);
+        } else if (conversationsList.length > 0) {
+          setError("No patients available in conversations");
+        }
+      } catch (error) {
+        console.error("Error fetching conversations:", error);
+        console.error("Error response:", error.response);
+        setError(error.response?.data?.message || error.message || "Failed to load conversations");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (user) {
       fetchConversations();
-      
-      // Auto-refresh conversations every 5 seconds
-      const interval = setInterval(() => {
-        fetchConversations();
-      }, 5000);
-      
-      return () => clearInterval(interval);
     }
   }, [user]);
-
-  const fetchConversations = async () => {
-    try {
-      setLoading(true);
-      const response = await API.get(`/messages/doctor/conversations/${user._id}`, {
-        headers: {
-          "x-doctor-id": user._id
-        }
-      });
-      setConversations(response.data.data || []);
-    } catch (error) {
-      console.error("Error fetching conversations:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // Fetch chat history when a patient is selected
   useEffect(() => {
@@ -114,14 +154,27 @@ const DoctorMessaging = () => {
           "x-doctor-id": user._id
         }
       });
-      const formattedMessages = response.data.data.map((msg) => {
-        console.log("Message from API:", msg);
-        const isOwn = msg.from === user._id || msg.from?._id === user._id;
-        return {
-          ...msg,
-          isOwn: isOwn
-        };
-      });
+      
+      // Remove potential duplicates
+      const seenMessages = new Set();
+      const formattedMessages = response.data.data
+        .filter((msg) => {
+          // Create a unique key for each message
+          const messageKey = `${msg.message}_${new Date(msg.timestamp).getTime()}`;
+          if (seenMessages.has(messageKey)) {
+            return false;
+          }
+          seenMessages.add(messageKey);
+          return true;
+        })
+        .map((msg) => {
+          const isOwn = msg.from === user._id || msg.from?._id === user._id;
+          return {
+            ...msg,
+            isOwn: isOwn
+          };
+        });
+      
       setMessages(formattedMessages);
     } catch (error) {
       console.error("Error fetching chat history:", error);
@@ -141,24 +194,39 @@ const DoctorMessaging = () => {
       timestamp: new Date()
     };
 
-    // Add message to local state immediately
+    console.log("Sending message:", messageData);
+    console.log("Socket connected:", socket?.connected);
+
+    // Create unique ID to track this message
+    const tempId = Date.now().toString();
+
+    // Add message to local state immediately with temp ID
     setMessages((prev) => [...prev, {
       ...messageData,
-      isOwn: true
+      isOwn: true,
+      tempId: tempId
     }]);
 
     // Send via Socket.io
     if (socket) {
-      socket.emit("send_message", messageData);
+      console.log("Emitting send_message event via Socket.io");
+      socket.emit("send_message", {
+        ...messageData,
+        tempId: tempId
+      });
+    } else {
+      console.error("Socket is not initialized!");
     }
 
     // Save to database (backup)
     try {
+      console.log("Saving message via API...");
       await API.post("/messages/send", {
         from: user._id,
         to: selectedPatient._id,
         message: messageInput
       });
+      console.log("Message saved via API");
     } catch (error) {
       console.error("Error saving message:", error);
     }
@@ -175,7 +243,7 @@ const DoctorMessaging = () => {
   return (
     <main className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-linear-to-r from-blue-600 to-indigo-600 text-white">
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center gap-3">
             <MessageSquare className="w-8 h-8" />
@@ -188,6 +256,11 @@ const DoctorMessaging = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-6">
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-red-700">⚠️ {error}</p>
+          </div>
+        )}
         <div className="grid lg:grid-cols-3 gap-6 h-[600px] bg-white rounded-xl shadow-lg overflow-hidden">
           {/* Conversations List */}
           <div className="border-r border-gray-200 flex flex-col">
@@ -223,7 +296,7 @@ const DoctorMessaging = () => {
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-linear-to-r from-green-500 to-emerald-600 text-white flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 text-white flex items-center justify-center">
                           {conversation.patientInfo?.[0]?.name?.charAt(0) || "P"}
                         </div>
                         <div className="flex-1 min-w-0">
@@ -249,9 +322,9 @@ const DoctorMessaging = () => {
 
           {/* Chat Area */}
           {selectedPatient ? (
-            <div className="lg:col-span-2 flex flex-col">
-              {/* Chat Header */}
-              <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-linear-to-r from-blue-50 to-indigo-50">
+            <div className="lg:col-span-2 flex flex-col h-[calc(100vh-120px)] relative bg-white">
+              {/* ================= CHAT HEADER ================= */}
+              <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50 shrink-0">
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => setSelectedPatient(null)}
@@ -259,33 +332,36 @@ const DoctorMessaging = () => {
                   >
                     <ArrowLeft className="w-5 h-5" />
                   </button>
-                  <div className="w-10 h-10 rounded-full bg-linear-to-r from-green-500 to-emerald-600 text-white flex items-center justify-center">
-                    {selectedPatient.name?.charAt(0)}
+
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 text-white flex items-center justify-center">
+                    {selectedPatient.name?.charAt(0) || "P"}
                   </div>
+
                   <div>
                     <h2 className="font-semibold text-gray-800">
-                      {selectedPatient.name}
+                      {selectedPatient.name || "Unknown Patient"}
                     </h2>
                     <p className="text-sm text-gray-600">
-                      {selectedPatient.email}
+                      {selectedPatient.email || "No email"}
                     </p>
                   </div>
                 </div>
+
                 <div className="flex items-center gap-2">
-                  <button className="p-2 hover:bg-white rounded-lg transition">
+                  <button className="p-2 hover:bg-white rounded-lg">
                     <Phone className="w-5 h-5 text-blue-600" />
                   </button>
-                  <button className="p-2 hover:bg-white rounded-lg transition">
+                  <button className="p-2 hover:bg-white rounded-lg">
                     <Video className="w-5 h-5 text-blue-600" />
                   </button>
-                  <button className="p-2 hover:bg-white rounded-lg transition">
+                  <button className="p-2 hover:bg-white rounded-lg">
                     <MoreVertical className="w-5 h-5 text-gray-600" />
                   </button>
                 </div>
               </div>
 
-              {/* Messages */}
-              <div className="flex-1 overflow-y-auto p-4 bg-white">
+              {/* ================= MESSAGES AREA ================= */}
+              <div className="flex-1 overflow-y-auto p-4 bg-white pb-28">
                 {loading ? (
                   <div className="flex justify-center items-center h-full">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -299,7 +375,7 @@ const DoctorMessaging = () => {
                   <div className="space-y-4">
                     {messages.map((msg, index) => (
                       <div
-                        key={index}
+                        key={msg.tempId || msg._id || index}
                         className={`flex ${msg.isOwn ? "justify-end" : "justify-start"}`}
                       >
                         <div
@@ -323,14 +399,15 @@ const DoctorMessaging = () => {
                         </div>
                       </div>
                     ))}
+                    <div ref={messagesEndRef} />
                   </div>
                 )}
               </div>
 
-              {/* Input Area */}
+              {/* ================= INPUT (FIXED BOTTOM) ================= */}
               <form
                 onSubmit={handleSendMessage}
-                className="p-4 border-t border-gray-200 bg-gray-50 flex gap-2"
+                className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-gray-50 flex gap-2"
               >
                 <input
                   type="text"
@@ -349,7 +426,7 @@ const DoctorMessaging = () => {
               </form>
             </div>
           ) : (
-            <div className="lg:col-span-2 flex flex-col items-center justify-center text-gray-500">
+            <div className="lg:col-span-2 flex flex-col items-center justify-center text-gray-500 h-full">
               <MessageSquare className="w-16 h-16 mb-4 opacity-30" />
               <p className="text-lg">Select a patient to view conversation</p>
             </div>

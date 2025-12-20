@@ -25,15 +25,15 @@ const MessagingPage = () => {
     });
 
     newSocket.on("connect", () => {
-      console.log("✅ Connected to socket server with socket ID:", newSocket.id);
+      console.log("Connected to socket server with socket ID:", newSocket.id);
       if (user) {
-        console.log("🔗 Emitting user_join for user:", user._id);
+        console.log("Emitting user_join for user:", user._id);
         newSocket.emit("user_join", user._id);
       }
     });
 
     newSocket.on("receive_message", (data) => {
-      console.log("💬 Received message:", data);
+      console.log("Received message:", data);
       setMessages((prev) => [...prev, {
         from: data.from,
         message: data.message,
@@ -43,11 +43,11 @@ const MessagingPage = () => {
     });
 
     newSocket.on("disconnect", () => {
-      console.log("❌ Disconnected from socket server");
+      console.log("Disconnected from socket server");
     });
 
     newSocket.on("connect_error", (error) => {
-      console.error("❌ Socket.io connection error:", error);
+      console.error("Socket.io connection error:", error);
     });
 
     setSocket(newSocket);
@@ -61,24 +61,24 @@ const MessagingPage = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        console.log("📍 Fetching doctors...");
-        console.log("🔑 Token:", localStorage.getItem("token"));
+        console.log("Fetching doctors...");
+        console.log("Token:", localStorage.getItem("token"));
         const response = await API.get("/messages/doctors");
-        console.log("✅ Doctors response:", response.data);
+        console.log("Doctors response:", response.data);
         const doctorsList = response.data.data || [];
         setDoctors(doctorsList);
         setError("");
         
         // Auto-select the first (and only) doctor
         if (doctorsList.length > 0) {
-          console.log("🏥 Auto-selecting doctor:", doctorsList[0]);
+          console.log("Auto-selecting doctor:", doctorsList[0]);
           setSelectedDoctor(doctorsList[0]);
         } else {
           setError("No doctors available");
         }
       } catch (error) {
-        console.error("❌ Error fetching doctors:", error);
-        console.error("❌ Error response:", error.response);
+        console.error("Error fetching doctors:", error);
+        console.error("Error response:", error.response);
         setError(error.response?.data?.message || error.message || "Failed to load doctors");
       }
     };
@@ -126,8 +126,8 @@ const MessagingPage = () => {
       timestamp: new Date()
     };
 
-    console.log("📤 Sending message:", messageData);
-    console.log("🔌 Socket connected:", socket?.connected);
+    console.log("Sending message:", messageData);
+    console.log("Socket connected:", socket?.connected);
 
     // Add message to local state immediately
     setMessages((prev) => [...prev, {
@@ -137,23 +137,23 @@ const MessagingPage = () => {
 
     // Send via Socket.io
     if (socket) {
-      console.log("📨 Emitting send_message event via Socket.io");
+      console.log("Emitting send_message event via Socket.io");
       socket.emit("send_message", messageData);
     } else {
-      console.error("❌ Socket is not initialized!");
+      console.error("Socket is not initialized!");
     }
 
     // Save to database (backup)
     try {
-      console.log("💾 Saving message via API...");
+      console.log("Saving message via API...");
       await API.post("/messages/send", {
         from: user._id,
         to: selectedDoctor._id,
         message: messageInput
       });
-      console.log("✅ Message saved via API");
+      console.log("Message saved via API");
     } catch (error) {
-      console.error("❌ Error saving message:", error);
+      console.error("Error saving message:", error);
     }
 
     setMessageInput("");
@@ -240,116 +240,114 @@ const MessagingPage = () => {
 
           {/* Chat Area */}
           {selectedDoctor ? (
-  <div className="lg:col-span-2 flex flex-col h-[calc(100vh-120px)] relative bg-white">
+            <div className="lg:col-span-2 flex flex-col h-[calc(100vh-120px)] relative bg-white">
+              {/* ================= CHAT HEADER ================= */}
+              <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50 shrink-0">
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setSelectedDoctor(null)}
+                    className="lg:hidden p-2 hover:bg-white rounded-lg"
+                  >
+                    <ArrowLeft className="w-5 h-5" />
+                  </button>
 
-    {/* ================= CHAT HEADER ================= */}
-    <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-blue-50 to-indigo-50 shrink-0">
-      <div className="flex items-center gap-3">
-        <button
-          onClick={() => setSelectedDoctor(null)}
-          className="lg:hidden p-2 hover:bg-white rounded-lg"
-        >
-          <ArrowLeft className="w-5 h-5" />
-        </button>
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white flex items-center justify-center">
+                    {selectedDoctor.name.charAt(0)}
+                  </div>
 
-        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white flex items-center justify-center">
-          {selectedDoctor.name.charAt(0)}
-        </div>
+                  <div>
+                    <h2 className="font-semibold text-gray-800">
+                      {selectedDoctor.name}
+                    </h2>
+                    <p className="text-sm text-gray-600">
+                      {selectedDoctor.specialization}
+                    </p>
+                  </div>
+                </div>
 
-        <div>
-          <h2 className="font-semibold text-gray-800">
-            {selectedDoctor.name}
-          </h2>
-          <p className="text-sm text-gray-600">
-            {selectedDoctor.specialization}
-          </p>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-2">
-        <button className="p-2 hover:bg-white rounded-lg">
-          <Phone className="w-5 h-5 text-blue-600" />
-        </button>
-        <button className="p-2 hover:bg-white rounded-lg">
-          <Video className="w-5 h-5 text-blue-600" />
-        </button>
-        <button className="p-2 hover:bg-white rounded-lg">
-          <MoreVertical className="w-5 h-5 text-gray-600" />
-        </button>
-      </div>
-    </div>
-
-    {/* ================= MESSAGES AREA ================= */}
-    <div className="flex-1 overflow-y-auto p-4 bg-white pb-28">
-      {loading ? (
-        <div className="flex justify-center items-center h-full">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        </div>
-      ) : messages.length === 0 ? (
-        <div className="flex flex-col items-center justify-center h-full text-gray-500">
-          <MessageSquare className="w-16 h-16 mb-4 opacity-30" />
-          <p>No messages yet. Start the conversation!</p>
-        </div>
-      ) : (
-        <div className="space-y-4">
-          {messages.map((msg, index) => (
-            <div
-              key={index}
-              className={`flex ${msg.isOwn ? "justify-end" : "justify-start"}`}
-            >
-              <div
-                className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
-                  msg.isOwn
-                    ? "bg-blue-600 text-white rounded-br-none"
-                    : "bg-gray-200 text-gray-800 rounded-bl-none"
-                }`}
-              >
-                <p>{msg.message}</p>
-                <p
-                  className={`text-xs mt-1 ${
-                    msg.isOwn ? "text-blue-100" : "text-gray-500"
-                  }`}
-                >
-                  {new Date(msg.timestamp).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </p>
+                <div className="flex items-center gap-2">
+                  <button className="p-2 hover:bg-white rounded-lg">
+                    <Phone className="w-5 h-5 text-blue-600" />
+                  </button>
+                  <button className="p-2 hover:bg-white rounded-lg">
+                    <Video className="w-5 h-5 text-blue-600" />
+                  </button>
+                  <button className="p-2 hover:bg-white rounded-lg">
+                    <MoreVertical className="w-5 h-5 text-gray-600" />
+                  </button>
+                </div>
               </div>
+
+              {/* ================= MESSAGES AREA ================= */}
+              <div className="flex-1 overflow-y-auto p-4 bg-white pb-28">
+                {loading ? (
+                  <div className="flex justify-center items-center h-full">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                  </div>
+                ) : messages.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center h-full text-gray-500">
+                    <MessageSquare className="w-16 h-16 mb-4 opacity-30" />
+                    <p>No messages yet. Start the conversation!</p>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {messages.map((msg, index) => (
+                      <div
+                        key={index}
+                        className={`flex ${msg.isOwn ? "justify-end" : "justify-start"}`}
+                      >
+                        <div
+                          className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                            msg.isOwn
+                              ? "bg-blue-600 text-white rounded-br-none"
+                              : "bg-gray-200 text-gray-800 rounded-bl-none"
+                          }`}
+                        >
+                          <p>{msg.message}</p>
+                          <p
+                            className={`text-xs mt-1 ${
+                              msg.isOwn ? "text-blue-100" : "text-gray-500"
+                            }`}
+                          >
+                            {new Date(msg.timestamp).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* ================= INPUT (FIXED BOTTOM) ================= */}
+              <form
+                onSubmit={handleSendMessage}
+                className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-gray-50 flex gap-2"
+              >
+                <input
+                  type="text"
+                  value={messageInput}
+                  onChange={(e) => setMessageInput(e.target.value)}
+                  placeholder="Type your message..."
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
+                <button
+                  type="submit"
+                  disabled={!messageInput.trim()}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:bg-gray-400"
+                >
+                  <Send className="w-5 h-5" />
+                </button>
+              </form>
             </div>
-          ))}
-        </div>
-      )}
-    </div>
-
-    {/* ================= INPUT (FIXED BOTTOM) ================= */}
-    <form
-      onSubmit={handleSendMessage}
-      className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-gray-50 flex gap-2"
-    >
-      <input
-        type="text"
-        value={messageInput}
-        onChange={(e) => setMessageInput(e.target.value)}
-        placeholder="Type your message..."
-        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
-      />
-      <button
-        type="submit"
-        disabled={!messageInput.trim()}
-        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:bg-gray-400"
-      >
-        <Send className="w-5 h-5" />
-      </button>
-    </form>
-  </div>
-) : (
-  <div className="lg:col-span-2 flex flex-col items-center justify-center text-gray-500 h-full">
-    <MessageSquare className="w-16 h-16 mb-4 opacity-30" />
-    <p className="text-lg">Select a doctor to start chatting</p>
-  </div>
-)}
-
+          ) : (
+            <div className="lg:col-span-2 flex flex-col items-center justify-center text-gray-500 h-full">
+              <MessageSquare className="w-16 h-16 mb-4 opacity-30" />
+              <p className="text-lg">Select a doctor to start chatting</p>
+            </div>
+          )}
         </div>
       </div>
     </main>
