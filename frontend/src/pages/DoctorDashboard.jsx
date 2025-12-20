@@ -133,7 +133,7 @@ const DoctorDashboard = () => {
   return (
     <main className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-900 to-indigo-800 text-white">
+      <div className="bg-linear-to-r from-blue-900 to-indigo-800 text-white">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
@@ -175,7 +175,7 @@ const DoctorDashboard = () => {
                   <Calendar className="w-4 h-4" />
                   Schedule
                 </button>
-                <button className="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg hover:opacity-90 transition flex items-center gap-2">
+                <button className="px-4 py-2 bg-linear-to-r from-green-500 to-emerald-600 rounded-lg hover:opacity-90 transition flex items-center gap-2">
                   <Video className="w-4 h-4" />
                   Start Consult
                 </button>
@@ -530,7 +530,7 @@ const DoctorDashboard = () => {
             </div>
 
             {/* Quick Actions */}
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-6 text-white shadow-lg">
+            <div className="bg-linear-to-r from-blue-600 to-indigo-600 rounded-xl p-6 text-white shadow-lg">
               <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
               <div className="grid grid-cols-2 gap-3">
                 <Link
@@ -548,7 +548,7 @@ const DoctorDashboard = () => {
                   <span className="text-xs">Add Appt</span>
                 </Link>
                 <Link
-                  to="/messages"
+                  to="/doctor/messages"
                   className="bg-white/20 hover:bg-white/30 p-3 rounded-lg transition flex flex-col items-center justify-center"
                 >
                   <MessageSquare className="w-5 h-5 mb-1" />
@@ -592,7 +592,7 @@ const DoctorDashboard = () => {
         </div>
 
         {/* Performance Tips */}
-        <div className="mt-8 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6">
+        <div className="mt-8 bg-linear-to-r from-indigo-50 to-purple-50 rounded-xl p-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-blue-600" />
             Efficiency Tips

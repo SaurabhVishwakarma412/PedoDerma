@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Eye, EyeOff, Lock, Mail, Stethoscope, User, AlertCircle, LogIn } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import API from "../services/api";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -48,43 +49,25 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      // Simulate API call with timeout
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
       if (userType === "parent") {
-        // Mock API response for parent login
-        const mockParentData = {
-          id: "parent_123",
-          name: "John Doe",
+        // Call real parent login endpoint
+        const response = await API.post("/patients/login", {
           email: form.email,
-          role: "parent", // MUST include role
-          children: [
-            { id: "child_1", name: "Emma Doe", age: 5 },
-            { id: "child_2", name: "Noah Doe", age: 8 }
-          ]
-        };
-        const mockToken = "parent_token_123";
-        
-        // Call login with corrected signature
-        login(mockParentData, mockToken);
-        
+          password: form.password
+        });
+
+        const { token, user } = response.data;
+        login(user, token);
         navigate("/parent/dashboard");
       } else {
-        // Doctor login logic
-        const mockDoctorData = {
-          id: "doc_123",
-          name: "Dr. Sarah Johnson",
+        // Call real doctor login endpoint
+        const response = await API.post("/doctors/login", {
           email: form.email,
-          specialty: "Pediatric Dermatology",
-          role: "doctor", // MUST include role
-          licenseNumber: "MD123456",
-          hospital: "Children's Medical Center"
-        };
-        const mockDoctorToken = "doctor_token_123";
-        
-        // Call login with corrected signature
-        login(mockDoctorData, mockDoctorToken);
-        
+          password: form.password
+        });
+
+        const { token, user } = response.data;
+        login(user, token);
         navigate("/doctor/dashboard");
       }
     } catch (err) {
@@ -105,7 +88,7 @@ const Login = () => {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 py-12 px-4">
+    <main className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-50 py-12 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -273,9 +256,9 @@ const Login = () => {
 
             {/* Divider */}
             <div className="my-8 flex items-center">
-              <div className="flex-grow border-t border-gray-300"></div>
+              <div className="flex border-t border-gray-300"></div>
               <span className="mx-4 text-gray-500 text-sm">or continue with</span>
-              <div className="flex-grow border-t border-gray-300"></div>
+              <div className="flex border-t border-gray-300"></div>
             </div>
 
             {/* Alternative Sign In */}
@@ -325,7 +308,7 @@ const Login = () => {
           {/* Right Side - Info Section */}
           <div className="space-y-6">
             {/* Parent Login Info */}
-            <div className="bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl p-8 text-white shadow-xl">
+            <div className="bg-linear-to-br from-blue-600 to-indigo-600 rounded-2xl p-8 text-white shadow-xl">
               <div className="flex items-center gap-3 mb-6">
                 <User className="w-8 h-8" />
                 <h3 className="text-xl font-bold">For Parents & Guardians</h3>
@@ -359,7 +342,7 @@ const Login = () => {
             </div>
 
             {/* Doctor Login Info */}
-            <div className="bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl p-8 text-white shadow-xl">
+            <div className="bg-linear-to-br from-green-600 to-emerald-600 rounded-2xl p-8 text-white shadow-xl">
               <div className="flex items-center gap-3 mb-6">
                 <Stethoscope className="w-8 h-8" />
                 <h3 className="text-xl font-bold">For Doctors & Specialists</h3>

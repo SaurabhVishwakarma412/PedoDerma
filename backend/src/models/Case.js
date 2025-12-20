@@ -1,21 +1,3 @@
-// const mongoose = require("mongoose");
-
-// const caseSchema = new mongoose.Schema(
-//   {
-//     parentId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-//     title: String,
-//     description: String,
-//     duration: String,
-//     childAge: String,
-//     status: { type: String, default: "pending" },
-//     imageUrl: String,
-//     doctorNotes: String,
-//   },
-//   { timestamps: true }
-// );
-
-// module.exports = mongoose.model("Case", caseSchema);
-
 const mongoose = require("mongoose");
 
 const caseSchema = new mongoose.Schema(
@@ -40,9 +22,7 @@ const caseSchema = new mongoose.Schema(
       default: "pending",
     },
 
-    imageUrl: { type: String }, 
-    // OR if you want multiple:
-    // images: [String],
+    imageUrls: { type: [String], default: [] },
 
     doctorNotes: { type: String },
 

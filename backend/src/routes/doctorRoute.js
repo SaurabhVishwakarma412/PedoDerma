@@ -16,7 +16,7 @@ router.post("/login", loginDoctor);
 router.get("/appointments", getDoctorAppointments);
 router.get("/stats", getDoctorStats);
 
-// ❗ ALWAYS KEEP THIS LAST
+// keeping at last
 router.get("/:id", getDoctorById);
 
 module.exports = router;

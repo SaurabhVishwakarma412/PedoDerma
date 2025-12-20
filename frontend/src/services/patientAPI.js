@@ -37,7 +37,7 @@ export const getCaseById = (caseId) => {
 
 /* ================= APPOINTMENTS ================= */
 /*
-⚠️ Backend routes not implemented yet.
+Backend routes not implemented yet.
 Functions kept to avoid frontend crashes.
 */
 
@@ -55,7 +55,7 @@ export const getUpcomingAppointments = () => {
 
 /* ================= MEDICAL RECORDS ================= */
 /*
-⚠️ Backend route not implemented yet.
+Backend route not implemented yet.
 */
 
 export const getMedicalRecords = () => {
@@ -70,7 +70,7 @@ export const getDoctors = () => {
 
 /* ================= PRESCRIPTIONS ================= */
 /*
-⚠️ Backend route not implemented yet.
+Backend route not implemented yet.
 */
 
 export const getPrescriptions = () => {
@@ -91,7 +91,7 @@ export const updateParentProfile = (data) => {
 
 /* ================= DASHBOARD ================= */
 /*
-⚠️ Backend route not implemented yet.
+Backend route not implemented yet.
 */
 
 export const getDashboardStats = () => {

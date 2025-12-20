@@ -1,11 +1,33 @@
 // backend/controllers/doctorController.js
+const bcrypt = require("bcryptjs");
+const Doctor = require("../models/Doctor");
+const generateToken = require("../utils/generateToken");
 
 // Doctor login function
 exports.loginDoctor = async (req, res) => {
   try {
     const { email, password } = req.body;
-    // Your login logic here
-    res.json({ success: true, message: "Login successful" });
+    
+    // Find doctor by email
+    const doctor = await Doctor.findOne({ email });
+    
+    if (!doctor || !(await bcrypt.compare(password, doctor.password))) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+    
+    // Generate token and return
+    const token = generateToken(doctor._id, "doctor");
+    
+    res.json({
+      token,
+      user: {
+        _id: doctor._id,
+        name: doctor.name,
+        email: doctor.email,
+        role: "doctor",
+        specialization: doctor.specialization
+      }
+    });
   } catch (e) {
     console.error("LoginDoctor ERROR:", e);
     res.status(500).json({ message: "Server Error" });
@@ -32,7 +54,7 @@ exports.getDoctors = async (req, res) => {
         languages: ["English", "Spanish"],
         education: "Johns Hopkins University",
         certification: "American Board of Dermatology",
-        profileImage: "/images/doctors/dr-sarah.jpg"
+        profileImage: "../frontend/src/assets/doctor2.jpg"
       },
       {
         id: 2,

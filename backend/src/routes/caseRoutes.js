@@ -13,7 +13,7 @@ const {
 } = require("../controllers/caseController");
 
 // Parent
-router.post("/", auth, role(["parent"]), upload.single("image"), submitCase);
+router.post("/", auth, role(["parent"]), upload.array("images", 5), submitCase);
 router.get("/my", auth, role(["parent"]), getMyCases);
 
 // Doctor

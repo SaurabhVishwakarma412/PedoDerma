@@ -1,83 +1,246 @@
 // frontend/src/pages/Home.jsx
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { CheckCircle, Clock, Shield, Video, MessageSquare, Star } from "lucide-react";
+import { CheckCircle, Clock, Shield, Video, MessageSquare, Star, ArrowRight } from "lucide-react";
 import doctor4 from "../assets/doctor4.jpg";
-import doctor6 from "../assets/doctor6.jpg";
 import camera2 from "../assets/camera2.avif";
+
+// Animated Counter Component
+const AnimatedCounter = ({ number, label, icon, desc }) => {
+  const [count, setCount] = useState(0);
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isVisible) {
+          setIsVisible(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, [isVisible]);
+
+  useEffect(() => {
+    if (!isVisible) return;
+
+    let start = 0;
+    const end = parseInt(number);
+    const duration = 2000;
+    const increment = end / (duration / 16);
+
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= end) {
+        setCount(end);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
+
+    return () => clearInterval(timer);
+  }, [isVisible, number]);
+
+  return (
+    <div
+      ref={ref}
+      className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl shadow-lg border border-blue-100 text-center transform hover:-translate-y-2 transition-all duration-300 hover:shadow-xl"
+    >
+      <div className="text-5xl mb-4">{icon}</div>
+      <div className="text-5xl font-bold text-blue-900 mb-2">
+        {count}
+        {number.includes("+") ? "+" : number.includes("%") ? "%" : ""}
+      </div>
+      <div className="text-xl font-semibold text-gray-800 mb-2">{label}</div>
+      <div className="text-gray-600">{desc}</div>
+    </div>
+  );
+};
+
+// Testimonial Carousel Component
+const TestimonialCarousel = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const carouselRef = useRef(null);
+
+  const testimonials = [
+    {
+      name: "Sarah Johnson",
+      role: "Parent of Emma (6)",
+      content: "Amazing experience! Dr. Smith was so patient with Emma and gave us clear instructions. The whole process was smooth.",
+      rating: 5,
+      avatar: "👩‍👧"
+    },
+    {
+      name: "Michael Chen",
+      role: "Parent of Liam (8)",
+      content: "Finally found a pediatric dermatologist who understands kids. The video consultation was convenient and thorough.",
+      rating: 5,
+      avatar: "👨‍👦"
+    },
+    {
+      name: "Priya Patel",
+      role: "Parent of Aisha (5)",
+      content: "No more long waits at clinics. Quick diagnosis and the prescription worked perfectly. Highly recommended!",
+      rating: 5,
+      avatar: "👩‍👧‍👧"
+    },
+    {
+      name: "James Wilson",
+      role: "Parent of Noah (7)",
+      content: "The doctors are wonderful with children. No stress for Noah, and we got the answers we needed immediately.",
+      rating: 5,
+      avatar: "👨‍👩‍👦"
+    },
+    {
+      name: "Anita Sharma",
+      role: "Parent of Zara (4)",
+      content: "Best healthcare experience! The team was caring, professional, and solved our concern in just one session.",
+      rating: 5,
+      avatar: "👩‍👧"
+    }
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <section className="py-20 bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            What Parents Say About Us
+          </h2>
+          <p className="text-xl text-blue-200">Real stories from real families</p>
+        </div>
+
+        <div className="relative overflow-hidden">
+          <div className="flex transition-transform duration-1000 ease-out">
+            {testimonials.map((testimonial, index) => (
+              <div
+                key={index}
+                className="w-full md:w-1/3 flex-shrink-0 px-4"
+                style={{
+                  transform: `translateX(-${currentIndex * 100}%)`
+                }}
+              >
+                <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20 hover:border-white/40 transition-all duration-300 h-full">
+                  <div className="flex gap-1 mb-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} size={20} className="fill-yellow-400 text-yellow-400" />
+                    ))}
+                  </div>
+                  <p className="text-white text-lg mb-6 italic leading-relaxed">
+                    "{testimonial.content}"
+                  </p>
+                  <div className="flex items-center gap-4">
+                    <div className="text-4xl">{testimonial.avatar}</div>
+                    <div>
+                      <p className="font-semibold text-white">{testimonial.name}</p>
+                      <p className="text-blue-200 text-sm">{testimonial.role}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Indicators */}
+          <div className="flex justify-center gap-2 mt-8">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentIndex(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  index === currentIndex
+                    ? "bg-blue-400 w-8"
+                    : "bg-white/30 hover:bg-white/50"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const Home = () => {
   return (
-    <main className="w-full">
+    <main className="w-full bg-white">
       {/* Hero Section - Enhanced with overlay and better alignment */}
       <section
         style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${doctor4})` }}
-        className="relative text-center py-20 md:py-32 bg-cover bg-center bg-no-repeat"
+        className="relative text-center py-20 md:py-40 bg-cover bg-center bg-no-repeat overflow-hidden"
       >
-        <div className="absolute inset-0 bg-black/30"></div>
-        <div className="relative z-10 max-w-4xl mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-white leading-tight">
+        <div className="absolute inset-0 bg-black/40"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20"></div>
+        <div className="relative z-10 max-w-4xl mx-auto px-4 animate-fade-in">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-white leading-tight drop-shadow-lg">
             Skip the Travel! Get Pediatric Dermatology Care Online
           </h1>
-          <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-2xl mx-auto">
+          <p className="text-lg md:text-2xl text-white/95 mb-8 max-w-2xl mx-auto drop-shadow-md">
             Expert care for your child's skin from board-certified pediatric dermatologists
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
             <Link
-              to="/book-online"
-              className="px-8 py-4 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg"
+              to="/cases/submit"
+              className="px-8 py-4 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl inline-flex items-center justify-center gap-2 group"
             >
               Book Consultation Now
+              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
-              to="/how-it-works"
-              className="px-8 py-4 rounded-xl bg-white text-blue-600 font-semibold hover:bg-gray-50 transition-all shadow-lg"
+              to="/about"
+              className="px-8 py-4 rounded-xl bg-white text-blue-600 font-semibold hover:bg-gray-100 transition-all shadow-lg hover:shadow-xl"
             >
-              How It Works →
+              About Tele-Dermatology →
             </Link>
           </div>
           <div className="mt-12 flex flex-wrap justify-center gap-8">
-            <div className="flex items-center gap-3 text-white">
+            <div className="flex items-center gap-3 text-white bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm">
               <CheckCircle size={20} className="text-green-400" />
-              <span>Secure & Private</span>
+              <span className="font-medium">Secure & Private</span>
             </div>
-            <div className="flex items-center gap-3 text-white">
+            <div className="flex items-center gap-3 text-white bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm">
               <Clock size={20} className="text-blue-300" />
-              <span>24/7 Access</span>
+              <span className="font-medium">24/7 Access</span>
             </div>
-            <div className="flex items-center gap-3 text-white">
+            <div className="flex items-center gap-3 text-white bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm">
               <Video size={20} className="text-purple-300" />
-              <span>Video Consultations</span>
+              <span className="font-medium">Video Consultations</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Stats Section - Enhanced with cards */}
-      <section className="py-12 bg-white">
+      {/* Stats Section - With Animated Counters */}
+      <section className="py-16 bg-white">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center text-blue-900 mb-12">
             Trusted by Thousands of Parents
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { number: "50+", label: "Pediatric Dermatologists", icon: "👨‍⚕️", desc: "Board-certified specialists" },
-              { number: "10,000+", label: "Happy Parents", icon: "😊", desc: "Satisfied families served" },
-              { number: "98%", label: "Satisfaction Rate", icon: "⭐", desc: "Parent satisfaction score" },
-            ].map((stat, index) => (
-              <div key={index} className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl shadow-lg border border-blue-100 text-center transform hover:-translate-y-2 transition-transform duration-300">
-                <div className="text-5xl mb-4">{stat.icon}</div>
-                <div className="text-4xl font-bold text-blue-900 mb-2">{stat.number}</div>
-                <div className="text-xl font-semibold text-gray-800 mb-2">{stat.label}</div>
-                <div className="text-gray-600">{stat.desc}</div>
-              </div>
-            ))}
+            <AnimatedCounter number="20" label="Pediatric Dermatologists" icon="👨‍⚕️" desc="Board-certified specialists" />
+            <AnimatedCounter number="12000" label="Happy Parents" icon="😊" desc="Satisfied families served" />
+            <AnimatedCounter number="98" label="Satisfaction Rate" icon="⭐" desc="Parent satisfaction score" />
           </div>
         </div>
       </section>
 
       {/* Why Choose Us - Improved layout */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-4">
@@ -110,8 +273,11 @@ const Home = () => {
                 icon: "👶"
               },
             ].map((feature, index) => (
-              <div key={index} className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100">
-                <div className="flex items-center justify-center w-14 h-14 bg-blue-50 rounded-full mb-4 mx-auto">
+              <div
+                key={index}
+                className="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-blue-300 hover:-translate-y-1 group"
+              >
+                <div className="flex items-center justify-center w-14 h-14 bg-blue-50 rounded-full mb-4 mx-auto group-hover:bg-blue-100 transition-colors">
                   {feature.icon}
                 </div>
                 <h3 className="text-lg font-semibold text-gray-800 mb-2 text-center">{feature.title}</h3>
@@ -244,28 +410,11 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Testimonial/Stats Section */}
-      <section className="py-16 bg-gradient-to-r from-blue-900 to-indigo-900 text-white">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8 text-center">
-            {[
-              { number: "10,000+", label: "Happy Parents", sublabel: "Families served" },
-              { number: "50+", label: "Verified Doctors", sublabel: "Pediatric specialists" },
-              { number: "98%", label: "Satisfaction", sublabel: "Parent rating" },
-              { number: "4.8/5", label: "Platform Rating", sublabel: "User reviews" },
-            ].map((stat, index) => (
-              <div key={index} className="p-6">
-                <div className="text-5xl font-bold mb-2">{stat.number}</div>
-                <div className="text-xl font-semibold mb-1">{stat.label}</div>
-                <div className="text-blue-200">{stat.sublabel}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Testimonial Carousel */}
+      <TestimonialCarousel />
 
       {/* FAQs - Enhanced with accordion-like design */}
-      <section className="py-16 bg-gray-50">
+      <section id="faq" className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-4">
@@ -316,7 +465,7 @@ const Home = () => {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
-              to="/book-online"
+              to="/cases/submit"
               className="px-10 py-4 rounded-xl bg-white text-blue-600 font-bold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-2xl"
             >
               Book Consultation

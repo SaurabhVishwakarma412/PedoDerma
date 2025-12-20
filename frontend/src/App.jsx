@@ -15,9 +15,10 @@ import SubmitCase from "./pages/SubmitCase";
 import CaseDetails from "./pages/CaseDetails";
 import DoctorLogin from "./pages/DoctorLogin";
 import DoctorDashboard from "./pages/DoctorDashboard";
-import CaseReview from "./pages/CaseReview";
-import BookOnline from "./pages/BookOnline";
+
 import DoctorsList from "./pages/DoctorsList";
+import Messaging from "./pages/Messaging";
+import DoctorMessaging from "./pages/DoctorMessaging";
 
 import { AuthProvider, useAuth } from "./context/AuthContext";
 
@@ -58,7 +59,6 @@ const AppContent = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/book-online" element={<BookOnline />} />
           <Route path="/doctors" element={<DoctorsList />} />
 
           {/* Authentication Routes */}
@@ -83,6 +83,14 @@ const AppContent = () => {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/messages"
+            element={
+              <ProtectedRoute allowedRoles={["parent"]}>
+                <Messaging />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Doctor Routes */}
           <Route
@@ -94,13 +102,14 @@ const AppContent = () => {
             }
           />
           <Route
-            path="/cases/:id/review"
+            path="/doctor/messages"
             element={
               <ProtectedRoute allowedRoles={["doctor"]}>
-                <CaseReview />
+                <DoctorMessaging />
               </ProtectedRoute>
             }
           />
+
 
           {/* Shared Routes (both parent and doctor can access) */}
           <Route
