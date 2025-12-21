@@ -178,7 +178,9 @@ This project is licensed under the **MIT License**.
 B.Tech CSE • Lovely Professional University  
 📧 Email: saurabhkv412@gmail.com
 🌐 LinkedIn: *(add link here)*
-    **Aviral  Chaurasia**  
+
+## 👤 Author
+**Aviral  Chaurasia**  
 B.Tech CSE • Lovely Professional University  
 📧 Email: aviralchaurasia175@gmail.com
 🌐 LinkedIn: https://www.linkedin.com/in/aviralchaurasia05/
