@@ -91,6 +91,7 @@ backend/
 │   ├── models/
 │   │   ├── User.js
 │   │   ├── Doctor.js
+|   |   ├── Message.js
 │   │   └── Case.js
 │   │
 │   ├── controllers/
@@ -105,13 +106,20 @@ backend/
 │   ├── routes/
 │   │   ├── authRoutes.js
 │   │   ├── caseRoutes.js
+|   |   ├── messageRoutes.js
 │   │   └── doctorRoutes.js
 │   │
 │   ├── utils/
 │   │   └── generateToken.js
+|   ├── uploads/
+│   │   └── cases/
 │   │
 │   ├── app.js
+|   ├── seedDoctor.js
 │   └── server.js
+|
+├── uploads/
+│   └── cases/
 │
 └── .env
 ```
