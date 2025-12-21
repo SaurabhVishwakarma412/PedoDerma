@@ -47,6 +47,7 @@ A full-stack **MERN** (MongoDB, Express.js, React.js, Node.js) based web applica
 │   ├── FileUpload.jsx
 │   ├── Input.jsx
 │   ├── CaseCard.jsx
+|   ├── Logo.jsx
 │
 │── pages/
 │   ├── Home.jsx
@@ -58,8 +59,11 @@ A full-stack **MERN** (MongoDB, Express.js, React.js, Node.js) based web applica
 │   ├── SubmitCase.jsx
 │   ├── CaseDetails.jsx
 │   ├── DoctorLogin.jsx
+|   ├── DoctorList.jsx
 │   ├── DoctorDashboard.jsx
 │   ├── CaseReview.jsx
+|   ├── Messaging.jsx
+|   ├── DoctorMessaging.jsx
 │
 │── services/
 │   ├── api.js
