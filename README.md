@@ -189,11 +189,11 @@ This project is licensed under the **MIT License**.
 **Saurabh Vishwakarma**  
 B.Tech CSE • Lovely Professional University  
 📧 Email: saurabhkv412@gmail.com
-🌐 LinkedIn: *(add link here)*
+🌐 LinkedIn: https://www.linkedin.com/feed/update/urn:li:activity:7408114263015292928/
 
 ## 👤 Author
 **Aviral  Chaurasia**  
-B.Tech CSE • Lovely Professional University  
+B.Tech CSE • Lovely Professional University
 📧 Email: aviralchaurasia175@gmail.com
 🌐 LinkedIn: https://www.linkedin.com/in/aviralchaurasia05/
 
