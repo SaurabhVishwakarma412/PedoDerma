@@ -197,6 +197,12 @@ B.Tech CSE • Lovely Professional University
 📧 Email: aviralchaurasia175@gmail.com
 🌐 LinkedIn: https://www.linkedin.com/in/aviralchaurasia05/
 
+## 👤 Author
+**Aditya Khot**  
+B.Tech CSE • Lovely Professional University  
+📧 Email: khot.aditya7618@gmail.com
+🌐 LinkedIn: https://www.linkedin.com/feed/update/urn:li:activity:7408558428039680000/
+
 ---
 
 > *Pediatric Teledermatology aims to bridge the gap between healthcare and accessibility by enabling early skin condition detection for children, anytime and anywhere.*
