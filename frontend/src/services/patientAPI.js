@@ -2,8 +2,7 @@
 
 import api from "./api";
 
-/* ================= AUTH ================= */
-
+// auth ------
 // Register parent
 export const registerParent = (data) => {
   return api.post("/patients/register", data);
@@ -14,8 +13,7 @@ export const loginParent = (data) => {
   return api.post("/patients/login", data);
 };
 
-/* ================= CASE MANAGEMENT ================= */
-
+// case management ----
 // Get logged-in parent's cases
 export const getMyCases = () => {
   return api.get("/cases/my");
@@ -35,12 +33,7 @@ export const getCaseById = (caseId) => {
   return api.get(`/cases/${caseId}`);
 };
 
-/* ================= APPOINTMENTS ================= */
-/*
-Backend routes not implemented yet.
-Functions kept to avoid frontend crashes.
-*/
-
+// Appoitments
 export const bookAppointment = (data) => {
   return api.post("/appointments", data);
 };
@@ -53,33 +46,22 @@ export const getUpcomingAppointments = () => {
   return api.get("/appointments/upcoming");
 };
 
-/* ================= MEDICAL RECORDS ================= */
-/*
-Backend route not implemented yet.
-*/
-
+// Medical Records
 export const getMedicalRecords = () => {
   return api.get("/medical-records");
 };
 
-/* ================= DOCTORS ================= */
-
+//DOCTORS
 export const getDoctors = () => {
   return api.get("/doctors");
 };
 
-/* ================= PRESCRIPTIONS ================= */
-/*
-Backend route not implemented yet.
-*/
-
+//Prescription
 export const getPrescriptions = () => {
   return api.get("/prescriptions");
 };
 
-/* ================= PROFILE ================= */
-
-// Get parent profile
+//Profile
 export const getParentProfile = () => {
   return api.get("/patients/profile");
 };
@@ -89,11 +71,7 @@ export const updateParentProfile = (data) => {
   return api.put("/patients/profile", data);
 };
 
-/* ================= DASHBOARD ================= */
-/*
-Backend route not implemented yet.
-*/
-
+//Dashboard
 export const getDashboardStats = () => {
   return api.get("/dashboard/stats");
 };

@@ -16,12 +16,10 @@ const DoctorMessaging = () => {
   const [error, setError] = useState("");
   const messagesEndRef = useRef(null);
 
-  // Scroll to bottom of messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Initialize Socket.io connection
   useEffect(() => {
     const newSocket = io("http://localhost:5000", {
       reconnection: true,
@@ -41,13 +39,10 @@ const DoctorMessaging = () => {
     newSocket.on("receive_message", (data) => {
       console.log("Received message:", data);
       
-      // FILTER OUT ECHOED MESSAGES - This is the key fix
       if (data.from === user._id) {
         console.log("Ignoring echoed message from self");
         return;
       }
-      
-      // Check if this is from the currently selected patient
       const isFromSelectedPatient = selectedPatient && 
         (data.from === selectedPatient._id || data.from === selectedPatient.userId);
       
@@ -71,7 +66,6 @@ const DoctorMessaging = () => {
         });
       }
 
-      // Update conversation list without refetching chat history
       setConversations(prev => {
         return prev.map(conv => {
           if (conv.patientInfo?.[0]?._id === data.from) {
@@ -102,7 +96,6 @@ const DoctorMessaging = () => {
     };
   }, [user, selectedPatient]);
 
-  // Fetch all conversations (patients)
   useEffect(() => {
     const fetchConversations = async () => {
       try {
@@ -117,8 +110,6 @@ const DoctorMessaging = () => {
         const conversationsList = response.data.data || [];
         setConversations(conversationsList);
         setError("");
-        
-        // Auto-select the first conversation if available
         if (conversationsList.length > 0 && conversationsList[0].patientInfo?.[0]) {
           console.log("Auto-selecting patient:", conversationsList[0].patientInfo[0]);
           setSelectedPatient(conversationsList[0].patientInfo[0]);
@@ -139,7 +130,6 @@ const DoctorMessaging = () => {
     }
   }, [user]);
 
-  // Fetch chat history when a patient is selected
   useEffect(() => {
     if (selectedPatient) {
       fetchChatHistory();
@@ -159,7 +149,6 @@ const DoctorMessaging = () => {
       const seenMessages = new Set();
       const formattedMessages = response.data.data
         .filter((msg) => {
-          // Create a unique key for each message
           const messageKey = `${msg.message}_${new Date(msg.timestamp).getTime()}`;
           if (seenMessages.has(messageKey)) {
             return false;
@@ -197,17 +186,14 @@ const DoctorMessaging = () => {
     console.log("Sending message:", messageData);
     console.log("Socket connected:", socket?.connected);
 
-    // Create unique ID to track this message
     const tempId = Date.now().toString();
 
-    // Add message to local state immediately with temp ID
     setMessages((prev) => [...prev, {
       ...messageData,
       isOwn: true,
       tempId: tempId
     }]);
 
-    // Send via Socket.io
     if (socket) {
       console.log("Emitting send_message event via Socket.io");
       socket.emit("send_message", {
@@ -218,7 +204,6 @@ const DoctorMessaging = () => {
       console.error("Socket is not initialized!");
     }
 
-    // Save to database (backup)
     try {
       console.log("Saving message via API...");
       await API.post("/messages/send", {
@@ -360,7 +345,6 @@ const DoctorMessaging = () => {
                 </div>
               </div>
 
-              {/* ================= MESSAGES AREA ================= */}
               <div className="flex-1 overflow-y-auto p-4 bg-white pb-28">
                 {loading ? (
                   <div className="flex justify-center items-center h-full">
@@ -404,7 +388,6 @@ const DoctorMessaging = () => {
                 )}
               </div>
 
-              {/* ================= INPUT (FIXED BOTTOM) ================= */}
               <form
                 onSubmit={handleSendMessage}
                 className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 bg-gray-50 flex gap-2"

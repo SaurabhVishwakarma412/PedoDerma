@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     initAuth();
-  }, []);
+  },[]);
 
   // Login function - expects API response format
   const login = (userData, authToken) => {
@@ -85,16 +85,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{
-        user,
-        token,
-        role,
-        loading,
-        isAuthenticated: !!token && !!role,
-        login,
-        logout,
-      }}
-    >
+      value={{user,token,role,loading,isAuthenticated: !!token && !!role,login,logout,}}>
       {children}
     </AuthContext.Provider>
   );

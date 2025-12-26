@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ quiet: true });
 const http = require("http");
 const socketIO = require("socket.io");
 const connectDB = require("./config/db.js");
@@ -24,14 +24,14 @@ io.on("connection", (socket) => {
   // Store user socket
   socket.on("user_join", (userId) => {
     userSockets[userId] = socket.id;
-    console.log(`✅ User ${userId} joined with socket ${socket.id}`);
+    console.log(`User ${userId} joined with socket ${socket.id}`);
     console.log("Current online users:", Object.keys(userSockets));
   });
 
   // Handle sending messages
   socket.on("send_message", async (data) => {
     const { from, to, message, timestamp } = data;
-    console.log(`📨 Message received from ${from} to ${to}`);
+    console.log(`Message received from ${from} to ${to}`);
     
     // Save message to database
     try {
@@ -42,15 +42,15 @@ io.on("connection", (socket) => {
         timestamp: new Date(timestamp)
       });
       await newMessage.save();
-      console.log("✅ Message saved to database");
+      console.log("Message saved to database");
     } catch (err) {
-      console.error("❌ Error saving message:", err);
+      console.error("Error saving message:", err);
     }
     
     // Send to recipient if online
     const recipientSocketId = userSockets[to];
     if (recipientSocketId) {
-      console.log(`📤 Sending message to recipient socket ${recipientSocketId}`);
+      console.log(`Sending message to recipient socket ${recipientSocketId}`);
       io.to(recipientSocketId).emit("receive_message", {
         from,
         message,
@@ -58,7 +58,7 @@ io.on("connection", (socket) => {
         senderSocketId: socket.id
       });
     } else {
-      console.log(`⚠️ Recipient ${to} is not online. Message saved to DB.`);
+      console.log(`Recipient ${to} is not online. Message saved to DB.`);
     }
   });
 
@@ -67,7 +67,7 @@ io.on("connection", (socket) => {
     for (let userId in userSockets) {
       if (userSockets[userId] === socket.id) {
         delete userSockets[userId];
-        console.log(`👋 User ${userId} disconnected`);
+        console.log(`User ${userId} disconnected`);
         break;
       }
     }
