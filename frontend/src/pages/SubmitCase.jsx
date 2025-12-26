@@ -8,17 +8,13 @@ import {
   X,
   AlertCircle,
   CheckCircle,
-  // Info,
   Clock,
-  // Calendar,
   User,
   Thermometer,
-  // Droplets,
-  // MapPin,
-  // MessageSquare,
   ChevronLeft,
   Shield
 } from "lucide-react";
+
 import { submitCase } from "../services/patientAPI";
 
 const SubmitCase = () => {

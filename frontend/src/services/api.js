@@ -5,11 +5,8 @@ const api = axios.create({
   withCredentials: true,
 });
 
-/* ================= REQUEST INTERCEPTOR =================
-   Automatically attach JWT token to every request
-*/
-api.interceptors.request.use(
-  (config) => {
+// REQUEST INTERCEPTOR
+api.interceptors.request.use((config) => {
     const token = localStorage.getItem("token");
     
     if (token) {
@@ -23,11 +20,8 @@ api.interceptors.request.use(
   }
 );
 
-/* ================= RESPONSE INTERCEPTOR =================
-   Clear error logging (optional but useful)
-*/
-api.interceptors.response.use(
-  (response) => response,
+// RESPONSE INTERCEPTOR
+api.interceptors.response.use((response) => response,
   (error) => {
     console.error(
       "API ERROR:",
