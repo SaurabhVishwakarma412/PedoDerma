@@ -47,6 +47,7 @@ A full-stack **MERN** (MongoDB, Express.js, React.js, Node.js) based web applica
 │   ├── FileUpload.jsx
 │   ├── Input.jsx
 │   ├── CaseCard.jsx
+|   ├── Logo.jsx
 │
 │── pages/
 │   ├── Home.jsx
@@ -58,8 +59,11 @@ A full-stack **MERN** (MongoDB, Express.js, React.js, Node.js) based web applica
 │   ├── SubmitCase.jsx
 │   ├── CaseDetails.jsx
 │   ├── DoctorLogin.jsx
+|   ├── DoctorList.jsx
 │   ├── DoctorDashboard.jsx
 │   ├── CaseReview.jsx
+|   ├── Messaging.jsx
+|   ├── DoctorMessaging.jsx
 │
 │── services/
 │   ├── api.js
@@ -87,6 +91,7 @@ backend/
 │   ├── models/
 │   │   ├── User.js
 │   │   ├── Doctor.js
+|   |   ├── Message.js
 │   │   └── Case.js
 │   │
 │   ├── controllers/
@@ -101,13 +106,20 @@ backend/
 │   ├── routes/
 │   │   ├── authRoutes.js
 │   │   ├── caseRoutes.js
+|   |   ├── messageRoutes.js
 │   │   └── doctorRoutes.js
 │   │
 │   ├── utils/
 │   │   └── generateToken.js
+|   ├── uploads/
+│   │   └── cases/
 │   │
 │   ├── app.js
+|   ├── seedDoctor.js
 │   └── server.js
+|
+├── uploads/
+│   └── cases/
 │
 └── .env
 ```
@@ -177,7 +189,19 @@ This project is licensed under the **MIT License**.
 **Saurabh Vishwakarma**  
 B.Tech CSE • Lovely Professional University  
 📧 Email: saurabhkv412@gmail.com
-🌐 LinkedIn: *(add link here)*
+🌐 LinkedIn: https://www.linkedin.com/feed/update/urn:li:activity:7408114263015292928/
+
+## 👤 Author
+**Aviral  Chaurasia**  
+B.Tech CSE • Lovely Professional University
+📧 Email: aviralchaurasia175@gmail.com
+🌐 LinkedIn: https://www.linkedin.com/in/aviralchaurasia05/
+
+## 👤 Author
+**Aditya Khot**  
+B.Tech CSE • Lovely Professional University  
+📧 Email: khot.aditya7618@gmail.com
+🌐 LinkedIn: https://www.linkedin.com/feed/update/urn:li:activity:7408558428039680000/
 
 ---
 

@@ -205,7 +205,7 @@ const DoctorsList = () => {
                     <CheckCircle className="w-4 h-4 mr-1" />
                     <span>Board Certified • Verified</span>
                   </div>
-
+ 
                   <div className="mt-4 p-3 bg-blue-50 rounded-lg">
                     <div className="flex items-center justify-between text-sm">
                       <div className="flex items-center text-gray-700">

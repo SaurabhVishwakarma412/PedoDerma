@@ -1,9 +1,8 @@
 // frontend/src/pages/Home.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { CheckCircle, Clock, Shield, Video, MessageSquare, Star, ArrowRight } from "lucide-react";
+import { CheckCircle, Clock, Shield, Video, MessageSquare, Star, ArrowRight ,UsersRound, Stethoscope, UserStar, BriefcaseMedical, Camera} from "lucide-react";
 import doctor4 from "../assets/doctor4.jpg";
-import camera2 from "../assets/camera2.avif";
 
 // Animated Counter Component
 const AnimatedCounter = ({ number, label, icon, desc }) => {
@@ -232,9 +231,9 @@ const Home = () => {
             Trusted by Thousands of Parents
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <AnimatedCounter number="20" label="Pediatric Dermatologists" icon="👨‍⚕️" desc="Board-certified specialists" />
-            <AnimatedCounter number="12000" label="Happy Parents" icon="😊" desc="Satisfied families served" />
-            <AnimatedCounter number="98" label="Satisfaction Rate" icon="⭐" desc="Parent satisfaction score" />
+            <AnimatedCounter number="20" label="Pediatric Dermatologists" icon={<Stethoscope className="mx-auto h-12 w-12 text-blue-500  " />} desc="Board-certified specialists" />
+            <AnimatedCounter number="12000" label="Happy Parents" icon={<UsersRound className="mx-auto h-12 w-12  " />} desc="Satisfied families served" />
+            <AnimatedCounter number="98" label="Satisfaction Rate" icon= {<UserStar className="mx-auto h-12 w-12 text-yellow-400  " />} desc="Parent satisfaction score" />
           </div>
         </div>
       </section>
@@ -332,7 +331,7 @@ const Home = () => {
                 step: "1",
                 title: "Upload Photos & Symptoms",
                 desc: "Securely upload photos of your child's skin condition and describe symptoms",
-                icon: <img className="w-16 h-16 rounded-full object-cover" src={camera2} alt="Camera" />
+                icon: <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-2xl"><Camera className="mx-auto h-12 w-12  " /></div>
               },
               {
                 step: "2",
@@ -344,7 +343,7 @@ const Home = () => {
                 step: "3",
                 title: "Get Diagnosis & Treatment",
                 desc: "Receive personalized diagnosis, treatment plan, and digital prescription",
-                icon: <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-2xl">💊</div>
+                icon: <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-2xl"><BriefcaseMedical className="mx-auto h-12 w-12  " /></div>
               },
             ].map((step, index) => (
               <div key={index} className="relative">
