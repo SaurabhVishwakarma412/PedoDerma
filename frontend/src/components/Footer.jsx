@@ -1,7 +1,7 @@
 // frontend/src/components/Footer.jsx
 import React from "react";
 import { Link } from "react-router-dom";
-
+import { Instagram , Facebook, Linkedin, Twitter } from "lucide-react";
 const Footer = () => {
   return (
     <footer className="bg-zinc-950 border-t mt-10">
@@ -20,22 +20,22 @@ const Footer = () => {
           </p>
 
           {/* Social Media Links */}
-          <div className="flex gap-4">
+          <div className="flex gap-6">
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
-              className="text-gray-500 hover:text-blue-600">
-              Facebook
+              className="text-gray-500 hover:text-blue-600 ">
+              <Facebook />
             </a>
             <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
               className="text-gray-500 hover:text-sky-500">
-              Twitter
+              <Twitter />
             </a>
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
               className="text-gray-500 hover:text-pink-500">
-              Instagram
+              <Instagram />
             </a>
             <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
               className="text-gray-500 hover:text-blue-700">
-              LinkedIn
+              <Linkedin />
             </a>
           </div>
         </div>

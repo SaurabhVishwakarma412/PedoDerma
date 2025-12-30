@@ -181,7 +181,7 @@ const Home = () => {
       {/* Hero Section - Enhanced with overlay and better alignment */}
       <section
         style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(${doctor4})` }}
-        className="relative text-center py-20 md:py-40 bg-cover bg-center bg-no-repeat overflow-hidden"
+        className=" h-[100vh] relative text-center py-10 md:py-40 bg-cover bg-center bg-no-repeat overflow-hidden"
       >
         <div className="absolute inset-0 bg-black/40"></div>
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20"></div>
@@ -293,7 +293,7 @@ const Home = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-12 text-center">
             Common Pediatric Skin Concerns We Treat
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid m-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               { condition: "Eczema & Atopic Dermatitis", icon: "🔴", color: "bg-red-50" },
               { condition: "Acne in Teens", icon: "⚫", color: "bg-gray-50" },
@@ -348,9 +348,7 @@ const Home = () => {
             ].map((step, index) => (
               <div key={index} className="relative">
                 <div className="bg-white p-8 rounded-2xl shadow-lg border border-blue-100">
-                  <div className="absolute -top-4 -right-4 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">
-                    {step.step}
-                  </div>
+
                   <div className="flex flex-col items-center text-center">
                     <div className="mb-6">
                       {step.icon}
@@ -369,7 +367,7 @@ const Home = () => {
       </section>
 
       {/* Benefits - Improved layout */}
-      <section className="py-16 bg-white">
+      <section className="py-16  bg-white">
         <div className="max-w-6xl mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-12 text-center">
             Benefits of Pediatric Tele-Dermatology
@@ -397,7 +395,7 @@ const Home = () => {
                 icon: "👨‍⚕️"
               },
             ].map((benefit, index) => (
-              <div key={index} className="flex items-start gap-4 p-6 bg-gray-50 rounded-xl hover:bg-blue-50 transition-colors">
+              <div key={index} className="flex items-start gap-4 p-6 m-4 bg-gray-50 rounded-xl hover:bg-blue-50 transition-colors">
                 <div className="text-2xl">{benefit.icon}</div>
                 <div>
                   <h3 className="text-lg font-semibold text-gray-800 mb-2">{benefit.title}</h3>
@@ -444,7 +442,7 @@ const Home = () => {
                 answer: "No appointment is required. You can start anytime by uploading photos and details, and a dermatologist will respond as soon as your case is reviewed."
               },
             ].map((faq, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-200 hover:border-blue-300 transition-colors">
+              <div key={index} className="bg-white rounded-xl m-4 p-6 shadow-sm border border-gray-200 hover:border-blue-300 transition-colors">
                 <h3 className="text-lg font-semibold text-gray-800 mb-3">{faq.question}</h3>
                 <p className="text-gray-600">{faq.answer}</p>
               </div>
@@ -462,7 +460,7 @@ const Home = () => {
           <p className="text-xl text-blue-100 mb-8">
             Join thousands of parents who trust our pediatric dermatologists
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <div className="flex m-4 flex-col sm:flex-row justify-center gap-4">
             <Link
               to="/cases/submit"
               className="px-10 py-4 rounded-xl bg-white text-blue-600 font-bold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-2xl"
