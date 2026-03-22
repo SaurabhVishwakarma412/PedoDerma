@@ -529,41 +529,6 @@ const DoctorDashboard = () => {
               </div>
             </div>
 
-            {/* Quick Actions */}
-            <div className="bg-linear-to-r from-blue-600 to-indigo-600 rounded-xl p-6 text-white shadow-lg">
-              <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
-              <div className="grid grid-cols-2 gap-3">
-                <Link
-                  to="/cases/new"
-                  className="bg-white/20 hover:bg-white/30 p-3 rounded-lg transition flex flex-col items-center justify-center"
-                >
-                  <Plus className="w-5 h-5 mb-1" />
-                  <span className="text-xs">New Case</span>
-                </Link>
-                <Link
-                  to="/appointments/new"
-                  className="bg-white/20 hover:bg-white/30 p-3 rounded-lg transition flex flex-col items-center justify-center"
-                >
-                  <Calendar className="w-5 h-5 mb-1" />
-                  <span className="text-xs">Add Appt</span>
-                </Link>
-                <Link
-                  to="/doctor/messages"
-                  className="bg-white/20 hover:bg-white/30 p-3 rounded-lg transition flex flex-col items-center justify-center"
-                >
-                  <MessageSquare className="w-5 h-5 mb-1" />
-                  <span className="text-xs">Messages</span>
-                </Link>
-                <Link
-                  to="/reports"
-                  className="bg-white/20 hover:bg-white/30 p-3 rounded-lg transition flex flex-col items-center justify-center"
-                >
-                  <Download className="w-5 h-5 mb-1" />
-                  <span className="text-xs">Reports</span>
-                </Link>
-              </div>
-            </div>
-
             {/* Support & Resources */}
             <div className="bg-blue-50 rounded-xl p-6 border border-blue-200">
               <h3 className="font-semibold text-gray-800 mb-3">Medical Resources</h3>
