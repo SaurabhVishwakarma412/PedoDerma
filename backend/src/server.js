@@ -11,10 +11,9 @@ const server = http.createServer(app);
 const io = socketIO(server, {
   cors: {
     origin: [
-      "http://localhost:5173",
-      "http://localhost:5174"
-      // ,"https://your-frontend.vercel.app" // 👈 add later
-    ],
+  "http://localhost:5173",
+  "https://pedo-derma.vercel.app"
+],
     credentials: true
   }
 });
