@@ -1,3 +1,4 @@
+// Case.js
 const mongoose = require("mongoose");
 
 const caseSchema = new mongoose.Schema(
