@@ -4,13 +4,17 @@ const socketIO = require("socket.io");
 const connectDB = require("./config/db.js");
 const Message = require("./models/Message");
 const app = require("./app");
-
+const PORT = process.env.PORT || 5000;
 connectDB();
 
 const server = http.createServer(app);
 const io = socketIO(server, {
   cors: {
-    origin: ["http://localhost:5173", "http://localhost:5174"],
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174"
+      // ,"https://your-frontend.vercel.app" // 👈 add later
+    ],
     credentials: true
   }
 });
@@ -32,7 +36,7 @@ io.on("connection", (socket) => {
   socket.on("send_message", async (data) => {
     const { from, to, message, timestamp } = data;
     console.log(`Message received from ${from} to ${to}`);
-    
+
     // Save message to database
     try {
       const newMessage = new Message({
@@ -46,7 +50,7 @@ io.on("connection", (socket) => {
     } catch (err) {
       console.error("Error saving message:", err);
     }
-    
+
     // Send to recipient if online
     const recipientSocketId = userSockets[to];
     if (recipientSocketId) {
@@ -74,6 +78,7 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(process.env.PORT, () =>
-  console.log(`Server running on http://localhost:${process.env.PORT}`)
+
+server.listen(PORT, () =>
+  console.log(`Server running on port ${PORT}`)
 );

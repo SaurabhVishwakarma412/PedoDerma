@@ -1,5 +1,21 @@
-
+// backend/src/controllers/caseController.js
 const Case = require("../models/Case");
+const cloudinary = require("../config/cloudinary");  // Import your cloudinary config
+const streamifier = require("streamifier");
+
+// Helper function for Cloudinary upload
+const uploadToCloudinary = (fileBuffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "pedoderma/cases" },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result.secure_url);
+      }
+    );
+    streamifier.createReadStream(fileBuffer).pipe(stream);
+  });
+};
 
 // Submit a new case (Parent)
 exports.submitCase = async (req, res) => {
@@ -7,12 +23,18 @@ exports.submitCase = async (req, res) => {
     console.log("BODY:", req.body);
     console.log("FILES:", req.files);
 
-    // Handle multiple files
-    const imagePaths = req.files ? req.files.map(f => `/uploads/cases/${f.filename}`) : [];
+    // Upload images to Cloudinary
+    const imageUrls = [];
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        const url = await uploadToCloudinary(file.buffer);
+        imageUrls.push(url);
+      }
+    }
 
     const created = await Case.create({
       parentId: req.user._id,
-      imageUrls: imagePaths,
+      imageUrls: imageUrls,
       ...req.body,
     });
 
