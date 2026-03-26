@@ -48,84 +48,141 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   return children;
 };
 
-const AppContent = () => {
+// Layout component for pages with header and footer
+const MainLayout = ({ children }) => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <div className="flex-1">
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/doctors" element={<DoctorsList />} />
-
-          {/* Authentication Routes */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/doctor/login" element={<DoctorLogin />} />
-
-          {/* Parent Routes */}
-          <Route
-            path="/parent/dashboard"
-            element={
-              <ProtectedRoute allowedRoles={["parent"]}>
-                <ParentDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/cases/submit"
-            element={
-              <ProtectedRoute allowedRoles={["parent"]}>
-                <SubmitCase />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/messages"
-            element={
-              <ProtectedRoute allowedRoles={["parent"]}>
-                <Messaging />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Doctor Routes */}
-          <Route
-            path="/doctor/dashboard"
-            element={
-              <ProtectedRoute allowedRoles={["doctor"]}>
-                <DoctorDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/doctor/messages"
-            element={
-              <ProtectedRoute allowedRoles={["doctor"]}>
-                <DoctorMessaging />
-              </ProtectedRoute>
-            }
-          />
-
-
-          {/* Shared Routes (both parent and doctor can access) */}
-          <Route
-            path="/cases/:id"
-            element={
-              <ProtectedRoute allowedRoles={["parent", "doctor"]}>
-                <CaseDetails />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Fallback Route */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        {children}
       </div>
       <Footer />
     </div>
+  );
+};
+
+// Layout component for authentication pages (no header/footer)
+const AuthLayout = ({ children }) => {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <div className="flex-1">
+        {children}
+      </div>
+    </div>
+  );
+};
+
+const AppContent = () => {
+  return (
+    <Routes>
+      {/* Public Routes with Header & Footer */}
+      <Route path="/" element={
+        <MainLayout>
+          <Home />
+        </MainLayout>
+      } />
+      <Route path="/about" element={
+        <MainLayout>
+          <About />
+        </MainLayout>
+      } />
+      <Route path="/contact" element={
+        <MainLayout>
+          <Contact />
+        </MainLayout>
+      } />
+      <Route path="/doctors" element={
+        <MainLayout>
+          <DoctorsList />
+        </MainLayout>
+      } />
+
+      {/* Authentication Routes - No Header & Footer */}
+      <Route path="/login" element={
+        <AuthLayout>
+          <Login />
+        </AuthLayout>
+      } />
+      <Route path="/register" element={
+        <AuthLayout>
+          <Register />
+        </AuthLayout>
+      } />
+      <Route path="/doctor/login" element={
+        <AuthLayout>
+          <DoctorLogin />
+        </AuthLayout>
+      } />
+
+      {/* Parent Routes with Header & Footer */}
+      <Route
+        path="/parent/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["parent"]}>
+            <MainLayout>
+              <ParentDashboard />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/cases/submit"
+        element={
+          <ProtectedRoute allowedRoles={["parent"]}>
+            <MainLayout>
+              <SubmitCase />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/messages"
+        element={
+          <ProtectedRoute allowedRoles={["parent"]}>
+            <MainLayout>
+              <Messaging />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Doctor Routes with Header & Footer */}
+      <Route
+        path="/doctor/dashboard"
+        element={
+          <ProtectedRoute allowedRoles={["doctor"]}>
+            <MainLayout>
+              <DoctorDashboard />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/doctor/messages"
+        element={
+          <ProtectedRoute allowedRoles={["doctor"]}>
+            <MainLayout>
+              <DoctorMessaging />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Shared Routes (both parent and doctor can access) with Header & Footer */}
+      <Route
+        path="/cases/:id"
+        element={
+          <ProtectedRoute allowedRoles={["parent", "doctor"]}>
+            <MainLayout>
+              <CaseDetails />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Fallback Route */}
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
   );
 };
 

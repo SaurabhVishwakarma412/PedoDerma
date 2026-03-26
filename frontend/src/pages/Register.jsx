@@ -140,24 +140,10 @@ const Register = () => {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-12 px-4">
+    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-4 px-4">
       <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-10">
-          <div className="flex justify-center mb-4">
-            <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
-              <UserPlus className="w-10 h-10 text-white" />
-            </div>
-          </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-3">
-            Create Your Pediatric Dermatology Account
-          </h1>
-          <p className="text-gray-600 max-w-xl mx-auto">
-            Register to access expert care for your child's skin conditions from board-certified dermatologists
-          </p>
-        </div>
 
-        <div className="grid lg:grid-cols-2 gap-10">
+        <div className="grid lg:grid-cols-2 gap-12">
           {/* Left Side - Registration Form */}
           <div className="bg-white rounded-2xl shadow-2xl p-8 border border-blue-100">
             {/* Progress Steps */}
@@ -190,7 +176,7 @@ const Register = () => {
 
             {/* Error Message */}
             {error && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+              <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-xl">
                 <div className="flex items-center gap-3">
                   <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
                   <p className="text-red-700 text-sm">{error}</p>
@@ -200,7 +186,7 @@ const Register = () => {
 
             {/* Success Message */}
             {success && (
-              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl">
+              <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-xl">
                 <div className="flex items-center gap-3">
                   <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
                   <p className="text-green-700 text-sm">{success}</p>
@@ -209,11 +195,11 @@ const Register = () => {
             )}
 
             {/* Form Steps */}
-            <div className="space-y-6">
+            <div className="">
               {/* Step 1: Account Information */}
               {activeStep === 1 && (
                 <>
-                  <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                  <h2 className="text-xl font-bold text-gray-800 mb-2 flex items-center gap-2">
                     <User className="w-6 h-6 text-blue-600" />
                     Parent/Guardian Information
                   </h2>
@@ -290,7 +276,6 @@ const Register = () => {
                           {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                         </button>
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">Must include uppercase, lowercase, and number</p>
                     </div>
 
                     <div>
@@ -329,9 +314,9 @@ const Register = () => {
                     Child Information
                   </h2>
                   
-                  <div className="space-y-6">
+                  <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-4">
                         Child's Full Name *
                       </label>
                       <input
@@ -403,7 +388,7 @@ const Register = () => {
               {/* Step 3: Terms & Address */}
               {activeStep === 3 && (
                 <>
-                  <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                  <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                     <Shield className="w-6 h-6 text-blue-600" />
                     Complete Registration
                   </h2>
@@ -411,8 +396,8 @@ const Register = () => {
                   <div className="space-y-6">
                     {/* Optional Address Section */}
                     <div>
-                      <h3 className="font-medium text-gray-700 mb-4">Optional: Address Information</h3>
-                      <div className="space-y-4">
+                      <h3 className="font-medium text-gray-700 mb-2">Optional: Address Information</h3>
+                      <div className="space-y-6">
                         <input
                           type="text"
                           name="address"
@@ -451,7 +436,7 @@ const Register = () => {
                     </div>
 
                     {/* Terms and Conditions */}
-                    <div className="space-y-4">
+                    <div className="space-y-6">
                       <label className="flex items-start space-x-3 cursor-pointer">
                         <input
                           type="checkbox"
@@ -467,24 +452,6 @@ const Register = () => {
                           </span>
                           <p className="text-sm text-gray-500 mt-1">
                             By checking this box, you confirm that you have read and agree to our terms of service, privacy policy, and consent to receive electronic communications.
-                          </p>
-                        </div>
-                      </label>
-
-                      <label className="flex items-start space-x-3 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          name="subscribeToUpdates"
-                          checked={form.subscribeToUpdates}
-                          onChange={handleChange}
-                          className="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-0.5"
-                        />
-                        <div>
-                          <span className="text-gray-700 font-medium">
-                            Subscribe to Health Updates & Tips
-                          </span>
-                          <p className="text-sm text-gray-500 mt-1">
-                            Receive helpful pediatric skin care tips, appointment reminders, and platform updates.
                           </p>
                         </div>
                       </label>
@@ -530,7 +497,7 @@ const Register = () => {
             </div>
 
             {/* Already have account */}
-            <div className="mt-8 pt-6 border-t border-gray-200 text-center">
+            <div className="mt-2 pt-4 border-t border-gray-200 text-center">
               <p className="text-gray-600">
                 Already have an account?{" "}
                 <Link
@@ -546,7 +513,7 @@ const Register = () => {
           {/* Right Side - Benefits & Info */}
           <div className="space-y-8">
             {/* Benefits Card */}
-            <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-8 text-white shadow-xl">
+            <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl p-6 text-white shadow-xl">
               <h3 className="text-2xl font-bold mb-6">Why Register With Us?</h3>
               <div className="space-y-5">
                 {[
@@ -559,11 +526,6 @@ const Register = () => {
                     icon: "📱",
                     title: "24/7 Online Access",
                     desc: "Consult from home, upload photos, and track progress anytime"
-                  },
-                  {
-                    icon: "🔒",
-                    title: "Secure & Private",
-                    desc: "HIPAA-compliant platform ensuring your child's data safety"
                   },
                   {
                     icon: "💊",
@@ -587,53 +549,6 @@ const Register = () => {
               </div>
             </div>
 
-            {/* Security Card */}
-            <div className="bg-white rounded-2xl p-6 border border-green-200 shadow-lg">
-              <div className="flex items-center gap-3 mb-4">
-                <Shield className="w-8 h-8 text-green-600" />
-                <div>
-                  <h4 className="font-bold text-gray-800">Your Privacy Matters</h4>
-                  <p className="text-sm text-gray-600">We protect your family's health information</p>
-                </div>
-              </div>
-              <ul className="space-y-2 text-sm text-gray-600">
-                <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>End-to-end encrypted communications</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>HIPAA compliant medical records</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>No sharing of personal data with third parties</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span>Secure photo upload and storage</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Quick Facts */}
-            <div className="bg-blue-50 rounded-2xl p-6">
-              <h4 className="font-bold text-gray-800 mb-4">Quick Facts</h4>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-3 bg-white rounded-lg">
-                  <span className="text-gray-700">Registration Time</span>
-                  <span className="font-semibold text-blue-600">2-3 minutes</span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-white rounded-lg">
-                  <span className="text-gray-700">First Consultation</span>
-                  <span className="font-semibold text-blue-600">Within 24 hours</span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-white rounded-lg">
-                  <span className="text-gray-700">Support Available</span>
-                  <span className="font-semibold text-blue-600">24/7</span>
-                </div>
-              </div>
-            </div>
 
             {/* Support Card */}
             <div className="bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-6 text-white">
@@ -655,23 +570,6 @@ const Register = () => {
                 </a>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Footer Note */}
-        <div className="mt-12 text-center">
-          <p className="text-sm text-gray-500">
-            By registering, you acknowledge that this platform is for non-emergency medical consultations. 
-            In case of emergency, please call 911 or visit the nearest emergency room.
-          </p>
-          <div className="mt-4 flex flex-wrap justify-center gap-4 text-xs text-gray-400">
-            <span>© 2024 Pediatric Dermatology Platform</span>
-            <span>•</span>
-            <Link to="/privacy" className="hover:text-gray-600">Privacy Policy</Link>
-            <span>•</span>
-            <Link to="/terms" className="hover:text-gray-600">Terms of Service</Link>
-            <span>•</span>
-            <span>HIPAA Compliant</span>
           </div>
         </div>
       </div>
