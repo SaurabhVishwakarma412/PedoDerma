@@ -129,9 +129,12 @@ const AppContent = () => {
         path="/cases/submit"
         element={
           <ProtectedRoute allowedRoles={["parent"]}>
-            <MainLayout>
+            {/* <MainLayout> */}
+              <AuthLayout>
+
               <SubmitCase />
-            </MainLayout>
+              </AuthLayout>
+            {/* </MainLayout> */}
           </ProtectedRoute>
         }
       />
