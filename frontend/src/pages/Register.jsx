@@ -1,7 +1,7 @@
 // frontend/src/pages/Register.jsx
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Eye, EyeOff, User, Mail, Lock, Phone, Calendar, Baby, AlertCircle, CheckCircle, Shield, UserPlus } from "lucide-react";
+import { Eye, EyeOff, User, Mail, Lock, Phone, AlertCircle, CheckCircle, Shield, UserPlus } from "lucide-react";
 import Input from "../components/Input";
 import { registerParent } from "../services/patientAPI";
 
@@ -14,12 +14,7 @@ const Register = () => {
     password: "",
     confirmPassword: "",
     
-    // Child Information
-    childName: "",
-    childAge: "",
-    childGender: "",
-    
-    // Address
+    // Address (Optional)
     address: "",
     city: "",
     state: "",
@@ -35,7 +30,7 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [activeStep, setActiveStep] = useState(1); // Multi-step form
+  const [activeStep, setActiveStep] = useState(1); // Multi-step form (now only 2 steps)
   
   const navigate = useNavigate();
 
@@ -68,16 +63,6 @@ const Register = () => {
         }
         return true;
       case 2:
-        if (!form.childName || !form.childAge || !form.childGender) {
-          setError("Please fill in all child information fields");
-          return false;
-        }
-        if (parseInt(form.childAge) < 0 || parseInt(form.childAge) > 18) {
-          setError("Child age must be between 0 and 18");
-          return false;
-        }
-        return true;
-      case 3:
         if (!form.agreeToTerms) {
           setError("You must agree to the Terms of Service and Privacy Policy");
           return false;
@@ -91,7 +76,7 @@ const Register = () => {
   const nextStep = () => {
     if (validateStep(activeStep)) {
       setError("");
-      if (activeStep < 3) {
+      if (activeStep < 2) {
         setActiveStep(activeStep + 1);
       } else {
         handleSubmit();
@@ -111,15 +96,12 @@ const Register = () => {
     setError("");
 
     try {
-      // Prepare registration data
+      // Prepare registration data (removed child information)
       const registrationData = {
         name: form.name,
         email: form.email,
         phone: form.phone,
         password: form.password,
-        childName: form.childName,
-        childAge: form.childAge,
-        childGender: form.childGender,
         address: form.address,
         city: form.city,
         state: form.state,
@@ -146,10 +128,10 @@ const Register = () => {
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Left Side - Registration Form */}
           <div className="bg-white rounded-2xl shadow-2xl p-8 border border-blue-100">
-            {/* Progress Steps */}
+            {/* Progress Steps - Updated to 2 steps */}
             <div className="mb-8">
-              <div className="flex justify-between items-center mb-4">
-                {[1, 2, 3].map((step) => (
+              <div className="flex justify-around items-center mb-4">
+                {[1, 2].map((step) => (
                   <div key={step} className="flex flex-col items-center">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg ${
                       step === activeStep 
@@ -161,7 +143,7 @@ const Register = () => {
                       {step < activeStep ? <CheckCircle size={20} /> : step}
                     </div>
                     <span className="text-xs mt-2 text-gray-600">
-                      {step === 1 ? 'Account' : step === 2 ? 'Child Info' : 'Complete'}
+                      {step === 1 ? 'Account' : 'Complete'}
                     </span>
                   </div>
                 ))}
@@ -169,7 +151,7 @@ const Register = () => {
               <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                 <div 
                   className="h-full bg-blue-600 transition-all duration-300"
-                  style={{ width: `${((activeStep - 1) / 2) * 100}%` }}
+                  style={{ width: `${((activeStep - 1) / 1) * 100}%` }}
                 ></div>
               </div>
             </div>
@@ -306,87 +288,8 @@ const Register = () => {
                 </>
               )}
 
-              {/* Step 2: Child Information */}
+              {/* Step 2: Terms & Address (Removed Child Information) */}
               {activeStep === 2 && (
-                <>
-                  <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                    <Baby className="w-6 h-6 text-blue-600" />
-                    Child Information
-                  </h2>
-                  
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-4">
-                        Child's Full Name *
-                      </label>
-                      <input
-                        type="text"
-                        name="childName"
-                        value={form.childName}
-                        onChange={handleChange}
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                        placeholder="Enter child's full name"
-                      />
-                    </div>
-
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Age (years) *
-                        </label>
-                        <input
-                          type="number"
-                          name="childAge"
-                          value={form.childAge}
-                          onChange={handleChange}
-                          required
-                          min="0"
-                          max="18"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                          placeholder="0-18"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Gender *
-                        </label>
-                        <select
-                          name="childGender"
-                          value={form.childGender}
-                          onChange={handleChange}
-                          required
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                        >
-                          <option value="">Select gender</option>
-                          <option value="male">Male</option>
-                          <option value="female">Female</option>
-                          <option value="other">Other</option>
-                          <option value="prefer-not-to-say">Prefer not to say</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Primary Skin Concern (Optional)
-                      </label>
-                      <select className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
-                        <option value="">Select if known</option>
-                        <option value="eczema">Eczema/Dermatitis</option>
-                        <option value="acne">Acne</option>
-                        <option value="rashes">Rashes</option>
-                        <option value="birthmarks">Birthmarks</option>
-                        <option value="other">Other</option>
-                      </select>
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {/* Step 3: Terms & Address */}
-              {activeStep === 3 && (
                 <>
                   <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                     <Shield className="w-6 h-6 text-blue-600" />
@@ -487,7 +390,7 @@ const Register = () => {
                       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3 inline-block"></div>
                       Processing...
                     </>
-                  ) : activeStep === 3 ? (
+                  ) : activeStep === 2 ? (
                     'Complete Registration'
                   ) : (
                     'Continue →'
@@ -548,7 +451,6 @@ const Register = () => {
                 ))}
               </div>
             </div>
-
 
             {/* Support Card */}
             <div className="bg-gradient-to-r from-gray-800 to-gray-900 rounded-2xl p-6 text-white">
