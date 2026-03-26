@@ -5,8 +5,18 @@ const path = require("path");
 
 const app = express();
 
+// app.use(cors({
+//   origin: "http://localhost:5173",
+//   credentials: true
+// }));
+
+const cors = require("cors");
+
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: [
+    "http://localhost:5173",
+    "https://pedo-derma.vercel.app"
+  ],
   credentials: true
 }));
 
