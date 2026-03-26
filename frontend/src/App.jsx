@@ -142,9 +142,9 @@ const AppContent = () => {
         path="/messages"
         element={
           <ProtectedRoute allowedRoles={["parent"]}>
-            <MainLayout>
+              <AuthLayout>
+              </AuthLayout>
               <Messaging />
-            </MainLayout>
           </ProtectedRoute>
         }
       />
@@ -164,9 +164,9 @@ const AppContent = () => {
         path="/doctor/messages"
         element={
           <ProtectedRoute allowedRoles={["doctor"]}>
-            <MainLayout>
+              <AuthLayout>
               <DoctorMessaging />
-            </MainLayout>
+              </AuthLayout>
           </ProtectedRoute>
         }
       />

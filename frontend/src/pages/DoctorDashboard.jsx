@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { 
-  Filter, 
-  Search, 
-  Bell, 
-  Calendar, 
-  Clock, 
-  MessageSquare, 
-  Users, 
+import {
+  Filter,
+  Search,
+  Bell,
+  Calendar,
+  Clock,
+  MessageSquare,
+  Users,
   Activity,
   AlertCircle,
   CheckCircle,
@@ -22,7 +22,9 @@ import {
   Shield,
   AlertTriangle,
   Star,
-  BarChart3
+  BarChart3,
+  ChartArea,
+  MessageCircle
 } from "lucide-react";
 import { getAllCases, getDoctorAppointments, getDoctorStats } from "../services/doctorAPI";
 import CaseCard from "../components/CaseCard";
@@ -51,7 +53,7 @@ const DoctorDashboard = () => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
-        
+
         // Fetch cases
         const casesRes = await getAllCases();
         const casesData = casesRes.data || [];
@@ -65,12 +67,12 @@ const DoctorDashboard = () => {
         // Fetch doctor stats
         const statsRes = await getDoctorStats();
         const statsData = statsRes.data || {};
-        
+
         // Calculate stats
         const pendingCases = casesData.filter(c => c.status === "pending").length;
         const completedCases = casesData.filter(c => c.status === "completed").length;
         const todayAppointments = appointmentsData.filter(a => a.date === new Date().toISOString().split('T')[0]).length;
-        
+
         setStats({
           totalCases: casesData.length,
           pendingCases,
@@ -94,7 +96,7 @@ const DoctorDashboard = () => {
   // Filter and search cases
   const filteredCases = cases.filter((c) => {
     const matchesFilter = filter === "all" ? true : c.status === filter;
-    const matchesSearch = 
+    const matchesSearch =
       c.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       c.patientName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       c.symptoms?.toLowerCase().includes(searchQuery.toLowerCase());
@@ -110,7 +112,7 @@ const DoctorDashboard = () => {
   });
 
   // Get today's appointments
-  const todayAppointments = appointments.filter(a => 
+  const todayAppointments = appointments.filter(a =>
     a.date === new Date().toISOString().split('T')[0]
   );
 
@@ -121,7 +123,7 @@ const DoctorDashboard = () => {
   ];
 
   const getStatusColor = (status) => {
-    switch(status) {
+    switch (status) {
       case 'pending': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       case 'in_review': return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'completed': return 'bg-green-100 text-green-800 border-green-200';
@@ -175,10 +177,14 @@ const DoctorDashboard = () => {
                   <Calendar className="w-4 h-4" />
                   Schedule
                 </button>
-                <button className="px-4 py-2 bg-linear-to-r from-green-500 to-emerald-600 rounded-lg hover:opacity-90 transition flex items-center gap-2">
-                  <Video className="w-4 h-4" />
-                  Start Consult
+                <button
+                  onClick={() => navigate("/doctor/messages")}
+                  className="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg hover:opacity-90 transition flex items-center gap-2"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  Chat
                 </button>
+                
               </div>
             </div>
           </div>
@@ -190,30 +196,30 @@ const DoctorDashboard = () => {
         <section className="mb-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { 
-                label: "Total Cases", 
-                value: stats.totalCases, 
+              {
+                label: "Total Cases",
+                value: stats.totalCases,
                 change: stats.monthlyGrowth,
                 color: "bg-blue-500",
                 icon: <FileText className="w-6 h-6" />
               },
-              { 
-                label: "Pending Review", 
-                value: stats.pendingCases, 
+              {
+                label: "Pending Review",
+                value: stats.pendingCases,
                 change: urgentCases.length > 0 ? `${urgentCases.length} urgent` : null,
                 color: "bg-yellow-500",
                 icon: <AlertCircle className="w-6 h-6" />
               },
-              { 
-                label: "Today's Appointments", 
-                value: stats.todayAppointments, 
+              {
+                label: "Today's Appointments",
+                value: stats.todayAppointments,
                 change: "Next in 30 min",
                 color: "bg-purple-500",
                 icon: <Calendar className="w-6 h-6" />
               },
-              { 
-                label: "Patient Satisfaction", 
-                value: stats.patientSatisfaction, 
+              {
+                label: "Patient Satisfaction",
+                value: stats.patientSatisfaction,
                 change: "/5.0",
                 color: "bg-green-500",
                 icon: <Star className="w-6 h-6" />
@@ -252,7 +258,7 @@ const DoctorDashboard = () => {
                   </h2>
                   <p className="text-sm text-gray-500">Review and manage dermatology cases</p>
                 </div>
-                
+
                 <div className="flex flex-wrap gap-3 w-full md:w-auto">
                   {/* Search */}
                   <div className="relative flex-1 md:flex-none">
@@ -339,7 +345,7 @@ const DoctorDashboard = () => {
                       />
                     ))}
                   </div>
-                  
+
                   {filteredCases.length > 4 && (
                     <div className="text-center pt-4">
                       <Link
@@ -443,19 +449,18 @@ const DoctorDashboard = () => {
                   3 new
                 </span>
               </div>
-              
+
               <div className="space-y-4">
                 {notifications.map((notification) => (
-                  <div 
+                  <div
                     key={notification.id}
                     className="p-3 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition cursor-pointer"
                   >
                     <div className="flex items-start gap-3">
-                      <div className={`mt-1 p-1 rounded ${
-                        notification.type === 'urgent' ? 'bg-red-100' :
-                        notification.type === 'appointment' ? 'bg-green-100' :
-                        'bg-blue-100'
-                      }`}>
+                      <div className={`mt-1 p-1 rounded ${notification.type === 'urgent' ? 'bg-red-100' :
+                          notification.type === 'appointment' ? 'bg-green-100' :
+                            'bg-blue-100'
+                        }`}>
                         {notification.type === 'urgent' ? (
                           <AlertCircle className="w-4 h-4" />
                         ) : notification.type === 'appointment' ? (
@@ -517,11 +522,10 @@ const DoctorDashboard = () => {
                       <p className="font-medium text-gray-800">{cond.condition}</p>
                       <p className="text-sm text-gray-500">{cond.cases} cases this month</p>
                     </div>
-                    <div className={`px-3 py-1 rounded-full text-sm ${
-                      cond.trend === 'up' ? 'bg-green-100 text-green-800' :
-                      cond.trend === 'down' ? 'bg-red-100 text-red-800' :
-                      'bg-yellow-100 text-yellow-800'
-                    }`}>
+                    <div className={`px-3 py-1 rounded-full text-sm ${cond.trend === 'up' ? 'bg-green-100 text-green-800' :
+                        cond.trend === 'down' ? 'bg-red-100 text-red-800' :
+                          'bg-yellow-100 text-yellow-800'
+                      }`}>
                       {cond.trend}
                     </div>
                   </div>
