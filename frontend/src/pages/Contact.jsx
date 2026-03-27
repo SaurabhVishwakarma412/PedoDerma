@@ -81,7 +81,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-medium text-gray-800">Emergency Support</h4>
-                    <p className="text-blue-600 font-semibold text-lg">1-800-PED-SKIN</p>
+                    <p className="text-blue-600 font-semibold text-lg">100</p>
                     <p className="text-sm text-gray-500">Available 24/7 for urgent cases</p>
                   </div>
                 </div>
@@ -226,7 +226,7 @@ const Contact = () => {
                     type="tel"
                     value={form.phone}
                     onChange={handleChange}
-                    placeholder="(123) 456-7890"
+                    placeholder="91-XXXXX XXXXX"
                     className="bg-gray-50"
                   />
 
@@ -350,9 +350,9 @@ const Contact = () => {
               <div>
                 <h4 className="font-semibold text-gray-800 mb-1">Address</h4>
                 <p className="text-gray-600">
-                  123 Pediatric Care Blvd<br />
-                  Suite 456<br />
-                  San Francisco, CA 94107
+                  LPU<br />
+                  Phagwara<br />
+                  Punjab, India
                 </p>
               </div>
             </div>
@@ -369,7 +369,7 @@ const Contact = () => {
               <Phone className="w-6 h-6 text-blue-600 mt-1" />
               <div>
                 <h4 className="font-semibold text-gray-800 mb-1">Office Phone</h4>
-                <p className="text-gray-600">(415) 123-4567</p>
+                <p className="text-gray-600">91- XXXXX XXXXX</p>
               </div>
             </div>
           </div>

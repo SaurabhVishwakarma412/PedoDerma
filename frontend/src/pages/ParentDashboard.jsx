@@ -18,7 +18,9 @@ import {
   Image as ImageIcon,
   Video,
   FilePlus,
-  Shield
+  Shield,
+  MessageCircle
+  
 } from "lucide-react";
 import { getMyCases, getUpcomingAppointments, getMedicalRecords } from "../services/patientAPI";
 import CaseCard from "../components/CaseCard";
@@ -181,13 +183,21 @@ const ParentDashboard = () => {
                   <Plus className="w-4 h-4" />
                   New Case
                 </Link>
-                <Link
+                {/* <Link
                   to="/book-online"
                   className="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold rounded-lg hover:opacity-90 transition flex items-center gap-2"
                 >
                   <Calendar className="w-4 h-4" />
                   Book Visit
-                </Link>
+                </Link> */}
+                <button
+                  onClick={() => navigate("/doctor/messages")}
+                  className="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg hover:opacity-90 transition flex items-center gap-2"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  Chat
+                </button>
+                
               </div>
             </div>
           </div>
