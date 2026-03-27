@@ -1,5 +1,5 @@
 // frontend/src/components/Navbar.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import Logo from "./Logo";
@@ -7,9 +7,27 @@ import Logo from "./Logo";
 const Navbar = () => {
   const { role, isAuthenticated, logout } = useAuth();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   // Check if user is logged in as a doctor
   const isDoctor = isAuthenticated && role === "doctor";
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 10;
+      if (isScrolled !== scrolled) {
+        setScrolled(isScrolled);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [scrolled]);
 
   const navClass = ({ isActive }) =>
     `block px-3 py-2 rounded transition ${
@@ -19,7 +37,13 @@ const Navbar = () => {
     }`;
 
   return (
-    <nav className="bg-white shadow-md">
+    <nav 
+      className={`sticky top-0 z-50 transition-all duration-300 ${
+        scrolled 
+          ? "bg-white/40 backdrop-blur-md shadow-lg" 
+          : "bg-white shadow-md"
+      }`}
+    >
       <div className="container mt-2 mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -45,7 +69,7 @@ const Navbar = () => {
                 <NavLink to="/login" className={navClass}>Login</NavLink>
                 <NavLink
                   to="/register"
-                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                  className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
                 >
                   Register
                 </NavLink>
@@ -60,7 +84,7 @@ const Navbar = () => {
                 </NavLink>
                 <button
                   onClick={logout}
-                  className="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300"
+                  className="bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition"
                 >
                   Logout
                 </button>
@@ -72,7 +96,7 @@ const Navbar = () => {
           <div className="md:hidden">
             <button
               onClick={() => setOpen(!open)}
-              className="text-gray-700"
+              className="text-gray-700 p-2"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -85,7 +109,11 @@ const Navbar = () => {
 
         {/* Mobile Navigation */}
         {open && (
-          <div className="md:hidden bg-gray-50 border-t">
+          <div className={`md:hidden border-t ${
+            scrolled 
+              ? "bg-white/95 backdrop-blur-md" 
+              : "bg-gray-50"
+          }`}>
             <NavLink to="/" className={navClass} onClick={() => setOpen(false)}>Home</NavLink>
             
             {/* Only show "Book Online" if user is not logged in as a doctor */}
@@ -105,7 +133,7 @@ const Navbar = () => {
                 </NavLink>
                 <NavLink
                   to="/register"
-                  className="block mx-3 my-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                  className="block mx-3 my-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
                   onClick={() => setOpen(false)}
                 >
                   Register
@@ -125,7 +153,7 @@ const Navbar = () => {
                     logout();
                     setOpen(false);
                   }}
-                  className="block w-[90%] mx-auto my-2 bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300"
+                  className="block w-[90%] mx-auto my-2 bg-gray-200 text-gray-800 px-4 py-2 rounded hover:bg-gray-300 transition"
                 >
                   Logout
                 </button>
