@@ -1,12 +1,13 @@
 // frontend/src/pages/Home.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { 
+import {
   CheckCircle, Clock, Shield, Video, MessageSquare, Star, ArrowRight,
   UsersRound, Stethoscope, UserStar, BriefcaseMedical, Camera,
-  Sparkles, Heart, Award, Zap, ShieldCheck, Calendar, Smile, 
-  Droplets, Sun, Moon, Activity, Phone, Mail, MapPin
+  Sparkles, Heart, Award, Zap, ShieldCheck, Calendar, Smile,
+  Droplets,Wind,Baby, Gem, Bug, AlertCircle,
 } from "lucide-react";
+
 import doctor4 from "../assets/doctor4.jpg";
 
 // Animated Counter Component with enhanced styling
@@ -154,7 +155,7 @@ const TestimonialCarousel = () => {
         <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400 rounded-full filter blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-purple-400 rounded-full filter blur-3xl animate-pulse delay-1000"></div>
       </div>
-      
+
       <div className="relative max-w-7xl mx-auto px-4">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
@@ -227,11 +228,10 @@ const TestimonialCarousel = () => {
                   setCurrentIndex(index);
                   setTimeout(() => setIsAnimating(false), 500);
                 }}
-                className={`transition-all duration-300 rounded-full ${
-                  index === currentIndex
-                    ? "bg-blue-400 w-8 h-2"
-                    : "bg-white/30 hover:bg-white/50 w-2 h-2"
-                }`}
+                className={`transition-all duration-300 rounded-full ${index === currentIndex
+                  ? "bg-blue-400 w-8 h-2"
+                  : "bg-white/30 hover:bg-white/50 w-2 h-2"
+                  }`}
               />
             ))}
           </div>
@@ -251,21 +251,21 @@ const Home = () => {
   return (
     <main className="w-full bg-white overflow-x-hidden">
       {/* Hero Section - Enhanced with parallax effect */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
         {/* Background Image with Parallax */}
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat transform scale-105"
-          style={{ 
+          style={{
             backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url(${doctor4})`,
             transform: `scale(${isHeroLoaded ? 1 : 1.1})`,
             transition: 'transform 1.5s ease-out'
           }}
         />
-        
+
         {/* Animated Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-blue-900/50 via-purple-900/30 to-transparent"></div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-        
+
         {/* Floating Elements */}
         <div className="absolute top-1/4 left-10 animate-float-slow">
           <div className="w-16 h-16 bg-blue-400/20 rounded-full blur-xl"></div>
@@ -273,27 +273,26 @@ const Home = () => {
         <div className="absolute bottom-1/3 right-10 animate-float-fast">
           <div className="w-24 h-24 bg-purple-400/20 rounded-full blur-xl"></div>
         </div>
-        
-        <div className={`relative z-10 max-w-5xl mx-auto px-4 text-center transform transition-all duration-1000 ${
-          isHeroLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
-        }`}>
-          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+
+        <div className={`relative z-10 max-w-5xl mx-auto px-4 text-center transform transition-all duration-1000 ${isHeroLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+          }`}>
+          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
             <Sparkles className="w-4 h-4 text-yellow-300" />
             <span className="text-white text-sm font-medium">Expert Pediatric Care — Available 24/7</span>
           </div>
-          
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 text-white leading-tight drop-shadow-2xl">
+
+          <h1 className="text-5xl md:text-7xl lg:text-8xl  font-bold mb-4 text-white leading-tight drop-shadow-2xl">
             Skip the Travel!
             <span className="block bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-transparent">
               Pediatric Dermatology Online
             </span>
           </h1>
-          
+
           <p className="text-xl md:text-2xl text-white/95 mb-8 max-w-3xl mx-auto drop-shadow-lg">
             Expert care for your child's skin from board-certified pediatric dermatologists
           </p>
-          
-          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-6">
             <Link
               to="/cases/submit"
               className="group relative px-8 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold hover:shadow-2xl transition-all transform hover:scale-105 inline-flex items-center justify-center gap-2 overflow-hidden"
@@ -309,7 +308,7 @@ const Home = () => {
               Learn More →
             </Link>
           </div>
-          
+
           <div className="flex flex-wrap justify-center gap-4">
             {[
               { icon: ShieldCheck, text: "Secure & Private", color: "text-green-400" },
@@ -324,22 +323,29 @@ const Home = () => {
             ))}
           </div>
         </div>
-        
+
       </section>
 
       {/* Stats Section - Enhanced with glassmorphism */}
       <section className="py-20 bg-gradient-to-br from-gray-50 to-white relative">
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
         <div className="relative max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-blue-100 rounded-full px-4 py-2 mb-4">
-              <Award className="w-4 h-4 text-blue-600" />
-              <span className="text-blue-700 text-sm font-medium">Our Impact</span>
+          <div className="text-center mb-12 animate-fade-in-up">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full px-4 py-2 mb-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+              <Award className="w-4 h-4 text-white animate-pulse" />
+              <span className="text-white text-sm font-medium">Our Impact • Real Results</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Trusted by Thousands of Parents
+
+            {/* Animated heading with gradient text */}
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 bg-gradient-to-r from-gray-900 via-blue-800 to-gray-900 bg-clip-text text-transparent animate-gradient">
+              Trusted by Thousands
+              <br />
+              <span className="text-blue-600">of Happy Parents</span>
             </h2>
-            <p className="text-gray-600 text-lg">Making pediatric dermatology accessible for everyone</p>
+
+            <p className="text-gray-600 text-lg max-w-2xl mx-auto animate-fade-in-up animation-delay-300">
+              Making pediatric dermatology accessible, affordable, and available for everyone
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <AnimatedCounter number="20+" label="Pediatric Dermatologists" icon={<Stethoscope size={32} />} desc="Board-certified specialists" delay={0} />
@@ -348,6 +354,7 @@ const Home = () => {
           </div>
         </div>
       </section>
+  
 
       {/* Why Choose Us - Enhanced with hover effects */}
       <section className="py-20 bg-white">
@@ -411,46 +418,49 @@ const Home = () => {
 
       {/* Common Concerns - Enhanced with icons and animations */}
       <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50/30">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 bg-blue-100 rounded-full px-4 py-2 mb-4">
-              <Droplets className="w-4 h-4 text-blue-600" />
-              <span className="text-blue-700 text-sm font-medium">We Treat</span>
+  <div className="max-w-7xl mx-auto px-4">
+    {/* Section Header */}
+    <div className="text-center mb-12">
+      <div className="inline-flex items-center gap-2 bg-blue-100 rounded-full px-4 py-2 mb-4">
+        <Droplets className="w-4 h-4 text-blue-600" />
+        <span className="text-blue-700 text-sm font-medium">We Treat</span>
+      </div>
+      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Common Pediatric Skin Concerns
+      </h2>
+      <p className="text-gray-600 text-lg">Expert care for your child's skin health</p>
+    </div>
+
+    {/* Conditions Grid */}
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {[
+        { condition: "Eczema & Atopic Dermatitis", icon: Wind, color: "from-amber-50 to-amber-50", border: "border-amber-200", iconColor: "text-amber-600" },
+        { condition: "Acne in Teens", icon: Sparkles, color: "from-gray-100 to-gray-100", border: "border-gray-200", iconColor: "text-gray-700" },
+        { condition: "Baby Rashes & Diaper Dermatitis", icon: Baby, color: "from-pink-50 to-pink-50", border: "border-pink-200", iconColor: "text-pink-600" },
+        { condition: "Birthmarks & Moles", icon: Gem, color: "from-purple-50 to-purple-50", border: "border-purple-200", iconColor: "text-purple-600" },
+        { condition: "Viral Rashes", icon: Bug, color: "from-yellow-50 to-yellow-50", border: "border-yellow-200", iconColor: "text-yellow-600" },
+        { condition: "Allergic Reactions", icon: AlertCircle, color: "from-orange-50 to-orange-50", border: "border-orange-200", iconColor: "text-orange-600" },
+      ].map((concern, index) => (
+        <div
+          key={index}
+          className={`group bg-gradient-to-br ${concern.color} p-6 rounded-2xl border ${concern.border} hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer`}
+        >
+          <div className="flex items-center gap-4">
+            <concern.icon className={`w-6 h-6 ${concern.iconColor} group-hover:scale-110 transition-transform duration-300`} />
+            <div>
+              <h3 className="font-semibold text-gray-800 text-lg">{concern.condition}</h3>
+              <p className="text-gray-500 text-sm mt-1">Consult a specialist online</p>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Common Pediatric Skin Concerns
-            </h2>
-            <p className="text-gray-600 text-lg">Expert care for your child's skin health</p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { condition: "Eczema & Atopic Dermatitis", icon: "🔴", color: "from-red-100 to-red-50", border: "border-red-200" },
-              { condition: "Acne in Teens", icon: "⚫", color: "from-gray-100 to-gray-50", border: "border-gray-200" },
-              { condition: "Baby Rashes & Diaper Dermatitis", icon: "👶", color: "from-pink-100 to-pink-50", border: "border-pink-200" },
-              { condition: "Birthmarks & Moles", icon: "⭐", color: "from-purple-100 to-purple-50", border: "border-purple-200" },
-              { condition: "Viral Rashes", icon: "🦠", color: "from-yellow-100 to-yellow-50", border: "border-yellow-200" },
-              { condition: "Allergic Reactions", icon: "⚠️", color: "from-orange-100 to-orange-50", border: "border-orange-200" },
-            ].map((concern, index) => (
-              <div 
-                key={index} 
-                className={`group bg-gradient-to-br ${concern.color} p-6 rounded-2xl border ${concern.border} hover:shadow-xl transition-all duration-300 hover:-translate-y-1 cursor-pointer`}
-              >
-                <div className="flex items-center gap-4">
-                  <div className="text-3xl group-hover:scale-110 transition-transform duration-300">{concern.icon}</div>
-                  <div>
-                    <h3 className="font-semibold text-gray-800 text-lg">{concern.condition}</h3>
-                    <p className="text-gray-600 text-sm mt-1">Consult a pediatric specialist online</p>
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
 
       {/* How It Works - Enhanced with step indicators */}
       <section className="py-20 bg-white relative">
-<div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>        <div className="relative max-w-7xl mx-auto px-4">
+        <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>        <div className="relative max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 bg-green-100 rounded-full px-4 py-2 mb-4">
               <Zap className="w-4 h-4 text-green-600" />
@@ -619,7 +629,7 @@ const Home = () => {
       {/* Final CTA - Enhanced with gradient animation */}
       <section className="py-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 animate-gradient"></div>
-<div className="absolute inset-0 bg-[radial-gradient(circle,_rgba(255,255,255,0.1)_1px,_transparent_1px)] [background-size:24px_24px] opacity-10"></div>        <div className="relative max-w-5xl mx-auto px-4 text-center">
+        <div className="absolute inset-0 bg-[radial-gradient(circle,_rgba(255,255,255,0.1)_1px,_transparent_1px)] [background-size:24px_24px] opacity-10"></div>        <div className="relative max-w-5xl mx-auto px-4 text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
             Ready to Get Expert Care for Your Child's Skin?
           </h2>
