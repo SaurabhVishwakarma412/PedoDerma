@@ -18,8 +18,8 @@ A full-stack **MERN** (MongoDB, Express.js, React.js, Node.js) based web applica
 - Review case details and provide medical notes / treatment guidance
 - Update case status (Pending → Reviewed)
 
-### 🗂 Admin (Optional)
-- Manage doctors and platform data
+### 🗂 Admin
+- Manage doctors data
 - View analytics and total case counts
 
 ---
