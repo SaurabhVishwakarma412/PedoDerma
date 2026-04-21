@@ -157,7 +157,6 @@ Parent Sees Diagnosis Report
 
 ### Clone the repository
 - git clone https://github.com/SaurabhVishwakarma412/PedoDerma.git
-- cd PedoDerma
 
 
 ---
