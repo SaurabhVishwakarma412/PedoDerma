@@ -243,22 +243,36 @@ const TestimonialCarousel = () => {
 
 const Home = () => {
   const [isHeroLoaded, setIsHeroLoaded] = useState(false);
+  const [darkMode, setDarkMode] = useState(false); // State for theme toggle
 
   useEffect(() => {
     setIsHeroLoaded(true);
+
+    // Listen for theme changes from the document's class
+    const observer = new MutationObserver(() => {
+      setDarkMode(document.documentElement.classList.contains("dark"));
+    });
+
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <main className="w-full bg-white overflow-x-hidden">
+    <main
+      className={`w-full overflow-x-hidden ${darkMode ? "bg-gray-900 text-gray-100" : "bg-white text-gray-900"}`}
+    >
       {/* Hero Section - Enhanced with parallax effect */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+      <section
+        className={`relative min-h-[90vh] flex items-center justify-center overflow-hidden ${darkMode ? "bg-gray-800" : "bg-white"}`}
+      >
         {/* Background Image with Parallax */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat transform scale-105"
           style={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.5)), url(${doctor4})`,
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, ${darkMode ? "0.6" : "0.4"}), rgba(0, 0, 0, ${darkMode ? "0.7" : "0.5"})), url(${doctor4})`,
             transform: `scale(${isHeroLoaded ? 1 : 1.1})`,
-            transition: 'transform 1.5s ease-out'
+            transition: "transform 1.5s ease-out",
           }}
         />
 
@@ -327,7 +341,9 @@ const Home = () => {
       </section>
 
       {/* Stats Section - Enhanced with glassmorphism */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-white relative">
+      <section
+        className={`py-20 relative ${darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"}`}
+      >
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
         <div className="relative max-w-7xl mx-auto px-4">
           <div className="text-center mb-12 animate-fade-in-up">
@@ -357,7 +373,9 @@ const Home = () => {
   
 
       {/* Why Choose Us - Enhanced with hover effects */}
-      <section className="py-20 bg-white">
+      <section
+        className={`py-20 ${darkMode ? "bg-gray-900 text-gray-100" : "bg-white text-gray-900"}`}
+      >
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 bg-purple-100 rounded-full px-4 py-2 mb-4">
@@ -417,49 +435,53 @@ const Home = () => {
       </section>
 
       {/* Common Concerns - Enhanced with icons and animations */}
-      <section className="py-20 bg-gradient-to-br from-gray-50 to-blue-50/30">
-  <div className="max-w-7xl mx-auto px-4">
-    {/* Section Header */}
-    <div className="text-center mb-12">
-      <div className="inline-flex items-center gap-2 bg-blue-100 rounded-full px-4 py-2 mb-4">
-        <Droplets className="w-4 h-4 text-blue-600" />
-        <span className="text-blue-700 text-sm font-medium">We Treat</span>
-      </div>
-      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-        Common Pediatric Skin Concerns
-      </h2>
-      <p className="text-gray-600 text-lg">Expert care for your child's skin health</p>
-    </div>
-
-    {/* Conditions Grid */}
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {[
-        { condition: "Eczema & Atopic Dermatitis", icon: Wind, color: "from-amber-50 to-amber-50", border: "border-amber-200", iconColor: "text-amber-600" },
-        { condition: "Acne in Teens", icon: Sparkles, color: "from-gray-100 to-gray-100", border: "border-gray-200", iconColor: "text-gray-700" },
-        { condition: "Baby Rashes & Diaper Dermatitis", icon: Baby, color: "from-pink-50 to-pink-50", border: "border-pink-200", iconColor: "text-pink-600" },
-        { condition: "Birthmarks & Moles", icon: Gem, color: "from-purple-50 to-purple-50", border: "border-purple-200", iconColor: "text-purple-600" },
-        { condition: "Viral Rashes", icon: Bug, color: "from-yellow-50 to-yellow-50", border: "border-yellow-200", iconColor: "text-yellow-600" },
-        { condition: "Allergic Reactions", icon: AlertCircle, color: "from-orange-50 to-orange-50", border: "border-orange-200", iconColor: "text-orange-600" },
-      ].map((concern, index) => (
-        <div
-          key={index}
-          className={`group bg-gradient-to-br ${concern.color} p-6 rounded-2xl border ${concern.border} hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer`}
-        >
-          <div className="flex items-center gap-4">
-            <concern.icon className={`w-6 h-6 ${concern.iconColor} group-hover:scale-110 transition-transform duration-300`} />
-            <div>
-              <h3 className="font-semibold text-gray-800 text-lg">{concern.condition}</h3>
-              <p className="text-gray-500 text-sm mt-1">Consult a specialist online</p>
+      <section
+        className={`py-20 ${darkMode ? "bg-gray-800 text-gray-100" : "bg-gradient-to-br from-gray-50 to-blue-50/30"}`}
+      >
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Section Header */}
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 bg-blue-100 rounded-full px-4 py-2 mb-4">
+              <Droplets className="w-4 h-4 text-blue-600" />
+              <span className="text-blue-700 text-sm font-medium">We Treat</span>
             </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Common Pediatric Skin Concerns
+            </h2>
+            <p className="text-gray-600 text-lg">Expert care for your child's skin health</p>
+          </div>
+
+          {/* Conditions Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { condition: "Eczema & Atopic Dermatitis", icon: Wind, color: "from-amber-50 to-amber-50", border: "border-amber-200", iconColor: "text-amber-600" },
+              { condition: "Acne in Teens", icon: Sparkles, color: "from-gray-100 to-gray-100", border: "border-gray-200", iconColor: "text-gray-700" },
+              { condition: "Baby Rashes & Diaper Dermatitis", icon: Baby, color: "from-pink-50 to-pink-50", border: "border-pink-200", iconColor: "text-pink-600" },
+              { condition: "Birthmarks & Moles", icon: Gem, color: "from-purple-50 to-purple-50", border: "border-purple-200", iconColor: "text-purple-600" },
+              { condition: "Viral Rashes", icon: Bug, color: "from-yellow-50 to-yellow-50", border: "border-yellow-200", iconColor: "text-yellow-600" },
+              { condition: "Allergic Reactions", icon: AlertCircle, color: "from-orange-50 to-orange-50", border: "border-orange-200", iconColor: "text-orange-600" },
+            ].map((concern, index) => (
+              <div
+                key={index}
+                className={`group bg-gradient-to-br ${concern.color} p-6 rounded-2xl border ${concern.border} hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer`}
+              >
+                <div className="flex items-center gap-4">
+                  <concern.icon className={`w-6 h-6 ${concern.iconColor} group-hover:scale-110 transition-transform duration-300`} />
+                  <div>
+                    <h3 className="font-semibold text-gray-800 text-lg">{concern.condition}</h3>
+                    <p className="text-gray-500 text-sm mt-1">Consult a specialist online</p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      ))}
-    </div>
-  </div>
-</section>
+      </section>
 
       {/* How It Works - Enhanced with step indicators */}
-      <section className="py-20 bg-white relative">
+      <section
+        className={`py-20 ${darkMode ? "bg-gray-900 text-gray-100" : "bg-white text-gray-900"}`}
+      >
         <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-30"></div>        <div className="relative max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 bg-green-100 rounded-full px-4 py-2 mb-4">
@@ -516,7 +538,9 @@ const Home = () => {
       </section>
 
       {/* Benefits - Enhanced with cards */}
-      <section className="py-20 bg-gradient-to-br from-indigo-50 to-blue-50">
+      <section
+        className={`py-20 ${darkMode ? "bg-gray-800 text-gray-100" : "bg-gradient-to-br from-indigo-50 to-blue-50"}`}
+      >
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 bg-indigo-100 rounded-full px-4 py-2 mb-4">
@@ -575,7 +599,10 @@ const Home = () => {
       <TestimonialCarousel />
 
       {/* FAQs - Enhanced with interactive design */}
-      <section id="faq" className="py-20 bg-white">
+      <section
+        id="faq"
+        className={`py-20 ${darkMode ? "bg-gray-900 text-gray-100" : "bg-white text-gray-900"}`}
+      >
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 bg-yellow-100 rounded-full px-4 py-2 mb-4">
@@ -627,7 +654,9 @@ const Home = () => {
       </section>
 
       {/* Final CTA - Enhanced with gradient animation */}
-      <section className="py-20 relative overflow-hidden">
+      <section
+        className={`py-20 relative overflow-hidden ${darkMode ? "bg-gray-800 text-gray-100" : "bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600"}`}
+      >
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 animate-gradient"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle,_rgba(255,255,255,0.1)_1px,_transparent_1px)] [background-size:24px_24px] opacity-10"></div>        <div className="relative max-w-5xl mx-auto px-4 text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
