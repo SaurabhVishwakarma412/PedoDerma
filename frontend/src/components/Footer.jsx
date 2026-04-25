@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import { Instagram , Facebook, Linkedin, Twitter } from "lucide-react";
 const Footer = () => {
   return (
-    <footer className="bg-zinc-950 border-t mt-10">
+    <footer className="bg-zinc-950 dark:bg-gray-800 border-t mt-10">
       {/* Top Section */}
-      <div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-4 gap-8 text-lg text-gray-50">
+      <div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-4 gap-8 text-lg text-gray-50 dark:text-gray-300">
 
         {/* Logo & About */}
         <div className="">
@@ -87,7 +87,7 @@ const Footer = () => {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t py-4 text-center text-sm text-gray-50">
+      <div className="border-t py-4 text-center text-sm text-gray-50 dark:text-gray-400">
         © {new Date().getFullYear()} PedoDerma. All rights reserved.
         <br />
         <Link to="/terms" className="hover:text-blue-600">Terms & Conditions</Link>

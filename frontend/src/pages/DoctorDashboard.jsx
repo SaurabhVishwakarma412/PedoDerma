@@ -48,8 +48,9 @@ const DoctorDashboard = () => {
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
+  const [darkMode, setDarkMode] = React.useState(false);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
@@ -132,8 +133,18 @@ const DoctorDashboard = () => {
     }
   };
 
+  React.useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setDarkMode(document.documentElement.classList.contains("dark"));
+    });
+
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className={`min-h-screen ${darkMode ? "bg-gray-900 text-gray-100" : "bg-gray-50"}`}>
       {/* Header */}
       <div className="bg-linear-to-r from-blue-900 to-indigo-800 text-white">
         <div className="max-w-7xl mx-auto px-4 py-6">

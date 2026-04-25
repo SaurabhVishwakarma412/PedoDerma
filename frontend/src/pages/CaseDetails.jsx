@@ -21,6 +21,17 @@ const statusColor = (status) => {
 const CaseDetails = () => {
   const { id } = useParams();
   const { role } = useAuth();
+  const [darkMode, setDarkMode] = React.useState(false);
+
+  React.useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setDarkMode(document.documentElement.classList.contains("dark"));
+    });
+
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+    return () => observer.disconnect();
+  }, []);
 
   const [caseData, setCaseData] = useState(null);
   const [error, setError] = useState("");
@@ -58,7 +69,7 @@ const CaseDetails = () => {
     return <p className="px-4 py-8 text-sm">Case not found.</p>;
 
   return (
-    <main className="max-w-2xl mx-auto px-4 py-8 text-sm">
+    <main className={`max-w-2xl mx-auto px-4 py-8 text-sm ${darkMode ? "bg-gray-900 text-gray-100" : ""}`}>
       {/* Header */}
       <div className="flex justify-between mb-5">
         <h1 className="text-2xl font-bold">

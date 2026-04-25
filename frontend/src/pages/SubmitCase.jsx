@@ -19,6 +19,17 @@ import { submitCase } from "../services/patientAPI";
 
 const SubmitCase = () => {
   const navigate = useNavigate();
+  const [darkMode, setDarkMode] = React.useState(false);
+
+  React.useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setDarkMode(document.documentElement.classList.contains("dark"));
+    });
+
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+    return () => observer.disconnect();
+  }, []);
 
   const [form, setForm] = useState({
     title: "",
@@ -189,7 +200,7 @@ const SubmitCase = () => {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <main className={`min-h-screen ${darkMode ? "bg-gray-900 text-gray-100" : "bg-gradient-to-b from-blue-50 to-white"}`}>
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -692,12 +703,12 @@ const SubmitCase = () => {
         </div>
 
         {/* Emergency Notice */}
-        <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+        <div className={`mt-6 p-4 ${darkMode ? "bg-gray-800 border-gray-700" : "bg-red-50 border-red-200"} rounded-xl`}>
           <div className="flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 text-red-600" />
+            <AlertCircle className={`w-5 h-5 ${darkMode ? "text-red-400" : "text-red-600"}`} />
             <div>
-              <p className="font-medium text-red-800">Medical Emergency?</p>
-              <p className="text-sm text-red-700">
+              <p className={`font-medium ${darkMode ? "text-red-300" : "text-red-800"}`}>Medical Emergency?</p>
+              <p className={`text-sm ${darkMode ? "text-red-400" : "text-red-700"}`}>
                 If your child has difficulty breathing, high fever, or spreading infection, please call 911 or visit the nearest emergency room immediately.
               </p>
             </div>
