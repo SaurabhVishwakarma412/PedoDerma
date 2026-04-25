@@ -32,6 +32,7 @@ const ParentDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("cases"); // cases, appointments, records
+  const [darkMode, setDarkMode] = React.useState(false);
 
   // Stats
   const [stats, setStats] = useState({
@@ -50,7 +51,7 @@ const ParentDashboard = () => {
     { id: 3, type: 'message', message: 'Dr. Johnson replied to your question', time: '2 days ago', read: true },
   ]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
@@ -135,8 +136,18 @@ const ParentDashboard = () => {
     }
   };
 
+  React.useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setDarkMode(document.documentElement.classList.contains("dark"));
+    });
+
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <main className="min-h-screen bg-gray-50">
+    <main className={`min-h-screen ${darkMode ? "bg-gray-900 text-gray-100" : "bg-gray-50"}`}>
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
         <div className="max-w-7xl mx-auto px-4 py-6">

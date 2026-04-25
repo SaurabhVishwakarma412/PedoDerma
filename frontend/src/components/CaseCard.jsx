@@ -16,8 +16,19 @@ const statusColor = (status) => {
 };
 
 const CaseCard = ({ caseData }) => {
+  const [darkMode, setDarkMode] = React.useState(false);
   const navigate = useNavigate();
   const baseURL = import.meta.env.VITE_API_URL; // http://localhost:5000
+
+  React.useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setDarkMode(document.documentElement.classList.contains("dark"));
+    });
+
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleClick = () => {
     navigate(`/cases/${caseData._id}`);
@@ -26,7 +37,9 @@ const CaseCard = ({ caseData }) => {
   return (
     <div
       onClick={handleClick}
-      className="border rounded-lg p-4 cursor-pointer hover:shadow-md transition bg-white"
+      className={`border rounded-lg p-4 cursor-pointer hover:shadow-md transition ${
+        darkMode ? "bg-gray-800 border-gray-600 text-gray-100" : "bg-white border-gray-300 text-gray-700"
+      }`}
     >
       {/* Header */}
       <div className="flex justify-between items-center mb-2">
@@ -48,30 +61,32 @@ const CaseCard = ({ caseData }) => {
         <img
           src={`${baseURL}${caseData.imageUrl}`}
           alt="Case"
-          className="w-full h-32 object-cover rounded mb-3 border"
+          className={`w-full h-32 object-cover rounded mb-3 border ${
+            darkMode ? "border-gray-600" : "border-gray-300"
+          }`}
         />
       )}
 
       {/* Description */}
-      <p className="text-xs text-gray-600 line-clamp-2 mb-3">
+      <p className="text-xs line-clamp-2 mb-3">
         {caseData.description || "No description provided"}
       </p>
 
       {/* Extra info */}
-      <div className="flex justify-between text-[11px] text-gray-500 mb-2">
+      <div className="flex justify-between text-[11px] mb-2">
         <span>Child Age: {caseData.childAge || "N/A"}</span>
         <span>Duration: {caseData.duration || "N/A"}</span>
       </div>
 
       {/* Doctor Notes */}
       {caseData.status === "completed" && caseData.doctorNotes && (
-        <p className="text-[11px] text-green-600 italic border-t pt-2 mt-2">
+        <p className="text-[11px] italic border-t pt-2 mt-2">
           Doctor Notes: {caseData.doctorNotes}
         </p>
       )}
 
       {/* Timestamp */}
-      <p className="text-[11px] text-gray-400 mt-2">
+      <p className="text-[11px] mt-2">
         Submitted:{" "}
         {caseData.createdAt
           ? new Date(caseData.createdAt).toLocaleDateString()

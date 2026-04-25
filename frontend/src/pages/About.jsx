@@ -11,8 +11,20 @@ import image5 from "../assets/secure.webp";
 import image6 from "../assets/started.jpg";
 
 const About = () => {
+  const [darkMode, setDarkMode] = React.useState(false);
+
+  React.useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setDarkMode(document.documentElement.classList.contains("dark"));
+    });
+
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <main className="mx-auto px-4 py-12 text-base">
+    <main className={`mx-auto px-4 py-12 text-base ${darkMode ? "bg-gray-900 text-gray-100" : ""}`}>
       
       {/* SECTION 1 */}
       <section className="m-4 lg:mx-24 md:mx-12 my-20">

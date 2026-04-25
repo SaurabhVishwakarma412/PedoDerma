@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Calendar, Clock, User, Phone, MessageSquare, Camera } from 'lucide-react'
 
 const BookOnline = () => {
+  const [darkMode, setDarkMode] = React.useState(false);
   const [formData, setFormData] = useState({
     patientName: '',
     patientAge: '',
@@ -16,6 +17,16 @@ const BookOnline = () => {
     preferredDoctor: '',
     photos: []
   })
+
+  React.useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setDarkMode(document.documentElement.classList.contains("dark"));
+    });
+
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+    return () => observer.disconnect();
+  }, []);
 
   const timeSlots = [
     '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
@@ -88,7 +99,7 @@ const BookOnline = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className={`min-h-screen ${darkMode ? "bg-gray-900 text-gray-100" : "bg-gray-50"} py-8 px-4`}>
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">

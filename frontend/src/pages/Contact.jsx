@@ -15,7 +15,19 @@ const Contact = () => {
 
   const [sent, setSent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [darkMode, setDarkMode] = React.useState(false);
 
+  React.useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setDarkMode(document.documentElement.classList.contains("dark"));
+    });
+
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Define the contactSubjects array
   const contactSubjects = [
     "General Inquiry",
     "Technical Support",
@@ -33,7 +45,7 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
@@ -53,14 +65,14 @@ const Contact = () => {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 py-12">
+    <main className={`min-h-screen ${darkMode ? "bg-gray-900 text-gray-100" : "bg-gray-50"} py-12`}>
       <div className="max-w-6xl mx-auto px-4">
         {/* Header Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-blue-900 mb-4">
+          <h1 className="text-4xl font-bold text-blue-900 dark:text-blue-400 mb-4">
             Contact Our Pediatric Dermatology Team
           </h1>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          <p className="text-gray-600 dark:text-gray-300 text-lg max-w-2xl mx-auto">
             Have questions about your child's skin care? Our team is here to help you 24/7.
           </p>
         </div>
@@ -159,15 +171,15 @@ const Contact = () => {
 
           {/* Right Column - Contact Form */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-lg p-8 border border-blue-100">
+            <div className={`rounded-xl shadow-lg p-8 border ${darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-blue-100"}`}>
               {/* Success Message */}
               {sent && (
-                <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                <div className="mb-6 p-4 bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-700 rounded-lg">
                   <div className="flex items-center gap-3">
-                    <CheckCircle className="w-6 h-6 text-green-600" />
+                    <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
                     <div>
-                      <h4 className="font-semibold text-green-800">Message Sent Successfully!</h4>
-                      <p className="text-green-700 text-sm">
+                      <h4 className="font-semibold text-green-800 dark:text-green-300">Message Sent Successfully!</h4>
+                      <p className="text-green-700 dark:text-green-400 text-sm">
                         Thank you for reaching out. Our team will respond within 24 hours.
                       </p>
                     </div>
@@ -175,41 +187,12 @@ const Contact = () => {
                 </div>
               )}
 
-              <h2 className="text-2xl font-bold text-gray-800 mb-6">
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">
                 Send Us a Message
               </h2>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
-                  {/* User Type Selection */}
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
-                      I am a:
-                    </label>
-                    <div className="flex flex-wrap gap-4">
-                      {[
-                        { value: "parent", label: "Parent/Guardian", desc: "For medical consultations" },
-                        { value: "doctor", label: "Doctor", desc: "For provider inquiries" },
-                        { value: "other", label: "Other", desc: "General inquiries" }
-                      ].map((type) => (
-                        <label key={type.value} className="flex items-center space-x-3 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="userType"
-                            value={type.value}
-                            checked={form.userType === type.value}
-                            onChange={handleChange}
-                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300"
-                          />
-                          <div>
-                            <span className="text-gray-700 font-medium">{type.label}</span>
-                            <p className="text-xs text-gray-500">{type.desc}</p>
-                          </div>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-
                   <Input
                     label="Full Name *"
                     name="name"
@@ -217,7 +200,7 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     placeholder="Enter your full name"
-                    className="bg-gray-50"
+                    darkMode={darkMode}
                   />
 
                   <Input
@@ -227,7 +210,7 @@ const Contact = () => {
                     value={form.phone}
                     onChange={handleChange}
                     placeholder="91-XXXXX XXXXX"
-                    className="bg-gray-50"
+                    darkMode={darkMode}
                   />
 
                   <Input
@@ -238,11 +221,11 @@ const Contact = () => {
                     onChange={handleChange}
                     required
                     placeholder="your.email@example.com"
-                    className="bg-gray-50"
+                    darkMode={darkMode}
                   />
 
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Subject *
                     </label>
                     <select
@@ -250,7 +233,7 @@ const Contact = () => {
                       value={form.subject}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-gray-50"
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition ${darkMode ? "bg-gray-700 text-gray-100 border-gray-600" : "bg-gray-50 border-gray-300"}`}
                     >
                       <option value="">Select a subject</option>
                       {contactSubjects.map((subject) => (
@@ -260,7 +243,7 @@ const Contact = () => {
                   </div>
 
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Message *
                     </label>
                     <textarea
@@ -269,9 +252,9 @@ const Contact = () => {
                       value={form.message}
                       onChange={handleChange}
                       required
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition bg-gray-50 resize-none"
+                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none ${darkMode ? "bg-gray-700 text-gray-100 border-gray-600" : "bg-gray-50 border-gray-300"}`}
                       placeholder={
-                        form.userType === "parent" 
+                        form.userType === "parent"
                           ? "Describe your child's condition or question in detail. Please include child's age and any relevant medical history..."
                           : "Please provide details about your inquiry..."
                       }
@@ -284,11 +267,10 @@ const Contact = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className={`inline-flex items-center justify-center px-8 py-4 rounded-lg font-semibold transition-all ${
-                      isSubmitting
-                        ? 'bg-blue-400 cursor-not-allowed'
-                        : 'bg-blue-600 hover:bg-blue-700 transform hover:-translate-y-0.5'
-                    } text-white shadow-lg`}
+                    className={`inline-flex items-center justify-center px-8 py-4 rounded-lg font-semibold transition-all ${isSubmitting
+                      ? 'bg-blue-400 cursor-not-allowed'
+                      : 'bg-blue-600 hover:bg-blue-700 transform hover:-translate-y-0.5'
+                      } text-white shadow-lg`}
                   >
                     {isSubmitting ? (
                       <>
@@ -302,7 +284,7 @@ const Contact = () => {
                       </>
                     )}
                   </button>
-                  <p className="text-sm text-gray-500 mt-3">
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-3">
                     By submitting, you agree to our Privacy Policy and Terms of Service.
                   </p>
                 </div>
