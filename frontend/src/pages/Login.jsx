@@ -1,7 +1,7 @@
 // frontend/src/pages/Login.jsx
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Eye, EyeOff, Lock, Mail, Stethoscope, User, AlertCircle, LogIn } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, Stethoscope, User, AlertCircle, LogIn, Cross, MoveUpLeft, CrossIcon, ChartNoAxesColumnDecreasingIcon, X } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import API from "../services/api";
 
@@ -98,7 +98,11 @@ const Login = () => {
               <h2 className="text-2xl font-bold text-gray-800">Sign In to Your Account</h2>
               <div className="flex justify-center mb-2">
                 <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                  <LogIn className="w-6 h-6 text-blue-600" />
+                  
+                  <button onClick={() => navigate(-1)} className="">
+                    <X className="font-black text-blue-600" />
+                  </button>
+                  
                 </div>
               </div>
             </div>
