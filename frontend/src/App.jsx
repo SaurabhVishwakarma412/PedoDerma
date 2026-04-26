@@ -20,6 +20,7 @@ import Messaging from "./pages/Messaging";
 import DoctorMessaging from "./pages/DoctorMessaging";
 
 import { AuthProvider, useAuth } from "./context/AuthContext";
+import { ThemeProvider } from "./context/ThemeContext";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { isAuthenticated, role, loading } = useAuth();
@@ -203,13 +204,13 @@ const App = () => {
   }, []);
 
   return (
-    <div className={darkMode ? "bg-gray-900 text-gray-100" : "bg-white text-gray-900"}>
+    <ThemeProvider>
       <Router>
         <AuthProvider>
           <AppContent />
         </AuthProvider>
       </Router>
-    </div>
+    </ThemeProvider>
   );
 };
 

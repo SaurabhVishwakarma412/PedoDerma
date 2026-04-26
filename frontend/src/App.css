@@ -1,0 +1,26 @@
+/* Light theme */
+.light {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --box-color: #f0f0f0;
+}
+
+/* Dark theme */
+.dark {
+  --bg-color: #121212;
+  --text-color: #ffffff;
+  --box-color: #1e1e1e;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.box {
+  background-color: var(--box-color);
+  padding: 1rem;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}

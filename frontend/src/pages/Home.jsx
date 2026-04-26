@@ -342,7 +342,7 @@ const Home = () => {
 
       {/* Stats Section - Enhanced with glassmorphism */}
       <section
-        className={`py-20 relative ${darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-50 text-gray-900"}`}
+        className={`py-20 relative ${darkMode ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-900"}`}
       >
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
         <div className="relative max-w-7xl mx-auto px-4">
@@ -382,7 +382,7 @@ const Home = () => {
               <Sparkles className="w-4 h-4 text-purple-600" />
               <span className="text-purple-700 text-sm font-medium">Why Families Love Us</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-blue-600 mb-4">
               Why Choose Our Pediatric Dermatology Care
             </h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto">
@@ -436,7 +436,7 @@ const Home = () => {
 
       {/* Common Concerns - Enhanced with icons and animations */}
       <section
-        className={`py-20 ${darkMode ? "bg-gray-800 text-gray-100" : "bg-gradient-to-br from-gray-50 to-blue-50/30"}`}
+        className={`py-20 ${darkMode ? "bg-gray-900 text-gray-100" : "bg-gradient-to-br from-gray-50 to-blue-50/30"}`}
       >
         <div className="max-w-7xl mx-auto px-4">
           {/* Section Header */}
@@ -445,7 +445,7 @@ const Home = () => {
               <Droplets className="w-4 h-4 text-blue-600" />
               <span className="text-blue-700 text-sm font-medium">We Treat</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-blue-600 mb-4">
               Common Pediatric Skin Concerns
             </h2>
             <p className="text-gray-600 text-lg">Expert care for your child's skin health</p>
@@ -488,7 +488,7 @@ const Home = () => {
               <Zap className="w-4 h-4 text-green-600" />
               <span className="text-green-700 text-sm font-medium">Simple Process</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-blue-600 mb-4">
               How Pediatric Tele-Dermatology Works
             </h2>
             <p className="text-gray-600 text-lg">Three simple steps to expert care</p>
@@ -547,7 +547,7 @@ const Home = () => {
               <Heart className="w-4 h-4 text-indigo-600" />
               <span className="text-indigo-700 text-sm font-medium">Why It Works</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-blue-600 mb-4">
               Benefits of Pediatric Tele-Dermatology
             </h2>
             <p className="text-gray-600 text-lg">Modern care designed for modern families</p>
@@ -734,7 +734,7 @@ const Home = () => {
           .bg-grid-pattern {
             background-image: linear-gradient(to right, #e5e7eb 1px, transparent 1px),
                               linear-gradient(to bottom, #e5e7eb 1px, transparent 1px);
-            background-size: 24px 24px;
+            background-size: 20px 20px;
           }
         `}
       </style>
