@@ -158,17 +158,8 @@ const ParentDashboard = () => {
                 <div>
                   <h1 className="text-2xl md:text-3xl font-bold">Welcome Back, Parent!</h1>
                   <p className="text-blue-100">Track your child's dermatology care journey</p>
+                  
                 </div>
-              </div>
-              <div className="flex items-center gap-4 text-sm">
-                <span className="flex items-center gap-1">
-                  <CheckCircle className="w-4 h-4" />
-                  Last login: Today at 10:30 AM
-                </span>
-                <span className="flex items-center gap-1">
-                  <Shield className="w-4 h-4" />
-                  Account verified
-                </span>
               </div>
             </div>
 
@@ -194,20 +185,15 @@ const ParentDashboard = () => {
                   <Plus className="w-4 h-4" />
                   New Case
                 </Link>
-                {/* <Link
-                  to="/book-online"
-                  className="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold rounded-lg hover:opacity-90 transition flex items-center gap-2"
-                >
-                  <Calendar className="w-4 h-4" />
-                  Book Visit
-                </Link> */}
+                
                 <button
-                  onClick={() => navigate("/doctor/messages")}
+                  onClick={() => navigate('parent/messages')}
                   className="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg hover:opacity-90 transition flex items-center gap-2"
                 >
                   <MessageCircle className="w-4 h-4" />
                   Chat
                 </button>
+                
                 
               </div>
             </div>

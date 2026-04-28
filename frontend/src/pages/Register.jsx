@@ -106,7 +106,8 @@ const Register = () => {
         city: form.city,
         state: form.state,
         zipCode: form.zipCode,
-        subscribeToUpdates: form.subscribeToUpdates
+        subscribeToUpdates: form.subscribeToUpdates,
+        childName: "" // Optional field added to match backend
       };
 
       await registerParent(registrationData);
@@ -115,6 +116,7 @@ const Register = () => {
       // Redirect after delay
       setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
+      console.error(err.response?.data || err.message); // Log error for debugging
       setError(err.response?.data?.message || "Registration failed. Please try again.");
     } finally {
       setIsLoading(false);
