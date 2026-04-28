@@ -140,12 +140,12 @@ const AppContent = () => {
         }
       />
       <Route
-        path="/messages"
+        path="/parent/messages"
         element={
           <ProtectedRoute allowedRoles={["parent"]}>
               <AuthLayout>
+                <Messaging />
               </AuthLayout>
-              <Messaging />
           </ProtectedRoute>
         }
       />

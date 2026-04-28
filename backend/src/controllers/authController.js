@@ -11,12 +11,13 @@ exports.registerParent = async (req, res) => {
     const user = await User.create({
       name,
       email,
-      childName,
+      childName: childName || null, // Default to null if not provided
       password: await bcrypt.hash(password, 10),
     });
 
     res.json({ message: "Registered Successfully" });
   } catch (e) {
+    console.error(e); // Log the error for debugging
     res.status(500).json({ message: "Server Error" });
   }
 };
