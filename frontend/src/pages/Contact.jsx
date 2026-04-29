@@ -1,6 +1,6 @@
 // frontend/src/pages/Contact.jsx
 import React, { useState } from "react";
-import { Mail, Phone, MapPin, Clock, Send, CheckCircle, MessageSquare } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, Send, CheckCircle, MessageSquare, HelpCircle, Building2, Globe } from "lucide-react";
 import Input from "../components/Input";
 
 const Contact = () => {
@@ -23,11 +23,11 @@ const Contact = () => {
     });
 
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    setDarkMode(document.documentElement.classList.contains("dark"));
 
     return () => observer.disconnect();
   }, []);
 
-  // Define the contactSubjects array
   const contactSubjects = [
     "General Inquiry",
     "Technical Support",
@@ -46,11 +46,9 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call
     setTimeout(() => {
       setIsSubmitting(false);
       setSent(true);
-      // Reset form after successful submission
       setTimeout(() => {
         setForm({
           name: "",
@@ -60,19 +58,71 @@ const Contact = () => {
           message: "",
           userType: "parent"
         });
+        setTimeout(() => setSent(false), 3000);
       }, 2000);
     }, 1500);
   };
 
+  // Contact Card Component
+  const ContactCard = ({ icon: Icon, title, content, subtext, href, color }) => (
+    <div className={`group rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 ${
+      darkMode 
+        ? "bg-gray-800/90 backdrop-blur-sm border border-gray-700/50 hover:shadow-xl" 
+        : "bg-white shadow-lg hover:shadow-xl border border-gray-100"
+    }`}>
+      <div className="flex items-start gap-4">
+        <div className={`p-3 rounded-xl bg-gradient-to-r ${color} shadow-lg transform group-hover:scale-110 transition-transform duration-300`}>
+          <Icon className="w-6 h-6 text-white" />
+        </div>
+        <div className="flex-1">
+          <h4 className={`font-semibold text-lg mb-1 ${darkMode ? "text-gray-200" : "text-gray-800"}`}>{title}</h4>
+          {href ? (
+            <a href={href} className={`font-semibold text-lg transition ${darkMode ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-700"}`}>
+              {content}
+            </a>
+          ) : (
+            <p className={`font-semibold text-lg ${darkMode ? "text-blue-400" : "text-blue-600"}`}>{content}</p>
+          )}
+          <p className={`text-sm mt-1 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>{subtext}</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  // FAQ Item Component
+  const FAQItem = ({ question, answer }) => (
+    <div className={`p-4 rounded-lg transition-all duration-300 ${
+      darkMode 
+        ? "bg-gray-800/50 border border-gray-700 hover:bg-gray-800" 
+        : "bg-white/80 border border-gray-100 hover:shadow-md"
+    }`}>
+      <p className={`font-medium mb-1 ${darkMode ? "text-gray-200" : "text-gray-800"}`}>{question}</p>
+      <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>{answer}</p>
+    </div>
+  );
+
   return (
-    <main className={`min-h-screen ${darkMode ? "bg-gray-900 text-gray-100" : "bg-gray-50"} py-12`}>
+    <main className={`min-h-screen transition-colors duration-300 ${
+      darkMode ? "bg-gray-900" : "bg-gradient-to-br from-gray-50 via-white to-blue-50/30"
+    } py-12`}>
       <div className="max-w-6xl mx-auto px-4">
         {/* Header Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-blue-900 dark:text-blue-400 mb-4">
-            Contact Our Pediatric Dermatology Team
+          <div className={`inline-flex items-center gap-2 rounded-full px-4 py-2 mb-6 ${
+            darkMode ? "bg-blue-900/30" : "bg-blue-100"
+          }`}>
+            <MessageSquare className={`w-4 h-4 ${darkMode ? "text-blue-400" : "text-blue-600"}`} />
+            <span className={`text-sm font-medium ${darkMode ? "text-blue-300" : "text-blue-700"}`}>24/7 Support Available</span>
+          </div>
+          <h1 className={`text-4xl md:text-5xl font-bold mb-4 ${
+            darkMode ? "text-white" : "text-gray-900"
+          }`}>
+            Contact Our{" "}
+            <span className={`bg-gradient-to-r ${darkMode ? "from-blue-400 to-indigo-400" : "from-blue-600 to-indigo-600"} bg-clip-text text-transparent`}>
+              Pediatric Dermatology Team
+            </span>
           </h1>
-          <p className="text-gray-600 dark:text-gray-300 text-lg max-w-2xl mx-auto">
+          <p className={`text-lg max-w-2xl mx-auto ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
             Have questions about your child's skin care? Our team is here to help you 24/7.
           </p>
         </div>
@@ -81,65 +131,70 @@ const Contact = () => {
           {/* Left Column - Contact Information */}
           <div className="lg:col-span-1 space-y-6">
             {/* Contact Cards */}
-            <div className="bg-white rounded-xl shadow-lg p-6 border border-blue-100">
-              <h3 className="text-xl font-semibold text-gray-800 mb-6">
+            <div className={`rounded-xl shadow-lg p-6 transition-colors duration-300 ${
+              darkMode 
+                ? "bg-gray-800/90 backdrop-blur-sm border border-gray-700/50" 
+                : "bg-white border border-gray-100"
+            }`}>
+              <h3 className={`text-xl font-semibold mb-6 ${darkMode ? "text-gray-200" : "text-gray-800"}`}>
                 Get in Touch
               </h3>
               
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Phone className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-800">Emergency Support</h4>
-                    <p className="text-blue-600 font-semibold text-lg">100</p>
-                    <p className="text-sm text-gray-500">Available 24/7 for urgent cases</p>
-                  </div>
-                </div>
+              <div className="space-y-4">
+                <ContactCard 
+                  icon={Phone}
+                  title="Emergency Support"
+                  content="100"
+                  subtext="Available 24/7 for urgent cases"
+                  color="from-red-500 to-pink-500"
+                  darkMode={darkMode}
+                />
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Mail className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-800">Email Us</h4>
-                    <a href="mailto:support@pediatricderm.com" className="text-blue-600 hover:underline">
-                      support@pediatricderm.com
-                    </a>
-                    <p className="text-sm text-gray-500">Response within 24 hours</p>
-                  </div>
-                </div>
+                <ContactCard 
+                  icon={Mail}
+                  title="Email Us"
+                  content="support@pediatricderm.com"
+                  subtext="Response within 24 hours"
+                  href="mailto:support@pediatricderm.com"
+                  color="from-blue-500 to-cyan-500"
+                  darkMode={darkMode}
+                />
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <MessageSquare className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-800">Live Chat</h4>
-                    <p className="text-blue-600 font-semibold">Available on website</p>
-                    <p className="text-sm text-gray-500">Quick answers to common questions</p>
-                  </div>
-                </div>
+                <ContactCard 
+                  icon={MessageSquare}
+                  title="Live Chat"
+                  content="Available on website"
+                  subtext="Quick answers to common questions"
+                  color="from-green-500 to-emerald-500"
+                  darkMode={darkMode}
+                />
               </div>
             </div>
 
             {/* Office Hours */}
-            <div className="bg-white rounded-xl shadow-lg p-6 border border-blue-100">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">
+            <div className={`rounded-xl shadow-lg p-6 transition-colors duration-300 ${
+              darkMode 
+                ? "bg-gray-800/90 backdrop-blur-sm border border-gray-700/50" 
+                : "bg-white border border-gray-100"
+            }`}>
+              <h3 className={`text-xl font-semibold mb-4 ${darkMode ? "text-gray-200" : "text-gray-800"}`}>
                 Support Hours
               </h3>
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Monday - Friday</span>
-                  <span className="font-medium">9:00 AM - 8:00 PM EST</span>
+                <div className={`flex items-center justify-between p-3 rounded-lg ${
+                  darkMode ? "bg-gray-700/50" : "bg-gray-50"
+                }`}>
+                  <span className={darkMode ? "text-gray-400" : "text-gray-600"}>Monday - Friday</span>
+                  <span className={`font-medium ${darkMode ? "text-gray-200" : "text-gray-800"}`}>9:00 AM - 8:00 PM EST</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Saturday - Sunday</span>
-                  <span className="font-medium">10:00 AM - 6:00 PM EST</span>
+                <div className={`flex items-center justify-between p-3 rounded-lg ${
+                  darkMode ? "bg-gray-700/50" : "bg-gray-50"
+                }`}>
+                  <span className={darkMode ? "text-gray-400" : "text-gray-600"}>Saturday - Sunday</span>
+                  <span className={`font-medium ${darkMode ? "text-gray-200" : "text-gray-800"}`}>10:00 AM - 6:00 PM EST</span>
                 </div>
-                <div className="pt-4 border-t">
-                  <div className="flex items-center gap-2 text-green-600">
+                <div className="pt-4 border-t dark:border-gray-700">
+                  <div className={`flex items-center gap-2 ${darkMode ? "text-green-400" : "text-green-600"}`}>
                     <Clock className="w-4 h-4" />
                     <span className="text-sm">Emergency support available 24/7</span>
                   </div>
@@ -148,38 +203,48 @@ const Contact = () => {
             </div>
 
             {/* Quick Tips */}
-            <div className="bg-blue-50 rounded-xl p-6">
-              <h4 className="font-semibold text-blue-900 mb-3">
+            <div className={`rounded-xl p-6 transition-colors duration-300 ${
+              darkMode 
+                ? "bg-blue-900/20 border border-blue-800" 
+                : "bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100"
+            }`}>
+              <h4 className={`font-semibold mb-3 ${darkMode ? "text-gray-200" : "text-gray-800"}`}>
                 Before You Contact
               </h4>
-              <ul className="space-y-2 text-sm text-gray-700">
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                  <span>For medical consultations, please use our booking system</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                  <span>Have your case ID ready for faster service</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-500 mt-0.5" />
-                  <span>Upload photos of the condition if applicable</span>
-                </li>
+              <ul className="space-y-3">
+                {[
+                  "For medical consultations, please use our booking system",
+                  "Have your case ID ready for faster service",
+                  "Upload photos of the condition if applicable"
+                ].map((tip, index) => (
+                  <li key={index} className="flex items-start gap-2">
+                    <CheckCircle className={`w-4 h-4 mt-0.5 ${darkMode ? "text-green-400" : "text-green-500"}`} />
+                    <span className={`text-sm ${darkMode ? "text-gray-300" : "text-gray-700"}`}>{tip}</span>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
 
           {/* Right Column - Contact Form */}
           <div className="lg:col-span-2">
-            <div className={`rounded-xl shadow-lg p-8 border ${darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-blue-100"}`}>
+            <div className={`rounded-xl shadow-lg p-8 transition-colors duration-300 ${
+              darkMode 
+                ? "bg-gray-800/90 backdrop-blur-sm border border-gray-700/50" 
+                : "bg-white border border-gray-100"
+            }`}>
               {/* Success Message */}
               {sent && (
-                <div className="mb-6 p-4 bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-700 rounded-lg">
+                <div className={`mb-6 p-4 rounded-lg border ${
+                  darkMode 
+                    ? "bg-green-900/20 border-green-800" 
+                    : "bg-green-50 border-green-200"
+                }`}>
                   <div className="flex items-center gap-3">
-                    <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
+                    <CheckCircle className={`w-6 h-6 ${darkMode ? "text-green-400" : "text-green-600"}`} />
                     <div>
-                      <h4 className="font-semibold text-green-800 dark:text-green-300">Message Sent Successfully!</h4>
-                      <p className="text-green-700 dark:text-green-400 text-sm">
+                      <h4 className={`font-semibold ${darkMode ? "text-green-400" : "text-green-800"}`}>Message Sent Successfully!</h4>
+                      <p className={`text-sm ${darkMode ? "text-green-300" : "text-green-700"}`}>
                         Thank you for reaching out. Our team will respond within 24 hours.
                       </p>
                     </div>
@@ -187,7 +252,7 @@ const Contact = () => {
                 </div>
               )}
 
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">
+              <h2 className={`text-2xl font-bold mb-6 ${darkMode ? "text-gray-100" : "text-gray-800"}`}>
                 Send Us a Message
               </h2>
 
@@ -209,7 +274,7 @@ const Contact = () => {
                     type="tel"
                     value={form.phone}
                     onChange={handleChange}
-                    placeholder="91-XXXXX XXXXX"
+                    placeholder="+91 XXXXX XXXXX"
                     darkMode={darkMode}
                   />
 
@@ -225,7 +290,7 @@ const Contact = () => {
                   />
 
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label className={`block text-sm font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
                       Subject *
                     </label>
                     <select
@@ -233,7 +298,11 @@ const Contact = () => {
                       value={form.subject}
                       onChange={handleChange}
                       required
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition ${darkMode ? "bg-gray-700 text-gray-100 border-gray-600" : "bg-gray-50 border-gray-300"}`}
+                      className={`w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition ${
+                        darkMode 
+                          ? "bg-gray-700 text-gray-100 border-gray-600" 
+                          : "bg-gray-50 border border-gray-300"
+                      }`}
                     >
                       <option value="">Select a subject</option>
                       {contactSubjects.map((subject) => (
@@ -243,7 +312,7 @@ const Contact = () => {
                   </div>
 
                   <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label className={`block text-sm font-medium mb-2 ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
                       Message *
                     </label>
                     <textarea
@@ -252,7 +321,11 @@ const Contact = () => {
                       value={form.message}
                       onChange={handleChange}
                       required
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none ${darkMode ? "bg-gray-700 text-gray-100 border-gray-600" : "bg-gray-50 border-gray-300"}`}
+                      className={`w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-none ${
+                        darkMode 
+                          ? "bg-gray-700 text-gray-100 border-gray-600" 
+                          : "bg-gray-50 border border-gray-300"
+                      }`}
                       placeholder={
                         form.userType === "parent"
                           ? "Describe your child's condition or question in detail. Please include child's age and any relevant medical history..."
@@ -267,9 +340,10 @@ const Contact = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className={`inline-flex items-center justify-center px-8 py-4 rounded-lg font-semibold transition-all ${isSubmitting
-                      ? 'bg-blue-400 cursor-not-allowed'
-                      : 'bg-blue-600 hover:bg-blue-700 transform hover:-translate-y-0.5'
+                    className={`inline-flex items-center justify-center px-8 py-4 rounded-lg font-semibold transition-all duration-300 ${
+                      isSubmitting
+                        ? darkMode ? 'bg-blue-600/50 cursor-not-allowed' : 'bg-blue-400 cursor-not-allowed'
+                        : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:shadow-xl transform hover:-translate-y-0.5 hover:scale-105'
                       } text-white shadow-lg`}
                   >
                     {isSubmitting ? (
@@ -284,7 +358,7 @@ const Contact = () => {
                       </>
                     )}
                   </button>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-3">
+                  <p className={`text-sm mt-3 ${darkMode ? "text-gray-500" : "text-gray-500"}`}>
                     By submitting, you agree to our Privacy Policy and Terms of Service.
                   </p>
                 </div>
@@ -292,66 +366,106 @@ const Contact = () => {
             </div>
 
             {/* FAQ Section */}
-            <div className="mt-8 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6">
-              <h3 className="text-xl font-semibold text-gray-800 mb-4">
-                Quick Answers
-              </h3>
+            <div className={`mt-8 rounded-xl p-6 transition-colors duration-300 ${
+              darkMode 
+                ? "bg-gradient-to-r from-indigo-900/30 to-purple-900/30 border border-indigo-800/50" 
+                : "bg-gradient-to-r from-indigo-50 to-purple-50"
+            }`}>
+              <div className="flex items-center gap-2 mb-4">
+                <HelpCircle className={`w-6 h-6 ${darkMode ? "text-purple-400" : "text-purple-600"}`} />
+                <h3 className={`text-xl font-semibold ${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+                  Quick Answers
+                </h3>
+              </div>
               <div className="space-y-4">
-                {[
-                  {
-                    q: "How quickly will I receive a response?",
-                    a: "We respond to all inquiries within 24 hours during business days. Emergency contacts are monitored 24/7."
-                  },
-                  {
-                    q: "Can I get medical advice through this form?",
-                    a: "For specific medical consultations, please book an appointment through our system for proper documentation and care."
-                  },
-                  {
-                    q: "Are my child's medical details secure?",
-                    a: "Yes, all communications are encrypted and HIPAA-compliant to ensure complete privacy and security."
-                  }
-                ].map((faq, index) => (
-                  <div key={index} className="bg-white/50 p-4 rounded-lg">
-                    <p className="font-medium text-gray-800 mb-1">{faq.q}</p>
-                    <p className="text-sm text-gray-600">{faq.a}</p>
-                  </div>
-                ))}
+                <FAQItem 
+                  question="How quickly will I receive a response?"
+                  answer="We respond to all inquiries within 24 hours during business days. Emergency contacts are monitored 24/7."
+                />
+                <FAQItem 
+                  question="Can I get medical advice through this form?"
+                  answer="For specific medical consultations, please book an appointment through our system for proper documentation and care."
+                />
+                <FAQItem 
+                  question="Are my child's medical details secure?"
+                  answer="Yes, all communications are encrypted and HIPAA-compliant to ensure complete privacy and security."
+                />
               </div>
             </div>
           </div>
         </div>
 
         {/* Map/Location Section */}
-        <div className="mt-12 bg-white rounded-xl shadow-lg p-8">
-          <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-            Our Headquarters
-          </h3>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="flex items-start gap-4">
-              <MapPin className="w-6 h-6 text-blue-600 mt-1" />
-              <div>
-                <h4 className="font-semibold text-gray-800 mb-1">Address</h4>
-                <p className="text-gray-600">
-                  LPU<br />
-                  Phagwara<br />
-                  Punjab, India
-                </p>
-              </div>
+        <div className={`mt-12 rounded-xl shadow-lg p-8 transition-colors duration-300 ${
+          darkMode 
+            ? "bg-gray-800/90 backdrop-blur-sm border border-gray-700/50" 
+            : "bg-white border border-gray-100"
+        }`}>
+          <div className="text-center mb-8">
+            <div className={`inline-flex items-center gap-2 rounded-full px-4 py-2 mb-4 ${
+              darkMode ? "bg-blue-900/30" : "bg-blue-100"
+            }`}>
+              <Building2 className={`w-4 h-4 ${darkMode ? "text-blue-400" : "text-blue-600"}`} />
+              <span className={`text-sm font-medium ${darkMode ? "text-blue-300" : "text-blue-700"}`}>Visit Us</span>
             </div>
-            <div className="flex items-start gap-4">
-              <Mail className="w-6 h-6 text-blue-600 mt-1" />
-              <div>
-                <h4 className="font-semibold text-gray-800 mb-1">Business Inquiries</h4>
-                <a href="mailto:partners@pediatricderm.com" className="text-blue-600 hover:underline">
-                  partners@pediatricderm.com
-                </a>
+            <h3 className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-800"}`}>
+              Our Headquarters
+            </h3>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                icon: MapPin,
+                title: "Address",
+                content: "LPU\nPhagwara\nPunjab, India",
+                color: "from-red-500 to-orange-500"
+              },
+              {
+                icon: Mail,
+                title: "Business Inquiries",
+                content: "partners@pediatricderm.com",
+                link: "mailto:partners@pediatricderm.com",
+                color: "from-blue-500 to-cyan-500"
+              },
+              {
+                icon: Phone,
+                title: "Office Phone",
+                content: "+91 XXXXX XXXXX",
+                color: "from-green-500 to-emerald-500"
+              }
+            ].map((item, index) => (
+              <div key={index} className={`flex items-start gap-4 p-4 rounded-lg transition-all duration-300 hover:-translate-y-1 ${
+                darkMode ? "bg-gray-700/50" : "bg-gray-50"
+              }`}>
+                <div className={`p-3 rounded-xl bg-gradient-to-r ${item.color} shadow-lg`}>
+                  <item.icon className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h4 className={`font-semibold mb-1 ${darkMode ? "text-gray-200" : "text-gray-800"}`}>{item.title}</h4>
+                  {item.link ? (
+                    <a href={item.link} className={`transition ${darkMode ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-700"}`}>
+                      {item.content}
+                    </a>
+                  ) : (
+                    <p className={`whitespace-pre-line ${darkMode ? "text-gray-400" : "text-gray-600"}`}>{item.content}</p>
+                  )}
+                </div>
               </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <Phone className="w-6 h-6 text-blue-600 mt-1" />
-              <div>
-                <h4 className="font-semibold text-gray-800 mb-1">Office Phone</h4>
-                <p className="text-gray-600">91- XXXXX XXXXX</p>
+            ))}
+          </div>
+
+          {/* Map Placeholder */}
+          <div className={`mt-6 h-64 rounded-xl overflow-hidden border ${
+            darkMode ? "border-gray-700" : "border-gray-200"
+          }`}>
+            <div className={`w-full h-full flex items-center justify-center ${
+              darkMode ? "bg-gray-700" : "bg-gray-100"
+            }`}>
+              <div className="text-center">
+                <Globe className={`w-12 h-12 mx-auto mb-2 ${darkMode ? "text-gray-500" : "text-gray-400"}`} />
+                <p className={darkMode ? "text-gray-400" : "text-gray-500"}>Interactive Map View</p>
+                <p className={`text-sm ${darkMode ? "text-gray-500" : "text-gray-400"}`}>LPU, Phagwara, Punjab</p>
               </div>
             </div>
           </div>
