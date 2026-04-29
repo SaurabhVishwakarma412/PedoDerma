@@ -61,7 +61,7 @@ const AnimatedCounter = ({ number, label, icon, desc, delay = 0 }) => {
   return (
     <div
       ref={ref}
-      className="group relative bg-white rounded-2xl shadow-xl overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-2"
+      className="group relative bg-blue-200 rounded-2xl shadow-xl overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-2"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
       <div className="relative p-8 text-center">
@@ -418,7 +418,7 @@ const Home = () => {
             ].map((feature, index) => (
               <div
                 key={index}
-                className="group relative bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
+                className="group relative bg-blue-200 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`}></div>
                 <div className="relative p-8 text-center">
@@ -518,7 +518,7 @@ const Home = () => {
               },
             ].map((step, index) => (
               <div key={index} className="relative">
-                <div className="bg-white rounded-2xl shadow-xl p-8 text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100">
+                <div className="bg-blue-200 rounded-2xl shadow-xl p-8 text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100">
                   <div className="relative mb-6">
                     <div className={`absolute inset-0 bg-gradient-to-r ${step.gradient} rounded-full blur-xl opacity-30`}></div>
                     <div className={`relative inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r ${step.gradient} rounded-full shadow-lg`}>
@@ -579,7 +579,7 @@ const Home = () => {
                 color: "from-orange-500 to-orange-600"
               },
             ].map((benefit, index) => (
-              <div key={index} className="group bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+              <div key={index} className="group bg-blue-200 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
                 <div className="flex items-start gap-5">
                   <div className={`inline-flex items-center justify-center w-14 h-14 bg-gradient-to-r ${benefit.color} rounded-xl shadow-md group-hover:scale-110 transition-transform duration-300`}>
                     <benefit.icon className="w-7 h-7 text-white" />
@@ -609,7 +609,7 @@ const Home = () => {
               <MessageSquare className="w-4 h-4 text-yellow-600" />
               <span className="text-yellow-700 text-sm font-medium">Got Questions?</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-500 mb-4">
               Frequently Asked Questions
             </h2>
             <p className="text-gray-600 text-lg">Everything you need to know</p>
@@ -637,14 +637,14 @@ const Home = () => {
                 answer: "No appointment is required. You can start anytime by uploading photos and details, and a dermatologist will respond as soon as your case is reviewed. We offer both immediate and scheduled consultations."
               },
             ].map((faq, index) => (
-              <details key={index} className="group bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-300">
+              <details key={index} className="group bg-gray-300 rounded-xl hover:bg-gray-200 transition-all duration-300">
                 <summary className="cursor-pointer p-6 font-semibold text-gray-800 text-lg list-none flex items-center justify-between">
                   <span>{faq.question}</span>
                   <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center group-open:rotate-180 transition-transform duration-300">
                     <ArrowRight className="w-4 h-4 text-blue-600 rotate-90" />
                   </div>
                 </summary>
-                <div className="px-6 pb-6 text-gray-600 leading-relaxed border-t border-gray-200 pt-4">
+                <div className="px-6 pb-6 text-gray-600 leading-relaxed border-t border-gray-400 pt-4">
                   {faq.answer}
                 </div>
               </details>
