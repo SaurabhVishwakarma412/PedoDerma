@@ -117,10 +117,6 @@ const CaseDetails = () => {
     fetchCase();
   }, [id, role]);
 
-  const handlePrint = () => {
-    window.print();
-  };
-
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
@@ -215,17 +211,7 @@ const CaseDetails = () => {
             
             <div className="flex items-center gap-3">
               {/* Action Buttons */}
-              <button
-                onClick={handlePrint}
-                className={`p-2 rounded-lg transition ${
-                  darkMode 
-                    ? "bg-gray-800 hover:bg-gray-700 text-gray-400" 
-                    : "bg-gray-100 hover:bg-gray-200 text-gray-600"
-                }`}
-                title="Print"
-              >
-                <Printer className="w-4 h-4" />
-              </button>
+              
               <button
                 onClick={handleShare}
                 className={`p-2 rounded-lg transition ${

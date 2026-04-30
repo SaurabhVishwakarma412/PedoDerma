@@ -175,7 +175,7 @@ const DoctorDashboard = () => {
                   <Stethoscope className="w-8 h-8" />
                 </div>
                 <div>
-                  <h1 className="text-2xl md:text-3xl font-bold">Welcome, Dr. Smith</h1>
+                  <h1 className="text-2xl md:text-3xl font-bold">Welcome, Dr. Priti</h1>
                   <p className="text-blue-100">Pediatric Dermatology Specialist</p>
                 </div>
               </div>

@@ -18,7 +18,7 @@ const statusColor = (status) => {
 const CaseCard = ({ caseData }) => {
   const [darkMode, setDarkMode] = React.useState(false);
   const navigate = useNavigate();
-  const baseURL = import.meta.env.VITE_API_URL; // http://localhost:5000
+  const baseURL = import.meta.env.VITE_API_URL;
 
   React.useEffect(() => {
     const observer = new MutationObserver(() => {

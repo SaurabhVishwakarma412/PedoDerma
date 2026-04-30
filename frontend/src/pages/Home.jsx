@@ -184,7 +184,7 @@ const TestimonialCarousel = () => {
   return (
     <section className={`py-24 relative overflow-hidden transition-colors duration-300 ${
       darkMode 
-        ? "bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900" 
+        ? "bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900" 
         : "bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"
     }`}>
       {/* Animated Background */}
