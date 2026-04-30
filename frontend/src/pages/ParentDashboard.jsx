@@ -342,15 +342,6 @@ const ParentDashboard = () => {
                           <h3 className={`text-lg font-semibold ${darkMode ? "text-gray-200" : "text-gray-800"}`}>
                             Recent Cases ({cases.length})
                           </h3>
-                          <Link
-                            to="/cases"
-                            className={`text-sm font-medium flex items-center gap-1 transition ${
-                              darkMode ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-800"
-                            }`}
-                          >
-                            View All
-                            <ChevronRight className="w-4 h-4" />
-                          </Link>
                         </div>
                         <div className="grid md:grid-cols-2 gap-4">
                           {cases.slice(0, 4).map((c) => (

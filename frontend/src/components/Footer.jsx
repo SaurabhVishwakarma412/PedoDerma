@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Instagram , Facebook, Linkedin, Twitter } from "lucide-react";
 const Footer = () => {
   return (
-    <footer className="bg-zinc-950 dark:bg-gray-800 border-t mt-10">
+    <footer className="bg-gray-950 border-t">
       {/* Top Section */}
       <div className="max-w-6xl mx-auto px-4 py-10 grid md:grid-cols-4 gap-8 text-lg text-gray-50 dark:text-gray-300">
 
