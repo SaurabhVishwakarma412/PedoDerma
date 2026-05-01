@@ -119,44 +119,52 @@ const TestimonialCarousel = () => {
 
   const testimonials = [
     {
-      name: "Sarah Johnson",
-      role: "Parent of Emma (6)",
+      name: "Priya sharma",
+      role: "Parent of Priti (6)",
       content: "Amazing experience! Dr. Smith was so patient with Emma and gave us clear instructions. The whole process was smooth and stress-free.",
       rating: 5,
       avatar: "👩‍👧",
-      location: "New York, NY"
+      location: "Ranchi, Jharkhand"
     },
     {
-      name: "Michael Chen",
-      role: "Parent of Liam (8)",
+      name: "Abhishek Verma",
+      role: "Parent of shyam (8)",
       content: "Finally found a pediatric dermatologist who understands kids. The video consultation was convenient and thorough. Highly recommended!",
       rating: 5,
-      avatar: "👨‍👦",
-      location: "San Francisco, CA"
+      avatar: "👨",
+      location: "Patna, Bihar"
     },
     {
       name: "Priya Patel",
       role: "Parent of Aisha (5)",
       content: "No more long waits at clinics. Quick diagnosis and the prescription worked perfectly. The follow-up care was exceptional!",
       rating: 5,
-      avatar: "👩‍👧‍👧",
-      location: "Austin, TX"
+      avatar: "👩‍👧",
+      location: "Hamirpur, Himachal Pradesh"
     },
     {
-      name: "James Wilson",
-      role: "Parent of Noah (7)",
+      name: "Rahul Singh",
+      role: "Parent of Neha (7)",
       content: "The doctors are wonderful with children. No stress for Noah, and we got the answers we needed immediately. Life-changing service!",
       rating: 5,
-      avatar: "👨‍👩‍👦",
-      location: "Chicago, IL"
+      avatar: "👨‍👩",
+      location: "Bhopal, Madhya Pradesh"
     },
     {
       name: "Anita Sharma",
       role: "Parent of Zara (4)",
       content: "Best healthcare experience! The team was caring, professional, and solved our concern in just one session. Truly exceptional.",
+      rating: 4,
+      avatar: "👩‍👧",
+      location: "Indore, Madhya Pradesh"
+    },
+    {
+      name: "Suman Tirkey",
+      role: "Parent of Zara (4)",
+      content: "Best healthcare experience! The team was caring, professional, and solved our concern in just one session. Truly exceptional.",
       rating: 5,
       avatar: "👩‍👧",
-      location: "Seattle, WA"
+      location: "Indore, Madhya Pradesh"
     }
   ];
 
@@ -257,7 +265,8 @@ const TestimonialCarousel = () => {
                       <div className={`text-5xl rounded-full w-16 h-16 flex items-center justify-center ${
                         darkMode ? "bg-white/20" : "bg-gray-100"
                       }`}>
-                        {testimonial.avatar}
+                        {/* {testimonial.avatar} */}
+                        <UsersRound />
                       </div>
                       <div>
                         <p className={`font-bold text-lg ${darkMode ? "text-white" : "text-gray-900"}`}>{testimonial.name}</p>
