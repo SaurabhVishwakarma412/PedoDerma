@@ -12,7 +12,7 @@ import {
   User,
   Thermometer,
   ChevronLeft,
-  Shield
+  Shield,
 } from "lucide-react";
 
 import { submitCase } from "../services/patientAPI";
@@ -26,7 +26,10 @@ const SubmitCase = () => {
       setDarkMode(document.documentElement.classList.contains("dark"));
     });
 
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
 
     return () => observer.disconnect();
   }, []);
@@ -45,7 +48,7 @@ const SubmitCase = () => {
     triggers: "",
     temperature: "",
     otherSymptoms: "",
-    consentForSharing: false
+    consentForSharing: false,
   });
 
   const [images, setImages] = useState([]);
@@ -56,53 +59,87 @@ const SubmitCase = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const bodyParts = [
-    "Face", "Scalp", "Neck", "Chest", "Back", "Abdomen",
-    "Arms", "Hands", "Legs", "Feet", "Groin", "Multiple Areas"
+    "Face",
+    "Scalp",
+    "Neck",
+    "Chest",
+    "Back",
+    "Abdomen",
+    "Arms",
+    "Hands",
+    "Legs",
+    "Feet",
+    "Groin",
+    "Multiple Areas",
   ];
 
   const severityLevels = [
     { value: "mild", label: "Mild", description: "Minor irritation, no pain" },
-    { value: "moderate", label: "Moderate", description: "Visible rash, some discomfort" },
-    { value: "severe", label: "Severe", description: "Painful, spreading rapidly" },
-    { value: "emergency", label: "Emergency", description: "Fever, difficulty breathing" }
+    {
+      value: "moderate",
+      label: "Moderate",
+      description: "Visible rash, some discomfort",
+    },
+    {
+      value: "severe",
+      label: "Severe",
+      description: "Painful, spreading rapidly",
+    },
+    {
+      value: "emergency",
+      label: "Emergency",
+      description: "Fever, difficulty breathing",
+    },
   ];
 
   const commonSymptoms = [
-    "Itching", "Redness", "Swelling", "Blisters", "Dryness",
-    "Peeling", "Bumps", "Pustules", "Scaling", "Crusting",
-    "Pain", "Burning", "Warmth", "Oozing", "Bleeding"
+    "Itching",
+    "Redness",
+    "Swelling",
+    "Blisters",
+    "Dryness",
+    "Peeling",
+    "Bumps",
+    "Pustules",
+    "Scaling",
+    "Crusting",
+    "Pain",
+    "Burning",
+    "Warmth",
+    "Oozing",
+    "Bleeding",
   ];
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setForm(prev => ({
+    setForm((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
   const handleSymptomToggle = (symptom) => {
-    const currentSymptoms = form.symptoms.split(',').filter(s => s.trim());
+    const currentSymptoms = form.symptoms.split(",").filter((s) => s.trim());
     if (currentSymptoms.includes(symptom)) {
-      setForm(prev => ({
+      setForm((prev) => ({
         ...prev,
-        symptoms: currentSymptoms.filter(s => s !== symptom).join(', ')
+        symptoms: currentSymptoms.filter((s) => s !== symptom).join(", "),
       }));
     } else {
-      setForm(prev => ({
+      setForm((prev) => ({
         ...prev,
-        symptoms: [...currentSymptoms, symptom].join(', ')
+        symptoms: [...currentSymptoms, symptom].join(", "),
       }));
     }
   };
 
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
-    const newImages = files.map(file => ({
+    const newImages = files.map((file) => ({
       file,
       preview: URL.createObjectURL(file),
       name: file.name,
-      size: (file.size / (1024 * 1024)).toFixed(2) + ' MB'
+      size: (file.size / (1024 * 1024)).toFixed(2) + " MB",
     }));
     setImages([...images, ...newImages].slice(0, 5)); // Limit to 5 images
   };
@@ -128,7 +165,9 @@ const SubmitCase = () => {
         return true;
       case 3:
         if (images.length === 0) {
-          setError("Please upload at least one clear photo of the affected area");
+          setError(
+            "Please upload at least one clear photo of the affected area",
+          );
           return false;
         }
         return true;
@@ -175,7 +214,7 @@ const SubmitCase = () => {
 
       // Simulate upload progress
       const interval = setInterval(() => {
-        setUploadProgress(prev => {
+        setUploadProgress((prev) => {
           if (prev >= 90) {
             clearInterval(interval);
             return 90;
@@ -189,21 +228,28 @@ const SubmitCase = () => {
       clearInterval(interval);
       setUploadProgress(100);
 
-      setSuccess("Case submitted successfully! A pediatric dermatologist will review your case within 24 hours.");
+      setSuccess(
+        "Case submitted successfully! A pediatric dermatologist will review your case within 24 hours.",
+      );
 
       setTimeout(() => navigate("/parent/dashboard"), 3000);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to submit case. Please try again.");
+      setError(
+        err.response?.data?.message ||
+          "Failed to submit case. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <main className={`min-h-screen ${darkMode ? "bg-gray-900 text-gray-100" : "bg-gradient-to-b from-blue-50 to-white"}`}>
-      <div className="max-w-4xl mx-auto px-4 py-8">
+    <main
+      className={`min-h-screen ${darkMode ? "bg-gray-900 text-gray-100" : "bg-gradient-to-b from-blue-50 to-white"}`}
+    >
+      <div className="max-w-4xl mx-auto px-4 py-4">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-4">
           <div className="flex items-center gap-4 mb-4">
             <button
               onClick={() => navigate("/parent/dashboard")}
@@ -212,26 +258,43 @@ const SubmitCase = () => {
               <ChevronLeft className="w-5 h-5" />
             </button>
             <div>
-              <h1 className="text-3xl font-bold text-gray-800">Submit New Dermatology Case</h1>
-              <p className="text-gray-600">Share your child's skin condition with board-certified pediatric dermatologists</p>
+              <h1 className="text-3xl font-bold text-gray-800">
+                Submit New Dermatology Case
+              </h1>
+              <p className="text-gray-600">
+                Share your child's skin condition with board-certified pediatric
+                dermatologists
+              </p>
             </div>
           </div>
 
           {/* Progress Steps */}
-          <div className="mb-8">
+          <div className="mb-4">
             <div className="flex justify-between items-center mb-4">
               {[1, 2, 3, 4].map((step) => (
-                <div key={step} className="flex flex-col items-center relative z-10">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg border-2 transition-all ${step === activeStep
-                      ? 'bg-blue-600 text-white border-blue-600'
-                      : step < activeStep
-                        ? 'bg-green-500 text-white border-green-500'
-                        : 'bg-white text-gray-400 border-gray-300'
-                    }`}>
+                <div
+                  key={step}
+                  className="flex flex-col items-center relative z-10"
+                >
+                  <div
+                    className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg border-2 transition-all ${
+                      step === activeStep
+                        ? "bg-blue-600 text-white border-blue-600"
+                        : step < activeStep
+                          ? "bg-green-500 text-white border-green-500"
+                          : "bg-white text-gray-400 border-gray-300"
+                    }`}
+                  >
                     {step < activeStep ? <CheckCircle size={20} /> : step}
                   </div>
                   <span className="text-xs mt-2 font-medium">
-                    {step === 1 ? 'Child Info' : step === 2 ? 'Symptoms' : step === 3 ? 'Photos' : 'Review'}
+                    {step === 1
+                      ? "Child Info"
+                      : step === 2
+                        ? "Symptoms"
+                        : step === 3
+                          ? "Photos"
+                          : "Review"}
                   </span>
                 </div>
               ))}
@@ -270,7 +333,9 @@ const SubmitCase = () => {
                         style={{ width: `${uploadProgress}%` }}
                       ></div>
                     </div>
-                    <p className="text-xs text-green-700 mt-1">Uploading... {uploadProgress}%</p>
+                    <p className="text-xs text-green-700 mt-1">
+                      Uploading... {uploadProgress}%
+                    </p>
                   </div>
                 )}
               </div>
@@ -399,10 +464,11 @@ const SubmitCase = () => {
                         key={symptom}
                         type="button"
                         onClick={() => handleSymptomToggle(symptom)}
-                        className={`p-3 text-sm rounded-lg border transition ${form.symptoms.includes(symptom)
-                            ? 'bg-blue-50 border-blue-300 text-blue-700'
-                            : 'bg-gray-50 border-gray-200 text-gray-700 hover:border-blue-300'
-                          }`}
+                        className={`p-3 text-sm rounded-lg border transition ${
+                          form.symptoms.includes(symptom)
+                            ? "bg-blue-50 border-blue-300 text-blue-700"
+                            : "bg-gray-50 border-gray-200 text-gray-700 hover:border-blue-300"
+                        }`}
                       >
                         {symptom}
                       </button>
@@ -432,7 +498,9 @@ const SubmitCase = () => {
                     >
                       <option value="">Select affected area</option>
                       {bodyParts.map((part) => (
-                        <option key={part} value={part}>{part}</option>
+                        <option key={part} value={part}>
+                          {part}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -551,21 +619,22 @@ const SubmitCase = () => {
             </>
           )}
 
-
           {/* Step 4: Review & Submit */}
           {activeStep === 4 && (
             <>
-              <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+              <h2 className="text-xl font-bold text-gray-800  flex items-center gap-2">
                 <CheckCircle className="w-5 h-5 text-blue-600" />
                 Review & Submit
               </h2>
 
-              <div className="space-y-6">
+              <div className="space-y-2">
                 {/* Review Summary */}
-                <div className="bg-gray-50 rounded-xl p-6">
-                  <h4 className="font-semibold text-gray-800 mb-4">Case Summary</h4>
+                <div className="bg-gray-50 rounded-xl p-4">
+                  <h4 className="font-semibold text-gray-800 mb-4">
+                    Case Summary
+                  </h4>
                   <div className="space-y-4">
-                    <div className="grid md:grid-cols-2 gap-4">
+                    <div className="grid md:grid-cols-2 gap-1">
                       <div>
                         <p className="text-sm text-gray-600">Case Title</p>
                         <p className="font-medium">{form.title}</p>
@@ -581,24 +650,28 @@ const SubmitCase = () => {
                       <div>
                         <p className="text-sm text-gray-600">Severity</p>
                         <p className="font-medium">
-                          {severityLevels.find(s => s.value === form.severity)?.label}
+                          {
+                            severityLevels.find(
+                              (s) => s.value === form.severity,
+                            )?.label
+                          }
                         </p>
                       </div>
-                    </div>
-
-                    <div>
-                      <p className="text-sm text-gray-600">Symptoms</p>
-                      <p className="font-medium">{form.symptoms}</p>
+                      <div>
+                        <p className="text-sm text-gray-600">Photos</p>
+                        <p className="font-medium">
+                          {images.length} photo(s) uploaded
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Symptoms</p>
+                        <p className="font-medium">{form.symptoms}</p>
+                      </div>
                     </div>
 
                     <div>
                       <p className="text-sm text-gray-600">Description</p>
                       <p className="font-medium">{form.description}</p>
-                    </div>
-
-                    <div>
-                      <p className="text-sm text-gray-600">Photos</p>
-                      <p className="font-medium">{images.length} photo(s) uploaded</p>
                     </div>
                   </div>
                 </div>
@@ -615,10 +688,12 @@ const SubmitCase = () => {
                     />
                     <div>
                       <span className="text-gray-700 font-medium">
-                        I consent to share photos and medical information with pediatric dermatologists *
+                        I consent to share photos and medical information with
+                        pediatric dermatologists *
                       </span>
                       <p className="text-sm text-gray-500 mt-1">
-                        Your information will be kept confidential and used only for medical diagnosis in compliance with HIPAA regulations.
+                        Your information will be kept confidential and used only
+                        for medical diagnosis.
                       </p>
                     </div>
                   </label>
@@ -627,9 +702,13 @@ const SubmitCase = () => {
                     <div className="flex items-start gap-3">
                       <Shield className="w-5 h-5 text-blue-600 mt-0.5" />
                       <div>
-                        <p className="text-sm text-blue-800 font-medium">Privacy Assurance</p>
+                        <p className="text-sm text-blue-800 font-medium">
+                          Privacy Assurance
+                        </p>
                         <p className="text-xs text-blue-700">
-                          All case information is encrypted and stored securely. Photos are deleted after 90 days unless retained for medical records.
+                          All case information is encrypted and stored securely.
+                          Photos are deleted after 30 days unless retained for
+                          medical records.
                         </p>
                       </div>
                     </div>
@@ -640,7 +719,7 @@ const SubmitCase = () => {
           )}
 
           {/* Navigation Buttons */}
-          <div className="mt-8 pt-8 border-t flex justify-between">
+          <div className="mt-2 pt-2 border-t flex justify-between">
             {activeStep > 1 && (
               <button
                 type="button"
@@ -655,10 +734,11 @@ const SubmitCase = () => {
               type="button"
               onClick={nextStep}
               disabled={loading}
-              className={`px-8 py-3 rounded-lg font-semibold transition-all ${loading
-                  ? 'bg-blue-400 cursor-not-allowed'
-                  : 'bg-blue-600 hover:bg-blue-700 transform hover:-translate-y-0.5'
-                } text-white shadow-lg ml-auto`}
+              className={`px-8 py-3 rounded-lg font-semibold transition-all ${
+                loading
+                  ? "bg-blue-400 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700 transform hover:-translate-y-0.5"
+              } text-white shadow-lg ml-auto`}
             >
               {loading ? (
                 <>
@@ -666,9 +746,9 @@ const SubmitCase = () => {
                   Submitting...
                 </>
               ) : activeStep === 4 ? (
-                'Submit Case'
+                "Submit Case"
               ) : (
-                'Continue →'
+                "Continue →"
               )}
             </button>
           </div>
@@ -680,36 +760,53 @@ const SubmitCase = () => {
           <div className="grid md:grid-cols-3 gap-4">
             <div className="bg-white p-4 rounded-lg">
               <div className="text-blue-600 font-bold text-lg mb-2">1</div>
-              <h5 className="font-medium text-gray-800 mb-2">Photo Guidelines</h5>
+              <h5 className="font-medium text-gray-800 mb-2">
+                Photo Guidelines
+              </h5>
               <p className="text-sm text-gray-600">
-                Clear photos help dermatologists make accurate diagnoses. Ensure good lighting and focus.
+                Clear photos help dermatologists make accurate diagnoses. Ensure
+                good lighting and focus.
               </p>
             </div>
             <div className="bg-white p-4 rounded-lg">
               <div className="text-blue-600 font-bold text-lg mb-2">2</div>
               <h5 className="font-medium text-gray-800 mb-2">Response Time</h5>
               <p className="text-sm text-gray-600">
-                Most cases are reviewed within 24 hours. Urgent cases receive priority attention.
+                Most cases are reviewed within 24 hours. Urgent cases receive
+                priority attention.
               </p>
             </div>
             <div className="bg-white p-4 rounded-lg">
               <div className="text-blue-600 font-bold text-lg mb-2">3</div>
               <h5 className="font-medium text-gray-800 mb-2">Follow-up Care</h5>
               <p className="text-sm text-gray-600">
-                You'll receive a 7-day free follow-up to track progress and adjust treatment if needed.
+                You'll receive a 7-day free follow-up to track progress and
+                adjust treatment if needed.
               </p>
             </div>
           </div>
         </div>
 
         {/* Emergency Notice */}
-        <div className={`mt-6 p-4 ${darkMode ? "bg-gray-800 border-gray-700" : "bg-red-50 border-red-200"} rounded-xl`}>
+        <div
+          className={`mt-6 p-4 ${darkMode ? "bg-gray-800 border-gray-700" : "bg-red-50 border-red-200"} rounded-xl`}
+        >
           <div className="flex items-center gap-3">
-            <AlertCircle className={`w-5 h-5 ${darkMode ? "text-red-400" : "text-red-600"}`} />
+            <AlertCircle
+              className={`w-5 h-5 ${darkMode ? "text-red-400" : "text-red-600"}`}
+            />
             <div>
-              <p className={`font-medium ${darkMode ? "text-red-300" : "text-red-800"}`}>Medical Emergency?</p>
-              <p className={`text-sm ${darkMode ? "text-red-400" : "text-red-700"}`}>
-                If your child has difficulty breathing, high fever, or spreading infection, please call 911 or visit the nearest emergency room immediately.
+              <p
+                className={`font-medium ${darkMode ? "text-red-300" : "text-red-800"}`}
+              >
+                Medical Emergency?
+              </p>
+              <p
+                className={`text-sm ${darkMode ? "text-red-400" : "text-red-700"}`}
+              >
+                If your child has difficulty breathing, high fever, or spreading
+                infection, please call 911 or visit the nearest emergency room
+                immediately.
               </p>
             </div>
           </div>
