@@ -1,4 +1,3 @@
-
 // frontend/src/pages/CaseDetails.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
@@ -21,6 +20,7 @@ import {
   Share2,
   Printer
 } from "lucide-react";
+import { updateCaseStatus, scheduleMeeting } from "../services/doctorAPI";
 
 const statusConfig = {
   pending: {
@@ -86,6 +86,7 @@ const CaseDetails = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [showFullImage, setShowFullImage] = useState(false);
+  const [meetingTime, setMeetingTime] = useState("");
 
   const baseURL = import.meta.env.VITE_API_URL;
 
@@ -124,6 +125,25 @@ const CaseDetails = () => {
         text: caseData.title,
         url: window.location.href,
       });
+    }
+  };
+
+  const handleScheduleMeeting = async () => {
+    try {
+      await scheduleMeeting(id, { meetingTime });
+      alert("Meeting time scheduled successfully.");
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to schedule meeting time.");
+    }
+  };
+
+  const handleUpdateStatus = async () => {
+    try {
+      await updateCaseStatus(id, { status: "completed" });
+      setCaseData((prev) => ({ ...prev, status: "completed" }));
+      alert("Case status updated to Completed.");
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to update case status.");
     }
   };
 

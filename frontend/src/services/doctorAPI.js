@@ -5,7 +5,7 @@ import api from "./api";
 export const loginDoctor = (data) => api.post("/doctors/login", data);
 
 // Case Management
-export const getAllCases = () => api.get("/cases/all"); // Changed from "/cases" to "/cases/all"
+export const getAllCases = () => api.get("/cases/all");
 export const getCaseByIdDoctor = (id) => api.get(`/cases/${id}`);
 export const reviewCase = (id, data) => api.put(`/cases/${id}/review`, data);
 

@@ -6,6 +6,7 @@ const Message = require("./models/Message");
 const app = require("./app");
 const PORT = process.env.PORT || 5000;
 const cors = require("cors");
+const contactRoutes = require("./routes/contactRoutes");
 
 connectDB();
 
@@ -16,6 +17,8 @@ app.use(cors({
   ],
   credentials: true
 }));
+
+app.use("/api", contactRoutes);
 
 const server = http.createServer(app);
 const io = socketIO(server, {
