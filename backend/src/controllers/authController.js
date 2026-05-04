@@ -11,7 +11,7 @@ exports.registerParent = async (req, res) => {
     const user = await User.create({
       name,
       email,
-      childName: childName || null, // Default to null if not provided
+      childName: childName || null,
       password: await bcrypt.hash(password, 10),
     });
 
