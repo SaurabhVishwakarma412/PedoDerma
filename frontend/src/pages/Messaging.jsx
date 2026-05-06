@@ -370,7 +370,6 @@ const MessagingPage = () => {
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [socket, setSocket] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState("");
   const [darkMode, setDarkMode] = useState(false);
@@ -378,6 +377,8 @@ const MessagingPage = () => {
   const [onlineStatus, setOnlineStatus] = useState({});
   const messagesEndRef = useRef(null);
   const typingTimeoutRef = useRef(null);
+  const typingEmitTimeoutRef = useRef(null);
+  const socketRef = useRef(null);
   const selectedDoctorRef = useRef(null);
 
   // Auto-scroll to bottom of messages
@@ -451,10 +452,13 @@ const MessagingPage = () => {
       console.error("Socket.io connection error:", error);
     });
 
-    setSocket(newSocket);
+    socketRef.current = newSocket;
 
     return () => {
+      socketRef.current = null;
       newSocket.disconnect();
+      clearTimeout(typingTimeoutRef.current);
+      clearTimeout(typingEmitTimeoutRef.current);
     };
   }, [user]);
 
@@ -526,8 +530,8 @@ const MessagingPage = () => {
 
     setMessages((prev) => [...prev, messageData]);
 
-    if (socket) {
-      socket.emit("send_message", {
+    if (socketRef.current) {
+      socketRef.current.emit("send_message", {
         from: user._id,
         to: selectedDoctor._id,
         message: messageInput,
@@ -556,13 +560,17 @@ const MessagingPage = () => {
   };
 
   const handleTyping = (e) => {
-    setMessageInput(e.target.value);
+    const value = e.target.value;
+    setMessageInput(value);
     
-    if (socket && selectedDoctor && e.target.value.length > 0) {
-      socket.emit("typing", {
-        from: user._id,
-        to: selectedDoctor._id
-      });
+    if (socketRef.current && selectedDoctor && value.length > 0) {
+      clearTimeout(typingEmitTimeoutRef.current);
+      typingEmitTimeoutRef.current = setTimeout(() => {
+        socketRef.current?.emit("typing", {
+          from: user._id,
+          to: selectedDoctor._id
+        });
+      }, 300);
     }
   };
 
@@ -692,10 +700,10 @@ const MessagingPage = () => {
             ? "bg-gray-800/90 backdrop-blur-sm border border-gray-700/50" 
             : "bg-white border border-gray-100"
         }`}>
-          <div className="grid lg:grid-cols-3 h-[calc(100vh-200px)]">
+          <div className="grid h-[calc(100vh-200px)] min-h-[520px] overflow-hidden lg:grid-cols-3">
             {/* Doctors List Sidebar */}
-            <div className={`border-r ${darkMode ? "border-gray-700" : "border-gray-200"} flex flex-col`}>
-              <div className="p-4 border-b dark:border-gray-700">
+            <div className={`border-r ${darkMode ? "border-gray-700" : "border-gray-200"} flex h-full min-h-0 flex-col overflow-hidden`}>
+              <div className="shrink-0 p-4 border-b dark:border-gray-700">
                 <div className="relative">
                   <Search className={`absolute left-3 top-2.5 w-5 h-5 ${darkMode ? "text-gray-500" : "text-gray-400"}`} />
                   <input
@@ -712,7 +720,7 @@ const MessagingPage = () => {
                 </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto">
+              <div className="min-h-0 flex-1 overflow-y-auto">
                 {filteredDoctors.length === 0 ? (
                   <div className="p-8 text-center">
                     <Users className={`w-12 h-12 mx-auto mb-3 ${darkMode ? "text-gray-600" : "text-gray-400"}`} />
@@ -735,7 +743,7 @@ const MessagingPage = () => {
 
             {/* Chat Area */}
             {selectedDoctor ? (
-              <div className="lg:col-span-2 flex flex-col h-full relative">
+              <div className="relative flex h-full min-h-0 flex-col overflow-hidden lg:col-span-2">
                 {/* Chat Header */}
                 <div className={`p-4 border-b ${darkMode ? "border-gray-700 bg-gray-800/50" : "border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50"} shrink-0`}>
                   <div className="flex items-center justify-between">
@@ -797,7 +805,7 @@ const MessagingPage = () => {
                 </div>
 
                 {/* Messages Area */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                <div className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-4">
                   {loading ? (
                     <div className="flex justify-center items-center h-full">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>

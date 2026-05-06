@@ -384,10 +384,10 @@ const DoctorMessaging = () => {
             ? "bg-gray-800/90 backdrop-blur-sm border border-gray-700/50" 
             : "bg-white border border-gray-100"
         }`}>
-          <div className="grid lg:grid-cols-3 h-[calc(100vh-200px)]">
+          <div className="grid h-[calc(100vh-200px)] min-h-[520px] overflow-hidden lg:grid-cols-3">
             {/* Conversations List Sidebar */}
-            <div className={`border-r ${darkMode ? "border-gray-700" : "border-gray-200"} flex flex-col`}>
-              <div className="p-4 border-b dark:border-gray-700">
+            <div className={`border-r ${darkMode ? "border-gray-700" : "border-gray-200"} flex h-full min-h-0 flex-col overflow-hidden`}>
+              <div className="shrink-0 p-4 border-b dark:border-gray-700">
                 <div className="relative">
                   <Search className={`absolute left-3 top-2.5 w-5 h-5 ${darkMode ? "text-gray-500" : "text-gray-400"}`} />
                   <input
@@ -404,7 +404,7 @@ const DoctorMessaging = () => {
                 </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto">
+              <div className="min-h-0 flex-1 overflow-y-auto">
                 {loading && conversations.length === 0 ? (
                   <div className="flex justify-center items-center h-32">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -436,7 +436,7 @@ const DoctorMessaging = () => {
 
             {/* Chat Area */}
             {selectedPatient ? (
-              <div className="lg:col-span-2 flex flex-col h-full relative">
+              <div className="relative flex h-full min-h-0 flex-col overflow-hidden lg:col-span-2">
                 {/* Chat Header */}
                 <div className={`p-4 border-b ${darkMode ? "border-gray-700 bg-gray-800/50" : "border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50"} shrink-0`}>
                   <div className="flex items-center justify-between">
@@ -494,7 +494,7 @@ const DoctorMessaging = () => {
                 </div>
 
                 {/* Messages Area */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                <div className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-4">
                   {loading && messages.length === 0 ? (
                     <div className="flex justify-center items-center h-full">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
