@@ -191,18 +191,6 @@ const AppContent = () => {
 };
 
 const App = () => {
-  const [darkMode, setDarkMode] = React.useState(false);
-
-  React.useEffect(() => {
-    const observer = new MutationObserver(() => {
-      setDarkMode(document.documentElement.classList.contains("dark"));
-    });
-
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <ThemeProvider>
       <Router>

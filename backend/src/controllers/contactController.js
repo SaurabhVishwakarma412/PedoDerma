@@ -1,4 +1,10 @@
-const nodemailer = require("nodemailer");
+let nodemailer;
+
+try {
+  nodemailer = require("nodemailer");
+} catch {
+  nodemailer = null;
+}
 
 const sendContactEmail = async (req, res) => {
   const { name, email, phone, subject, message } = req.body;
@@ -7,18 +13,30 @@ const sendContactEmail = async (req, res) => {
     return res.status(400).json({ error: "All required fields must be filled." });
   }
 
+  const mailUser = process.env.MAIL_USER;
+  const mailPass = process.env.MAIL_PASS;
+  const mailTo = process.env.CONTACT_EMAIL || mailUser;
+
+  if (!nodemailer || !mailUser || !mailPass || !mailTo) {
+    console.warn("Contact email is not configured. Set MAIL_USER, MAIL_PASS, and install nodemailer.");
+    return res.status(503).json({
+      error: "Contact email is not configured on the server.",
+    });
+  }
+
   try {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "your-email@gmail.com", // Replace with your email
-        pass: "your-email-password", // Replace with your email password or app password
+        user: mailUser,
+        pass: mailPass,
       },
     });
 
     const mailOptions = {
-      from: email,
-      to: "saurabhkv412@gmail.com", // Replace with your email
+      from: mailUser,
+      replyTo: email,
+      to: mailTo,
       subject: `Contact Form Submission: ${subject}`,
       text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone || "N/A"}\nMessage: ${message}`,
     };

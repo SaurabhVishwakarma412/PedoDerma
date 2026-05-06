@@ -353,12 +353,12 @@
 
 // export default MessagingPage;
 
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { 
   MessageSquare, Send, Phone, Video, MoreVertical, Search, ArrowLeft, 
-  Users, Clock, CheckCheck, Check, Smile, Paperclip, Mic, 
-  PhoneCall, VideoIcon, Star, Award, Shield, Circle, CircleOff
+  Users, Clock, CheckCheck, Check, Smile, Paperclip, 
+  Star, Award, Shield, CircleOff
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
 import API from "../services/api";
@@ -374,11 +374,11 @@ const MessagingPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState("");
   const [darkMode, setDarkMode] = useState(false);
-  const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [onlineStatus, setOnlineStatus] = useState({});
   const messagesEndRef = useRef(null);
   const typingTimeoutRef = useRef(null);
+  const selectedDoctorRef = useRef(null);
 
   // Auto-scroll to bottom of messages
   const scrollToBottom = () => {
@@ -388,6 +388,10 @@ const MessagingPage = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    selectedDoctorRef.current = selectedDoctor;
+  }, [selectedDoctor]);
 
   // Dark mode observer
   useEffect(() => {
@@ -436,7 +440,7 @@ const MessagingPage = () => {
     });
 
     newSocket.on("typing", (data) => {
-      if (data.from === selectedDoctor?._id) {
+      if (data.from === selectedDoctorRef.current?._id) {
         setIsTyping(true);
         clearTimeout(typingTimeoutRef.current);
         typingTimeoutRef.current = setTimeout(() => setIsTyping(false), 2000);
@@ -479,14 +483,7 @@ const MessagingPage = () => {
     }
   }, [user]);
 
-  // Fetch chat history when a doctor is selected
-  useEffect(() => {
-    if (selectedDoctor) {
-      fetchChatHistory();
-    }
-  }, [selectedDoctor]);
-
-  const fetchChatHistory = async () => {
+  const fetchChatHistory = useCallback(async () => {
     try {
       setLoading(true);
       const response = await API.get(`/messages/chat/${selectedDoctor._id}`, {
@@ -503,7 +500,14 @@ const MessagingPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedDoctor, user]);
+
+  // Fetch chat history when a doctor is selected
+  useEffect(() => {
+    if (selectedDoctor) {
+      fetchChatHistory();
+    }
+  }, [selectedDoctor, fetchChatHistory]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();

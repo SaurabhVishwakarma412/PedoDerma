@@ -1,10 +1,9 @@
 // frontend/src/pages/SubmitCase.jsx
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Upload,
   Camera,
-  Image as ImageIcon,
   X,
   AlertCircle,
   CheckCircle,
@@ -208,7 +207,7 @@ const SubmitCase = () => {
       });
 
       // Append images
-      images.forEach((img, index) => {
+      images.forEach((img) => {
         formData.append(`images`, img.file);
       });
 
