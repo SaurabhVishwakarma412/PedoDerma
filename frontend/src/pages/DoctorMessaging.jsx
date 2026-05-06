@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import { 
   MessageSquare, Send, Phone, Video, MoreVertical, Search, ArrowLeft,
@@ -20,7 +20,6 @@ const DoctorMessaging = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState("");
   const [darkMode, setDarkMode] = useState(false);
-  const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [onlineStatus, setOnlineStatus] = useState({});
   const messagesEndRef = useRef(null);
@@ -153,14 +152,7 @@ const DoctorMessaging = () => {
     }
   }, [user]);
 
-  // Fetch chat history
-  useEffect(() => {
-    if (selectedPatient) {
-      fetchChatHistory();
-    }
-  }, [selectedPatient]);
-
-  const fetchChatHistory = async () => {
+  const fetchChatHistory = useCallback(async () => {
     try {
       setLoading(true);
       const response = await API.get(`/messages/doctor/chat/${selectedPatient._id}`, {
@@ -187,7 +179,14 @@ const DoctorMessaging = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedPatient, user]);
+
+  // Fetch chat history
+  useEffect(() => {
+    if (selectedPatient) {
+      fetchChatHistory();
+    }
+  }, [selectedPatient, fetchChatHistory]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
