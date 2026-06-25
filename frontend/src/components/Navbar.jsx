@@ -84,7 +84,7 @@ const Navbar = () => {
                   to={role === "parent" ? "/parent/dashboard" : "/doctor/dashboard"}
                   className={navClass}
                 >
-                  {role === "parent" ? "Dashboard" : "Doctor Dashboard"}
+                  {role === "parent" ? "Patient Dashboard" : "Doctor Dashboard"}
                 </NavLink>
                 <button
                   onClick={logout}
@@ -204,7 +204,7 @@ const Navbar = () => {
                   className={navClass}
                   onClick={() => setOpen(false)}
                 >
-                  {role === "parent" ? "Dashboard" : "Doctor Dashboard"}
+                  {role === "parent" ? "Patient Dashboard" : "Doctor Dashboard"}
                 </NavLink>
                 <button
                   onClick={() => {

@@ -15,7 +15,22 @@ const statusColor = (status) => {
   }
 };
 
-const CaseCard = ({ caseData }) => {
+const statusLabel = (status) => {
+  switch (status) {
+    case "pending": return "Pending Review";
+    case "in_review": return "In Review";
+    case "completed": return "Completed";
+    default: return status;
+  }
+};
+
+const formatCaseId = (id) => {
+  if (!id) return "N/A";
+  const numericId = parseInt(id.slice(-6), 16).toString().padStart(6, '0');
+  return `CASE-${numericId}`;
+};
+
+const CaseCard = ({ caseData, onClickOverride, showPriority }) => {
   const [darkMode, setDarkMode] = React.useState(false);
   const navigate = useNavigate();
   const baseURL = import.meta.env.VITE_API_URL;
@@ -24,69 +39,86 @@ const CaseCard = ({ caseData }) => {
     const observer = new MutationObserver(() => {
       setDarkMode(document.documentElement.classList.contains("dark"));
     });
-
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
-
+    setDarkMode(document.documentElement.classList.contains("dark"));
     return () => observer.disconnect();
   }, []);
 
   const handleClick = () => {
-    navigate(`/cases/${caseData._id}`);
+    if (onClickOverride) {
+      onClickOverride();
+    } else {
+      navigate(`/cases/${caseData._id}`);
+    }
   };
+
+  const patientAge = caseData.patientAge || caseData.childAge;
+  const firstImage = caseData.imageUrls?.[0] || (caseData.imageUrl ? `${baseURL}${caseData.imageUrl}` : null);
 
   return (
     <div
       onClick={handleClick}
-      className={`border rounded-lg p-4 cursor-pointer hover:shadow-md transition ${
-        darkMode ? "bg-gray-800 border-gray-600 text-gray-100" : "bg-white border-gray-300 text-gray-700"
+      className={`border rounded-xl p-4 cursor-pointer hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 ${
+        darkMode ? "bg-gray-800 border-gray-600 text-gray-100" : "bg-white border-gray-200 text-gray-700"
       }`}
     >
       {/* Header */}
-      <div className="flex justify-between items-center mb-2">
-        <h3 className="font-semibold text-sm">
-          {caseData.title || `Case #${caseData._id?.slice(-6)}`}
-        </h3>
-
+      <div className="flex justify-between items-start mb-2 gap-2">
+        <div>
+          <p className={`text-xs font-mono font-semibold ${darkMode ? "text-blue-400" : "text-blue-600"}`}>
+            {formatCaseId(caseData._id)}
+          </p>
+          <h3 className="font-semibold text-sm mt-0.5 leading-tight">
+            {caseData.title || "Untitled Case"}
+          </h3>
+        </div>
         <span
-          className={`text-xs px-2 py-1 rounded-full ${statusColor(
-            caseData.status
-          )}`}
+          className={`text-xs px-2 py-1 rounded-full whitespace-nowrap flex-shrink-0 ${statusColor(caseData.status)}`}
         >
-          {caseData.status}
+          {statusLabel(caseData.status)}
         </span>
       </div>
 
       {/* Image */}
-      {caseData.imageUrl && (
+      {firstImage && (
         <img
-          src={`${baseURL}${caseData.imageUrl}`}
+          src={firstImage}
           alt="Case"
-          className={`w-full h-32 object-cover rounded mb-3 border ${
-            darkMode ? "border-gray-600" : "border-gray-300"
+          className={`w-full h-32 object-cover rounded-lg mb-3 border ${
+            darkMode ? "border-gray-600" : "border-gray-200"
           }`}
         />
       )}
 
       {/* Description */}
-      <p className="text-xs line-clamp-2 mb-3">
+      <p className={`text-xs line-clamp-2 mb-3 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
         {caseData.description || "No description provided"}
       </p>
 
       {/* Extra info */}
-      <div className="flex justify-between text-[11px] mb-2">
-        <span>Child Age: {caseData.childAge || "N/A"}</span>
+      <div className={`flex justify-between text-[11px] mb-2 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+        <span>Patient Age: {patientAge ? `${patientAge} yrs` : "N/A"}</span>
         <span>Duration: {caseData.duration || "N/A"}</span>
       </div>
 
+      {/* Appointment info if scheduled */}
+      {caseData.appointmentDate && caseData.timeSlot && (
+        <div className={`text-[11px] px-2 py-1 rounded mb-2 ${
+          darkMode ? "bg-blue-900/20 text-blue-400" : "bg-blue-50 text-blue-700"
+        }`}>
+          📅 {caseData.appointmentDate} • {caseData.timeSlot}
+        </div>
+      )}
+
       {/* Doctor Notes */}
       {caseData.status === "completed" && caseData.doctorNotes && (
-        <p className="text-[11px] italic border-t pt-2 mt-2">
-          Doctor Notes: {caseData.doctorNotes}
+        <p className={`text-[11px] italic border-t pt-2 mt-2 ${darkMode ? "border-gray-700 text-gray-400" : "border-gray-100"}`}>
+          Doctor Notes: {caseData.doctorNotes.slice(0, 80)}{caseData.doctorNotes.length > 80 ? "..." : ""}
         </p>
       )}
 
       {/* Timestamp */}
-      <p className="text-[11px] mt-2">
+      <p className={`text-[11px] mt-2 ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
         Submitted:{" "}
         {caseData.createdAt
           ? new Date(caseData.createdAt).toLocaleDateString()

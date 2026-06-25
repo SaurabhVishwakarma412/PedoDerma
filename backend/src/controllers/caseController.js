@@ -62,10 +62,33 @@ exports.getAllCases = async (req, res) => {
 
 // Review/update case (Doctor)
 exports.reviewCase = async (req, res) => {
-  const updated = await Case.findByIdAndUpdate(
-    req.params.id,
-    req.body,
-    { new: true }
-  );
-  res.json(updated);
+  try {
+    const updateData = { ...req.body };
+    if (req.user && req.user.role === 'doctor') {
+      updateData.doctorId = req.user._id;
+    }
+
+    const { appointmentDate, timeSlot } = req.body;
+    if (appointmentDate && timeSlot) {
+      const existing = await Case.findOne({
+        doctorId: req.user._id,
+        appointmentDate,
+        timeSlot,
+        _id: { $ne: req.params.id }
+      });
+      if (existing) {
+        return res.status(400).json({ message: "This time slot is already booked for another patient." });
+      }
+    }
+
+    const updated = await Case.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true }
+    );
+    res.json(updated);
+  } catch (e) {
+    console.error("reviewCase ERROR:", e);
+    res.status(500).json({ message: "Server Error" });
+  }
 };

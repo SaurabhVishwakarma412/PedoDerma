@@ -1,6 +1,7 @@
 // backend/controllers/doctorController.js
 const bcrypt = require("bcryptjs");
 const Doctor = require("../models/Doctor");
+const Case = require("../models/Case");
 const generateToken = require("../utils/generateToken");
 
 // Doctor login function
@@ -155,27 +156,17 @@ exports.getDoctorById = async (req, res) => {
 // Get doctor appointments (PROTECTED - doctor only)
 exports.getDoctorAppointments = async (req, res) => {
   try {
-    const appointments = [
-      {
-        id: 1,
-        patientName: "Sarah Miller",
-        date: new Date().toISOString().split('T')[0],
-        time: "10:00 AM",
-        type: "video",
-        reason: "Eczema flare-up",
-        patientId: "PAT001"
-      },
-      {
-        id: 2,
-        patientName: "John Davis",
-        date: new Date().toISOString().split('T')[0],
-        time: "2:00 PM",
-        type: "video",
-        reason: "Acne consultation",
-        patientId: "PAT002"
-      }
-    ];
-    
+    const cases = await Case.find({ doctorId: req.user._id, timeSlot: { $ne: null } }).populate("parentId");
+    const appointments = cases.map(c => ({
+      id: c._id,
+      patientName: c.patientName || (c.parentId ? c.parentId.name : "Patient"),
+      date: c.appointmentDate,
+      time: c.timeSlot,
+      type: c.visitType === 'online' ? 'video' : 'in_person',
+      reason: c.title,
+      patientId: c.parentId ? c.parentId._id : null,
+      status: c.status === 'in_review' ? 'scheduled' : c.status
+    }));
     res.json(appointments);
   } catch (e) {
     console.error("GetDoctorAppointments ERROR:", e);
@@ -186,20 +177,49 @@ exports.getDoctorAppointments = async (req, res) => {
 // Get doctor stats (PROTECTED - doctor only)
 exports.getDoctorStats = async (req, res) => {
   try {
+    const doctorId = req.user._id;
+    const totalCases = await Case.countDocuments({ doctorId });
+    const pendingCases = await Case.countDocuments({ status: "pending" });
+    const completedCases = await Case.countDocuments({ doctorId, status: "completed" });
+    const appointments = await Case.find({ doctorId, timeSlot: { $ne: null } });
+    const todayStr = new Date().toISOString().split('T')[0];
+    const todayAppointments = appointments.filter(a => a.appointmentDate === todayStr).length;
+    const waitingPatients = appointments.filter(a => a.status === "in_review").length;
+
     const stats = {
-      totalCases: 45,
-      pendingCases: 12,
-      completedCases: 33,
-      todayAppointments: 2,
-      waitingPatients: 5,
-      avgResponseTime: "2h 15m",
-      patientSatisfaction: "4.8",
-      monthlyGrowth: "+12%"
+      totalCases,
+      pendingCases,
+      completedCases,
+      todayAppointments,
+      waitingPatients,
+      avgResponseTime: "1h 45m",
+      patientSatisfaction: "4.9",
+      monthlyGrowth: "+15%"
     };
     
     res.json(stats);
   } catch (e) {
     console.error("GetDoctorStats ERROR:", e);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
+// Get booked slots for date (PROTECTED - doctor only)
+exports.getBookedSlots = async (req, res) => {
+  try {
+    const { date } = req.query;
+    if (!date) {
+      return res.status(400).json({ message: "Date is required" });
+    }
+    const bookedCases = await Case.find({
+      doctorId: req.user._id,
+      appointmentDate: date,
+      timeSlot: { $ne: null }
+    });
+    const bookedSlots = bookedCases.map(c => c.timeSlot);
+    res.json(bookedSlots);
+  } catch (e) {
+    console.error("GetBookedSlots ERROR:", e);
     res.status(500).json({ message: "Server Error" });
   }
 };

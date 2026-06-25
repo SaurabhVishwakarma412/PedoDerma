@@ -1,8 +1,8 @@
 // frontend/src/pages/CaseDetails.jsx
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { getCaseById } from "../services/patientAPI";
-import { getCaseByIdDoctor } from "../services/doctorAPI";
+import { getCaseByIdDoctor } from "../services/DoctorApi";
 import { useAuth } from "../context/AuthContext";
 import { 
   ChevronLeft, 
@@ -17,7 +17,8 @@ import {
   Clock as ClockIcon,
   MessageSquare,
   Download,
-  Share2
+  Share2,
+  CalendarPlus
 } from "lucide-react";
 
 const statusConfig = {
@@ -60,25 +61,36 @@ const InfoCard = ({ icon: Icon, label, value, darkMode }) => (
   </div>
 );
 
-const SectionCard = ({ title, icon: Icon, children, darkMode }) => (
+const SectionCard = ({ title, icon: Icon, children, darkMode, headerAction }) => (
   <div className={`rounded-xl p-6 transition-all duration-300 ${
     darkMode 
       ? "bg-gray-800/90 backdrop-blur-sm border border-gray-700/50" 
       : "bg-white border border-gray-100 shadow-lg"
   }`}>
-    <div className="flex items-center gap-2 mb-4 pb-3 border-b dark:border-gray-700">
-      <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600">
-        <Icon className="w-4 h-4 text-white" />
+    <div className="flex items-center justify-between mb-4 pb-3 border-b dark:border-gray-700">
+      <div className="flex items-center gap-2">
+        <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600">
+          <Icon className="w-4 h-4 text-white" />
+        </div>
+        <h2 className={`text-lg font-semibold ${darkMode ? "text-gray-200" : "text-gray-800"}`}>{title}</h2>
       </div>
-      <h2 className={`text-lg font-semibold ${darkMode ? "text-gray-200" : "text-gray-800"}`}>{title}</h2>
+      {headerAction && headerAction}
     </div>
     {children}
   </div>
 );
 
+// Format case ID to human-readable form
+const formatCaseId = (id) => {
+  if (!id) return "N/A";
+  const numericId = parseInt(id.slice(-6), 16).toString().padStart(6, '0');
+  return `CASE-${numericId}`;
+};
+
 const CaseDetails = () => {
   const { id } = useParams();
   const { role } = useAuth();
+  const navigate = useNavigate();
   const [darkMode, setDarkMode] = useState(false);
   const [caseData, setCaseData] = useState(null);
   const [error, setError] = useState("");
@@ -118,7 +130,7 @@ const CaseDetails = () => {
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: `Case ${caseData._id?.slice(-6)}`,
+        title: `Case ${formatCaseId(caseData._id)}`,
         text: caseData.title,
         url: window.location.href,
       });
@@ -158,7 +170,7 @@ const CaseDetails = () => {
               </div>
             </div>
             <Link
-              to={role === "doctor" ? "/doctor/dashboard" : "/dashboard"}
+              to={role === "doctor" ? "/doctor/dashboard" : "/parent/dashboard"}
               className={`inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-lg transition ${
                 darkMode 
                   ? "bg-gray-800 text-gray-300 hover:bg-gray-700" 
@@ -179,6 +191,18 @@ const CaseDetails = () => {
   const status = statusConfig[caseData.status] || statusConfig.pending;
   const StatusIcon = status.icon;
 
+  // Schedule button shown only to doctors on this case
+  const scheduleButton = role === "doctor" ? (
+    <button
+      onClick={() => navigate(`/cases/${caseData._id}/review`)}
+      className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-semibold rounded-lg hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+      title="Schedule appointment for this case"
+    >
+      <CalendarPlus className="w-4 h-4" />
+      Schedule Appointment
+    </button>
+  ) : null;
+
   return (
     <main className={`min-h-screen transition-colors duration-300 ${
       darkMode ? "bg-gray-900" : "bg-gradient-to-br from-gray-50 via-white to-blue-50/30"
@@ -187,7 +211,7 @@ const CaseDetails = () => {
         {/* Header with Navigation */}
         <div className="mb-6">
           <Link
-            to={role === "doctor" ? "/doctor/dashboard" : "/dashboard"}
+            to={role === "doctor" ? "/doctor/dashboard" : "/parent/dashboard"}
             className={`inline-flex items-center gap-2 text-sm font-medium transition mb-4 ${
               darkMode ? "text-gray-400 hover:text-gray-200" : "text-gray-600 hover:text-gray-800"
             }`}
@@ -199,10 +223,13 @@ const CaseDetails = () => {
           {/* Title and Status */}
           <div className="flex flex-wrap justify-between items-start gap-4">
             <div>
-              <h1 className={`text-2xl md:text-3xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-900"}`}>
-                Case #{caseData._id?.slice(-6)}
+              <h1 className={`text-2xl md:text-3xl font-bold mb-1 ${darkMode ? "text-white" : "text-gray-900"}`}>
+                {formatCaseId(caseData._id)}
               </h1>
-              <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
+              <p className={`text-sm font-medium ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                {caseData.title}
+              </p>
+              <p className={`text-xs mt-1 ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
                 Submitted on {new Date(caseData.createdAt).toLocaleDateString()}
               </p>
             </div>
@@ -245,31 +272,73 @@ const CaseDetails = () => {
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Main Content - Left Column */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Case Information */}
-            <SectionCard title="Case Information" icon={FileText} darkMode={darkMode}>
+            {/* Case Information — with Schedule button for doctor */}
+            <SectionCard
+              title="Case Information"
+              icon={FileText}
+              darkMode={darkMode}
+              headerAction={scheduleButton}
+            >
               <p className={`mb-4 leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
                 {caseData.description}
               </p>
               
               <div className="grid grid-cols-2 gap-3">
-                <InfoCard icon={User} label="Child's Age" value={caseData.childAge} darkMode={darkMode} />
-                <InfoCard icon={Clock} label="Duration" value={caseData.duration} darkMode={darkMode} />
-                <InfoCard icon={Calendar} label="Submitted" value={new Date(caseData.createdAt).toLocaleDateString()} darkMode={darkMode} />
-                {caseData.updatedAt !== caseData.createdAt && (
-                  <InfoCard icon={Clock} label="Last Updated" value={new Date(caseData.updatedAt).toLocaleDateString()} darkMode={darkMode} />
+                <InfoCard icon={User} label="Patient Name" value={caseData.patientName || caseData.childName || "N/A"} darkMode={darkMode} />
+                <InfoCard icon={User} label="Patient Age" value={`${caseData.patientAge || caseData.childAge || "N/A"} years`} darkMode={darkMode} />
+                <InfoCard icon={User} label="Patient Gender" value={caseData.patientGender || caseData.childGender || "N/A"} darkMode={darkMode} />
+                <InfoCard icon={Clock} label="Visit Preference" value={caseData.visitType === 'offline' ? "🏥 Offline Visit" : "💻 Online Consultation"} darkMode={darkMode} />
+                {caseData.timeSlot && caseData.appointmentDate && (
+                  <>
+                    <InfoCard icon={Calendar} label="Appointment Date" value={new Date(caseData.appointmentDate).toLocaleDateString()} darkMode={darkMode} />
+                    <InfoCard icon={Clock} label="Appointment Time" value={caseData.timeSlot} darkMode={darkMode} />
+                  </>
                 )}
+                <InfoCard icon={Clock} label="Duration" value={caseData.duration || "N/A"} darkMode={darkMode} />
+                <InfoCard icon={Calendar} label="Submitted" value={new Date(caseData.createdAt).toLocaleDateString()} darkMode={darkMode} />
               </div>
             </SectionCard>
 
             {/* Case Images */}
-            {caseData.imageUrl && (
+            {caseData.imageUrls && caseData.imageUrls.length > 0 && (
+              <SectionCard title="Medical Images" icon={ImageIcon} darkMode={darkMode}>
+                <div className="grid grid-cols-2 gap-3">
+                  {caseData.imageUrls.map((url, idx) => (
+                    <div
+                      key={idx}
+                      className={`relative group rounded-lg overflow-hidden cursor-pointer ${
+                        darkMode ? "bg-gray-700" : "bg-gray-100"
+                      }`}
+                      onClick={() => setShowFullImage(url)}
+                    >
+                      <img
+                        src={url}
+                        alt={`Case Medical Image ${idx + 1}`}
+                        className="w-full h-40 object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                      <div className={`absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/50`}>
+                        <span className="text-white text-sm font-medium px-3 py-1 rounded-full bg-black/50">
+                          View Full
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <p className={`text-xs text-center mt-2 ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
+                  Click image to view full size
+                </p>
+              </SectionCard>
+            )}
+            
+            {/* Legacy single imageUrl support */}
+            {!caseData.imageUrls?.length && caseData.imageUrl && (
               <SectionCard title="Medical Images" icon={ImageIcon} darkMode={darkMode}>
                 <div className="space-y-4">
                   <div 
                     className={`relative group rounded-lg overflow-hidden cursor-pointer ${
                       darkMode ? "bg-gray-700" : "bg-gray-100"
                     }`}
-                    onClick={() => setShowFullImage(true)}
+                    onClick={() => setShowFullImage(caseData.imageUrl)}
                   >
                     <img
                       src={`${baseURL}${caseData.imageUrl}`}
@@ -282,16 +351,13 @@ const CaseDetails = () => {
                       </span>
                     </div>
                   </div>
-                  <p className={`text-xs text-center ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
-                    Click image to view full size
-                  </p>
                 </div>
               </SectionCard>
             )}
 
             {/* Doctor Notes */}
             {caseData.doctorNotes && (
-              <SectionCard title="Doctor's Notes" icon={Stethoscope} darkMode={darkMode}>
+              <SectionCard title="Doctor's Assessment" icon={Stethoscope} darkMode={darkMode}>
                 <div className={`p-4 rounded-lg ${
                   darkMode ? "bg-blue-900/20 border border-blue-800" : "bg-blue-50 border border-blue-100"
                 }`}>
@@ -325,23 +391,42 @@ const CaseDetails = () => {
                 Quick Actions
               </h3>
               <div className="space-y-3">
-                <Link
-                  to={role === "doctor" ? `/cases/${caseData._id}/review` : `/parent/messages?caseId=${caseData._id}`}
-                  className={`flex items-center justify-between w-full p-3 rounded-lg transition group ${
-                    darkMode 
-                      ? "bg-gray-700/50 hover:bg-gray-700 text-gray-300" 
-                      : "bg-gray-50 hover:bg-gray-100 text-gray-700"
-                  }`}
-                >
-                  <span className="text-sm font-medium">Message Doctor</span>
-                  <MessageSquare className="w-4 h-4 opacity-60 group-hover:opacity-100" />
-                </Link>
-                {caseData.imageUrl && (
+                {/* Doctor: link to review/schedule page */}
+                {role === "doctor" && (
+                  <button
+                    onClick={() => navigate(`/cases/${caseData._id}/review`)}
+                    className={`flex items-center justify-between w-full p-3 rounded-lg transition group ${
+                      darkMode 
+                        ? "bg-blue-900/20 hover:bg-blue-900/40 text-blue-400 border border-blue-800" 
+                        : "bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200"
+                    }`}
+                  >
+                    <span className="text-sm font-medium">Schedule / Review Case</span>
+                    <CalendarPlus className="w-4 h-4 opacity-60 group-hover:opacity-100" />
+                  </button>
+                )}
+                {/* Patient: message doctor only if doctor is assigned */}
+                {role !== "doctor" && caseData.doctorId && (
+                  <Link
+                    to={`/parent/messages`}
+                    className={`flex items-center justify-between w-full p-3 rounded-lg transition group ${
+                      darkMode 
+                        ? "bg-gray-700/50 hover:bg-gray-700 text-gray-300" 
+                        : "bg-gray-50 hover:bg-gray-100 text-gray-700"
+                    }`}
+                  >
+                    <span className="text-sm font-medium">Message Doctor</span>
+                    <MessageSquare className="w-4 h-4 opacity-60 group-hover:opacity-100" />
+                  </Link>
+                )}
+                {/* Download image if available */}
+                {(caseData.imageUrls?.length > 0 || caseData.imageUrl) && (
                   <button
                     onClick={() => {
+                      const imgUrl = caseData.imageUrls?.[0] || `${baseURL}${caseData.imageUrl}`;
                       const link = document.createElement('a');
-                      link.href = `${baseURL}${caseData.imageUrl}`;
-                      link.download = `case-${caseData._id}-image.jpg`;
+                      link.href = imgUrl;
+                      link.download = `case-${formatCaseId(caseData._id)}-image.jpg`;
                       link.click();
                     }}
                     className={`flex items-center justify-between w-full p-3 rounded-lg transition group ${
@@ -395,6 +480,21 @@ const CaseDetails = () => {
                   </div>
                 )}
                 
+                {caseData.appointmentDate && caseData.timeSlot && (
+                  <div className="flex gap-3">
+                    <div className="relative">
+                      <div className="w-3 h-3 mt-1 rounded-full bg-purple-500"></div>
+                      {caseData.status === 'completed' && <div className="absolute top-5 left-1.5 w-0.5 h-10 bg-gray-300 dark:bg-gray-600"></div>}
+                    </div>
+                    <div>
+                      <p className={`text-sm font-medium ${darkMode ? "text-gray-200" : "text-gray-800"}`}>Appointment Scheduled</p>
+                      <p className={`text-xs ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
+                        {caseData.appointmentDate} • {caseData.timeSlot}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                
                 {caseData.status === 'completed' && (
                   <div className="flex gap-3">
                     <div className="w-3 h-3 mt-1 rounded-full bg-green-500"></div>
@@ -435,14 +535,14 @@ const CaseDetails = () => {
       </div>
 
       {/* Full Screen Image Modal */}
-      {showFullImage && caseData.imageUrl && (
+      {showFullImage && (
         <div 
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm"
           onClick={() => setShowFullImage(false)}
         >
           <div className="relative max-w-5xl w-full mx-4">
             <img
-              src={`${baseURL}${caseData.imageUrl}`}
+              src={showFullImage.startsWith('http') ? showFullImage : `${baseURL}${showFullImage}`}
               alt="Case Medical Image Full Size"
               className="w-full h-auto rounded-lg"
             />

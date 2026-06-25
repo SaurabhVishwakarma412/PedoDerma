@@ -14,8 +14,8 @@ const Footer = () => {
             PedoDerma
           </h2>
           <p className="text-lg leading-relaxed mb-4">
-            PedoDerma is a digital healthcare platform connecting parents with
-            qualified doctors for pediatric skin concerns. Trusted by families
+            PedoDerma is a digital healthcare platform connecting patients with
+            qualified doctors for all dermatological concerns. Trusted by families
             and medical professionals to provide timely and secure consultations.
           </p>
 
@@ -48,7 +48,7 @@ const Footer = () => {
           <ul className="space-y-2">
             <li><Link to="/about" className="hover:text-blue-600">About Us</Link></li>
             <li><Link to="/contact" className="hover:text-blue-600">Contact Us</Link></li>
-            <li><Link to="/login" className="hover:text-blue-600">Parent Login</Link></li>
+            <li><Link to="/login" className="hover:text-blue-600">Patient Login</Link></li>
             <li><Link to="/doctor/login" className="hover:text-blue-600">Doctor Login</Link></li>
             <li><Link to="/register" className="hover:text-blue-600">Register</Link></li>
           </ul>
@@ -60,7 +60,7 @@ const Footer = () => {
             Helpful Links
           </h3>
           <ul className="space-y-2">
-            <li><Link to="/parent/dashboard" className="hover:text-blue-600">Parent Dashboard</Link></li>
+            <li><Link to="/parent/dashboard" className="hover:text-blue-600">Patient Dashboard</Link></li>
             <li><Link to="/cases/submit" className="hover:text-blue-600">Submit a Case</Link></li>
             <li><Link to="/doctor/dashboard" className="hover:text-blue-600">Doctor Dashboard</Link></li>
             <li><Link to="/" className="hover:text-blue-600">Home</Link></li>

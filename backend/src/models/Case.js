@@ -17,6 +17,18 @@ const caseSchema = new mongoose.Schema(
 
     childName: { type: String }, // optional but good
 
+    patientName: { type: String },
+
+    patientAge: { type: String },
+
+    patientGender: { type: String },
+
+    visitType: { type: String, enum: ["online", "offline"], default: "online" },
+
+    appointmentDate: { type: String, default: null },
+
+    timeSlot: { type: String, default: null },
+
     status: {
       type: String,
       enum: ["pending", "in_review", "completed"],

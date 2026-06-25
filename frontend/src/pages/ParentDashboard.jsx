@@ -1,6 +1,7 @@
 // frontend/src/pages/ParentDashboard.jsx
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import { 
   Calendar, 
   Clock, 
@@ -27,6 +28,7 @@ import CaseCard from "../components/CaseCard";
 
 const ParentDashboard = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [cases, setCases] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [medicalRecords, setMedicalRecords] = useState([]);
@@ -119,6 +121,8 @@ const ParentDashboard = () => {
     fetchDashboardData();
   }, []);
 
+  const hasAssignedDoctor = cases.some(c => c.doctorId);
+
   const markNotificationAsRead = (id) => {
     setNotifications(notifications.map(n => 
       n.id === id ? { ...n, read: true } : n
@@ -130,7 +134,8 @@ const ParentDashboard = () => {
   const getStatusColor = (status) => {
     switch(status) {
       case 'pending': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300';
-      case 'in_review': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300';
+      case 'in_review':
+      case 'scheduled': return 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300';
       case 'completed': return 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300';
       case 'cancelled': return 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300';
       default: return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
@@ -182,8 +187,8 @@ const ParentDashboard = () => {
                   <User className="w-8 h-8" />
                 </div>
                 <div>
-                  <h1 className="text-2xl md:text-3xl font-bold">Welcome Back, Parent!</h1>
-                  <p className="text-blue-100">Track your child's dermatology care journey</p>
+                  <h1 className="text-2xl md:text-3xl font-bold">Welcome Back, {user?.name || "Patient"}!</h1>
+                  <p className="text-blue-100">Track your dermatology care journey</p>
                 </div>
               </div>
             </div>
@@ -211,13 +216,15 @@ const ParentDashboard = () => {
                   New Case
                 </Link>
                 
-                <button
-                  onClick={() => navigate('/parent/messages')}
-                  className="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg hover:opacity-90 transition flex items-center gap-2 shadow-lg"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  Chat
-                </button>
+                {hasAssignedDoctor && (
+                  <button
+                    onClick={() => navigate('/parent/messages')}
+                    className="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg hover:opacity-90 transition flex items-center gap-2 shadow-lg"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    Chat
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -481,13 +488,15 @@ const ParentDashboard = () => {
                   <Plus className="w-6 h-6 mb-2" />
                   <span className="text-sm">New Case</span>
                 </Link>
-                <Link
-                  to="/messages"
-                  className="bg-white/20 hover:bg-white/30 p-4 rounded-lg transition-all duration-300 transform hover:scale-105 flex flex-col items-center justify-center backdrop-blur-sm"
-                >
-                  <MessageSquare className="w-6 h-6 mb-2" />
-                  <span className="text-sm">Messages</span>
-                </Link>
+                {hasAssignedDoctor && (
+                  <Link
+                    to="/parent/messages"
+                    className="bg-white/20 hover:bg-white/30 p-4 rounded-lg transition-all duration-300 transform hover:scale-105 flex flex-col items-center justify-center backdrop-blur-sm"
+                  >
+                    <MessageSquare className="w-6 h-6 mb-2" />
+                    <span className="text-sm">Messages</span>
+                  </Link>
+                )}
                 <Link
                   to="/book-online"
                   className="bg-white/20 hover:bg-white/30 p-4 rounded-lg transition-all duration-300 transform hover:scale-105 flex flex-col items-center justify-center backdrop-blur-sm"
@@ -640,7 +649,7 @@ const ParentDashboard = () => {
             }`}>
               <h3 className={`font-semibold mb-3 ${darkMode ? "text-gray-200" : "text-gray-800"}`}>Need Help?</h3>
               <p className={`text-sm mb-4 ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
-                Our support team is here to assist you with any questions about your child's care.
+                Our support team is here to assist you with any questions about your care.
               </p>
               <div className="space-y-2">
                 <Link
@@ -675,7 +684,7 @@ const ParentDashboard = () => {
             : "bg-gradient-to-r from-indigo-50 to-purple-50"
         }`}>
           <h3 className={`text-lg font-semibold mb-4 ${darkMode ? "text-gray-200" : "text-gray-800"}`}>
-            Tips for Better Pediatric Dermatology Care
+            Tips for Better Dermatology Care
           </h3>
           <div className="grid md:grid-cols-3 gap-4">
             <div className={`p-4 rounded-lg transition-all duration-300 hover:shadow-md ${
