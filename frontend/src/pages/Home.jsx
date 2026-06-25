@@ -245,18 +245,18 @@ const Home = () => {
         }`}>
           <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
             <Sparkles className="w-4 h-4 text-yellow-300" />
-            <span className="text-white text-sm font-medium">Expert Pediatric Care — Available 24/7</span>
+            <span className="text-white text-sm font-medium">Expert Dermatological Care — Available 24/7</span>
           </div>
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-4 text-white leading-tight drop-shadow-2xl">
             Skip the Travel!
             <span className="block bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-transparent">
-              Pediatric Dermatology Online
+              Dermatology Online
             </span>
           </h1>
 
           <p className="text-xl md:text-2xl text-white/95 mb-8 max-w-3xl mx-auto drop-shadow-lg">
-            Expert care for your child's skin from board-certified pediatric dermatologists
+            Expert care for your skin from board-certified dermatologists
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-6">
@@ -317,13 +317,13 @@ const Home = () => {
             <p className={`text-lg max-w-2xl mx-auto animate-fade-in-up animation-delay-300 ${
               darkMode ? "text-gray-400" : "text-gray-600"
             }`}>
-              Making pediatric dermatology accessible, affordable, and available for everyone
+              Making dermatology accessible, affordable, and available for everyone
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <AnimatedCounter number="20+" label="Pediatric Dermatologists" icon={<Stethoscope size={32} />} desc="Board-certified specialists" delay={0} />
-            <AnimatedCounter number="12000+" label="Happy Parents" icon={<UsersRound size={32} />} desc="Satisfied families served" delay={200} />
-            <AnimatedCounter number="98%" label="Satisfaction Rate" icon={<UserStar size={32} />} desc="Parent satisfaction score" delay={400} />
+            <AnimatedCounter number="20+" label="Dermatologists" icon={<Stethoscope size={32} />} desc="Board-certified specialists" delay={0} />
+            <AnimatedCounter number="12000+" label="Happy Patients" icon={<UsersRound size={32} />} desc="Satisfied patients served" delay={200} />
+            <AnimatedCounter number="98%" label="Satisfaction Rate" icon={<UserStar size={32} />} desc="Patient satisfaction score" delay={400} />
           </div>
         </div>
       </section>
@@ -338,13 +338,13 @@ const Home = () => {
               darkMode ? "bg-purple-900/30" : "bg-purple-100"
             }`}>
               <Sparkles className={`w-4 h-4 ${darkMode ? "text-purple-400" : "text-purple-600"}`} />
-              <span className={`text-sm font-medium ${darkMode ? "text-purple-300" : "text-purple-700"}`}>Why Families Love Us</span>
+              <span className={`text-sm font-medium ${darkMode ? "text-purple-300" : "text-purple-700"}`}>Why Patients Love Us</span>
             </div>
             <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? "text-blue-400" : "text-blue-600"}`}>
-              Why Choose Our Pediatric Dermatology Care
+              Why Choose Our Dermatology Care
             </h2>
             <p className={`text-lg max-w-2xl mx-auto ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
-              Specialized care designed specifically for children's unique skin needs
+              Specialized care designed specifically for your unique skin needs
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -370,8 +370,8 @@ const Home = () => {
               darkMode={darkMode}
             />
             <FeatureCard 
-              title="Child-Friendly Care"
-              desc="Specialized in pediatric skin conditions and treatments"
+              title="Patient-Friendly Care"
+              desc="Specialized in various skin conditions and treatments"
               icon={Smile}
               gradient="from-orange-500 to-red-500"
               darkMode={darkMode}
@@ -393,9 +393,9 @@ const Home = () => {
               <span className={`text-sm font-medium ${darkMode ? "text-blue-300" : "text-blue-700"}`}>We Treat</span>
             </div>
             <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? "text-blue-400" : "text-blue-600"}`}>
-              Common Pediatric Skin Concerns
+              Common Skin Concerns
             </h2>
-            <p className={`text-lg ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Expert care for your child's skin health</p>
+            <p className={`text-lg ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Expert care for your skin health</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -485,13 +485,13 @@ const Home = () => {
               <span className={`text-sm font-medium ${darkMode ? "text-green-300" : "text-green-700"}`}>Simple Process</span>
             </div>
             <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? "text-blue-400" : "text-blue-600"}`}>
-              How Pediatric Tele-Dermatology Works
+              How Tele-Dermatology Works
             </h2>
             <p className={`text-lg ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Three simple steps to expert care</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <StepCard step="01" title="Upload Photos & Symptoms" desc="Securely upload photos of your child's skin condition and describe symptoms" icon={Camera} gradient="from-blue-500 to-cyan-500" darkMode={darkMode} />
-            <StepCard step="02" title="Consult Pediatric Specialist" desc="Connect with a board-certified pediatric dermatologist via secure video call" icon={Video} gradient="from-purple-500 to-pink-500" darkMode={darkMode} />
+            <StepCard step="01" title="Upload Photos & Symptoms" desc="Securely upload photos of your skin condition and describe symptoms" icon={Camera} gradient="from-blue-500 to-cyan-500" darkMode={darkMode} />
+            <StepCard step="02" title="Consult Specialist" desc="Connect with a board-certified dermatologist via secure video call" icon={Video} gradient="from-purple-500 to-pink-500" darkMode={darkMode} />
             <StepCard step="03" title="Get Diagnosis & Treatment" desc="Receive personalized diagnosis, treatment plan, and digital prescription" icon={BriefcaseMedical} gradient="from-green-500 to-emerald-500" darkMode={darkMode} />
           </div>
         </div>
@@ -510,15 +510,15 @@ const Home = () => {
               <span className={`text-sm font-medium ${darkMode ? "text-indigo-300" : "text-indigo-700"}`}>Why It Works</span>
             </div>
             <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? "text-blue-400" : "text-blue-600"}`}>
-              Benefits of Pediatric Tele-Dermatology
+              Benefits of Tele-Dermatology
             </h2>
-            <p className={`text-lg ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Modern care designed for modern families</p>
+            <p className={`text-lg ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Modern care designed for you</p>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
-            <BenefitCard title="Consult Top Pediatric Dermatologists 24x7" desc="Connect instantly with pediatric skin specialists from the comfort of your home" icon={Clock} color="from-blue-500 to-blue-600" darkMode={darkMode} />
-            <BenefitCard title="Child-Friendly & Convenient" desc="No travel, no waiting rooms - perfect for children's comfort and schedule" icon={Smile} color="from-green-500 to-green-600" darkMode={darkMode} />
-            <BenefitCard title="100% Safe & Private Consultations" desc="HIPAA-compliant platform ensuring complete privacy for your child's health data" icon={ShieldCheck} color="from-purple-500 to-purple-600" darkMode={darkMode} />
-            <BenefitCard title="Specialized Pediatric Care" desc="Doctors experienced in treating children's specific skin conditions and concerns" icon={Stethoscope} color="from-orange-500 to-orange-600" darkMode={darkMode} />
+            <BenefitCard title="Consult Top Dermatologists 24x7" desc="Connect instantly with skin specialists from the comfort of your home" icon={Clock} color="from-blue-500 to-blue-600" darkMode={darkMode} />
+            <BenefitCard title="Patient-Friendly & Convenient" desc="No travel, no waiting rooms - perfect for your comfort and schedule" icon={Smile} color="from-green-500 to-green-600" darkMode={darkMode} />
+            <BenefitCard title="100% Safe & Private Consultations" desc="HIPAA-compliant platform ensuring complete privacy for your health data" icon={ShieldCheck} color="from-purple-500 to-purple-600" darkMode={darkMode} />
+            <BenefitCard title="Specialized Care" desc="Doctors experienced in treating all specific skin conditions and concerns" icon={Stethoscope} color="from-orange-500 to-orange-600" darkMode={darkMode} />
           </div>
         </div>
       </section>
@@ -547,15 +547,15 @@ const Home = () => {
             {[
               {
                 question: "Is tele-dermatology safe for children?",
-                answer: "Yes. Our platform follows strict medical privacy standards (HIPAA-compliant), ensuring your child's medical information and photos remain secure and confidential. All our doctors are board-certified pediatric dermatologists with years of experience."
+                answer: "Yes. Our platform follows strict medical privacy standards (HIPAA-compliant), ensuring your medical information and photos remain secure and confidential. All our doctors are board-certified dermatologists with years of experience."
               },
               {
                 question: "Can I get a prescription online?",
-                answer: "Absolutely. After the dermatologist reviews your case, you receive a digital prescription for pediatric-safe medications that can be purchased at any pharmacy. We also offer direct pharmacy delivery in select areas."
+                answer: "Absolutely. After the dermatologist reviews your case, you receive a digital prescription for medications that can be purchased at any pharmacy. We also offer direct pharmacy delivery in select areas."
               },
               {
                 question: "What conditions can be treated online?",
-                answer: "Common pediatric skin conditions such as eczema, rashes, acne, birthmarks, fungal infections, allergies, and diaper dermatitis can be diagnosed and treated online. For emergency cases, we'll guide you to the nearest care facility."
+                answer: "Common skin conditions such as eczema, rashes, acne, birthmarks, fungal infections, allergies, and dermatitis can be diagnosed and treated online. For emergency cases, we'll guide you to the nearest care facility."
               },
               {
                 question: "How long does it take to receive a diagnosis?",
@@ -607,10 +607,10 @@ const Home = () => {
         <div className="absolute inset-0 bg-[radial-gradient(circle,_rgba(255,255,255,0.1)_1px,_transparent_1px)] [background-size:24px_24px] opacity-10"></div>
         <div className="relative max-w-5xl mx-auto px-4 text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Ready to Get Expert Care for Your Child's Skin?
+            Ready to Get Expert Care for Your Skin?
           </h2>
           <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Join thousands of parents who trust our pediatric dermatologists
+            Join thousands of patients who trust our dermatologists
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-5">
             <Link

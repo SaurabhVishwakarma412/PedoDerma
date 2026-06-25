@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Eye, EyeOff, Lock, Mail, Stethoscope, Shield, AlertCircle, LogIn, Key, BriefcaseMedical } from "lucide-react";
-import { loginDoctor } from "../services/doctorAPI";
+import { loginDoctor } from "../services/DoctorApi";
 import { useAuth } from "../context/AuthContext";
 
 const DoctorLogin = () => {

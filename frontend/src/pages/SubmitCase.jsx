@@ -40,6 +40,10 @@ const SubmitCase = () => {
     duration: "",
     childAge: "",
     childGender: "",
+    patientName: "",
+    patientAge: "",
+    patientGender: "",
+    visitType: "online",
     bodyPart: "",
     severity: "moderate",
     previousTreatments: "",
@@ -151,7 +155,7 @@ const SubmitCase = () => {
   const validateStep = (step) => {
     switch (step) {
       case 1:
-        if (!form.title || !form.childAge || !form.childGender) {
+        if (!form.title || !form.patientAge || !form.patientGender || !form.patientName) {
           setError("Please fill in all required fields");
           return false;
         }
@@ -201,8 +205,16 @@ const SubmitCase = () => {
     try {
       const formData = new FormData();
 
+      // Maintain compatibility for older schema fields
+      const dataToSend = {
+        ...form,
+        childAge: form.patientAge,
+        childName: form.patientName,
+        childGender: form.patientGender,
+      };
+
       // Append form data
-      Object.entries(form).forEach(([key, value]) => {
+      Object.entries(dataToSend).forEach(([key, value]) => {
         formData.append(key, value);
       });
 
@@ -228,7 +240,7 @@ const SubmitCase = () => {
       setUploadProgress(100);
 
       setSuccess(
-        "Case submitted successfully! A pediatric dermatologist will review your case within 24 hours.",
+        "Case submitted successfully! A dermatologist will review your case within 24 hours.",
       );
 
       setTimeout(() => navigate("/parent/dashboard"), 3000);
@@ -261,8 +273,7 @@ const SubmitCase = () => {
                 Submit New Dermatology Case
               </h1>
               <p className="text-gray-600">
-                Share your child's skin condition with board-certified pediatric
-                dermatologists
+                Share your skin condition with board-certified dermatologists
               </p>
             </div>
           </div>
@@ -288,7 +299,7 @@ const SubmitCase = () => {
                   </div>
                   <span className="text-xs mt-2 font-medium">
                     {step === 1
-                      ? "Child Info"
+                      ? "Patient Info"
                       : step === 2
                         ? "Symptoms"
                         : step === 3
@@ -344,12 +355,12 @@ const SubmitCase = () => {
 
         {/* Form Steps */}
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-blue-100">
-          {/* Step 1: Child Information */}
+          {/* Step 1: Patient Information */}
           {activeStep === 1 && (
             <>
               <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
                 <User className="w-5 h-5 text-blue-600" />
-                Child Information
+                Patient Information
               </h2>
 
               <div className="space-y-6">
@@ -371,31 +382,46 @@ const SubmitCase = () => {
                   </p>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid md:grid-cols-3 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Child's Age (Years) *
+                      Patient's Name *
                     </label>
                     <input
-                      type="number"
-                      name="childAge"
-                      value={form.childAge}
+                      type="text"
+                      name="patientName"
+                      value={form.patientName}
                       onChange={handleChange}
                       required
-                      min="0"
-                      max="18"
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                      placeholder="e.g., 5"
+                      placeholder="e.g., John Doe"
                     />
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Child's Gender *
+                      Patient's Age (Years) *
+                    </label>
+                    <input
+                      type="number"
+                      name="patientAge"
+                      value={form.patientAge}
+                      onChange={handleChange}
+                      required
+                      min="0"
+                      max="120"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                      placeholder="e.g., 25"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Patient's Gender *
                     </label>
                     <select
-                      name="childGender"
-                      value={form.childGender}
+                      name="patientGender"
+                      value={form.patientGender}
                       onChange={handleChange}
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
@@ -408,21 +434,53 @@ const SubmitCase = () => {
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Duration of Problem *
-                  </label>
-                  <div className="flex items-center gap-3">
-                    <Clock className="w-5 h-5 text-gray-400" />
-                    <input
-                      type="text"
-                      name="duration"
-                      value={form.duration}
-                      onChange={handleChange}
-                      required
-                      className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                      placeholder="e.g., 3 days, 2 weeks, 1 month"
-                    />
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Visit Type Preference *
+                    </label>
+                    <div className="grid grid-cols-2 gap-4">
+                      <button
+                        type="button"
+                        onClick={() => handleChange({ target: { name: 'visitType', value: 'online' } })}
+                        className={`p-3 text-sm rounded-lg border font-semibold transition ${
+                          form.visitType === 'online'
+                            ? "bg-blue-600 text-white border-blue-600"
+                            : "bg-gray-50 border-gray-200 text-gray-700 hover:border-blue-300"
+                        }`}
+                      >
+                        💻 Online Consultation
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleChange({ target: { name: 'visitType', value: 'offline' } })}
+                        className={`p-3 text-sm rounded-lg border font-semibold transition ${
+                          form.visitType === 'offline'
+                            ? "bg-blue-600 text-white border-blue-600"
+                            : "bg-gray-50 border-gray-200 text-gray-700 hover:border-blue-300"
+                        }`}
+                      >
+                        🏥 Offline Visit (In-Person)
+                      </button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Duration of Problem *
+                    </label>
+                    <div className="flex items-center gap-3">
+                      <Clock className="w-5 h-5 text-gray-400" />
+                      <input
+                        type="text"
+                        name="duration"
+                        value={form.duration}
+                        onChange={handleChange}
+                        required
+                        className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                        placeholder="e.g., 3 days, 2 weeks, 1 month"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -633,14 +691,26 @@ const SubmitCase = () => {
                     Case Summary
                   </h4>
                   <div className="space-y-4">
-                    <div className="grid md:grid-cols-2 gap-1">
+                    <div className="grid md:grid-cols-2 gap-4">
                       <div>
                         <p className="text-sm text-gray-600">Case Title</p>
                         <p className="font-medium">{form.title}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-gray-600">Child Age</p>
-                        <p className="font-medium">{form.childAge} years</p>
+                        <p className="text-sm text-gray-600">Patient Name</p>
+                        <p className="font-medium">{form.patientName}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Patient Age</p>
+                        <p className="font-medium">{form.patientAge} years</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Patient Gender</p>
+                        <p className="font-medium capitalize">{form.patientGender}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Visit Preference</p>
+                        <p className="font-medium capitalize">{form.visitType === 'online' ? '💻 Online Consultation' : '🏥 Offline In-Person'}</p>
                       </div>
                       <div>
                         <p className="text-sm text-gray-600">Duration</p>
@@ -662,7 +732,7 @@ const SubmitCase = () => {
                           {images.length} photo(s) uploaded
                         </p>
                       </div>
-                      <div>
+                      <div className="md:col-span-2">
                         <p className="text-sm text-gray-600">Symptoms</p>
                         <p className="font-medium">{form.symptoms}</p>
                       </div>
@@ -688,7 +758,7 @@ const SubmitCase = () => {
                     <div>
                       <span className="text-gray-700 font-medium">
                         I consent to share photos and medical information with
-                        pediatric dermatologists *
+                        dermatologists *
                       </span>
                       <p className="text-sm text-gray-500 mt-1">
                         Your information will be kept confidential and used only

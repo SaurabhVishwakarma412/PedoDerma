@@ -185,7 +185,7 @@ const Register = () => {
                 <>
                   <h2 className="text-xl font-bold text-gray-800 mb-2 flex items-center gap-2">
                     <User className="w-6 h-6 text-blue-600" />
-                    Parent/Guardian Information
+                    Patient / Account Information
                   </h2>
                   
                   <div className="grid md:grid-cols-2 gap-6">
@@ -424,8 +424,8 @@ const Register = () => {
                 {[
                   {
                     icon: "👨‍⚕️",
-                    title: "Expert Pediatric Dermatologists",
-                    desc: "Access board-certified specialists in children's skin care"
+                    title: "Expert Dermatologists",
+                    desc: "Access board-certified skin care specialists for all age groups"
                   },
                   {
                     icon: "📱",
@@ -435,7 +435,7 @@ const Register = () => {
                   {
                     icon: "💊",
                     title: "Digital Prescriptions",
-                    desc: "Get prescriptions specifically for pediatric medications"
+                    desc: "Receive digital prescriptions and treatment plans from your doctor"
                   },
                   {
                     icon: "🔄",
@@ -463,14 +463,14 @@ const Register = () => {
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <Phone className="w-4 h-4" />
-                  <span>1-800-PED-SKIN</span>
+                  <span>1-800-DERM-CARE</span>
                 </div>
                 <a 
-                  href="mailto:support@pediatricderm.com" 
+                  href="mailto:support@dermacare.com" 
                   className="flex items-center gap-2 text-blue-300 hover:text-blue-200 transition"
                 >
                   <Mail className="w-4 h-4" />
-                  support@pediatricderm.com
+                  support@dermacare.com
                 </a>
               </div>
             </div>

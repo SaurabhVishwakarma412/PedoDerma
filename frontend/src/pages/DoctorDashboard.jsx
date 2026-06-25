@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import {
   Filter,
   Search,
@@ -25,10 +26,11 @@ import {
   BarChart3,
   MessageCircle
 } from "lucide-react";
-import { getAllCases, getDoctorAppointments, getDoctorStats } from "../services/doctorAPI";
+import { getAllCases, getDoctorAppointments, getDoctorStats } from "../services/DoctorApi";
 import CaseCard from "../components/CaseCard";
 
 const DoctorDashboard = () => {
+  const { user } = useAuth();
   const [cases, setCases] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [stats, setStats] = useState({
@@ -165,8 +167,8 @@ const DoctorDashboard = () => {
                   <Stethoscope className="w-8 h-8" />
                 </div>
                 <div>
-                  <h1 className="text-2xl md:text-3xl font-bold">Welcome, Dr. Priti</h1>
-                  <p className="text-blue-100">Pediatric Dermatology Specialist</p>
+                  <h1 className="text-2xl md:text-3xl font-bold">Welcome, {user?.name || "Doctor"}</h1>
+                  <p className="text-blue-100">{user?.specialization || "Dermatology Specialist"}</p>
                 </div>
               </div>
               <div className="flex items-center gap-4 text-sm">
@@ -615,7 +617,7 @@ const DoctorDashboard = () => {
                       : "bg-white border border-blue-200 hover:bg-blue-50 text-blue-700"
                   }`}
                 >
-                  Pediatric Medications
+                  Dermatology Medications
                 </Link>
                 <Link
                   to="/training"
