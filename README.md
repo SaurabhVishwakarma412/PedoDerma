@@ -6,7 +6,7 @@ A full-stack **MERN** (MongoDB, Express.js, React.js, Node.js) based web applica
 
 ## 🚀 Features
 
-### 👨‍👩‍👧 Parent Side
+### 👨‍👩‍👧 Patient Side
 - Register/Login to the platform
 - Submit cases with skin issue description and image upload
 - Track status of submitted dermatology cases
