@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { getCaseByIdDoctor, reviewCase, getBookedSlots } from "../services/DoctorApi";
+import { getCaseByIdDoctor, reviewCase, getBookedSlots } from "../services/DoctorApi.js";
 import { 
   ChevronLeft, 
   Calendar, 
