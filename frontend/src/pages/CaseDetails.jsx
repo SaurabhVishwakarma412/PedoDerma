@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { getCaseById } from "../services/patientAPI";
-import { getCaseByIdDoctor } from "../services/DoctorApi";
+import { getCaseByIdDoctor } from "../services/DoctorApi.js";
 import { useAuth } from "../context/AuthContext";
 import { 
   ChevronLeft, 

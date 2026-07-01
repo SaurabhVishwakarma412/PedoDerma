@@ -26,7 +26,8 @@ import {
   BarChart3,
   MessageCircle
 } from "lucide-react";
-import { getAllCases, getDoctorAppointments, getDoctorStats } from "../services/DoctorApi";
+// updated api
+import { getAllCases, getDoctorAppointments, getDoctorStats } from "../services/DoctorApi.js";
 import CaseCard from "../components/CaseCard";
 
 const DoctorDashboard = () => {
