@@ -62,12 +62,14 @@ const Navbar = () => {
             <NavLink to="/" className={navClass}>Home</NavLink>
             {!isAuthenticated && <NavLink to="/about" className={navClass}>About</NavLink>}
             <NavLink to="/contact" className={navClass}>Contact</NavLink>
-            <NavLink
-              to="/cases/submit"
-              className={navClass}
-            >
-              Book Online
-            </NavLink>
+            {role === "parent" && (
+              <NavLink
+                to="/cases/submit"
+                className={navClass}
+              >
+                Book Online
+              </NavLink>
+            )}
             {!isAuthenticated ? (
               <>
                 <NavLink to="/login" className={navClass}>Login</NavLink>
@@ -169,7 +171,7 @@ const Navbar = () => {
             <NavLink to="/" className={navClass} onClick={() => setOpen(false)}>
               Home
             </NavLink>
-            {!isDoctor && (
+            {role === "parent" && (
               <NavLink
                 to="/cases/submit"
                 className={navClass}
