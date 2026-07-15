@@ -24,6 +24,19 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     console.error("API ERROR:", error?.response?.data || error.message);
+
+    // If server returned 401 Unauthorized, notify the app so auth can be cleared
+    const status = error?.response?.status;
+    if (status === 401) {
+      try {
+        const evt = new CustomEvent("unauthorized", { detail: 401 });
+        window.dispatchEvent(evt);
+      } catch (e) {
+        // fallback for older browsers
+        window.dispatchEvent(new Event("unauthorized"));
+      }
+    }
+
     return Promise.reject(error);
   }
 );

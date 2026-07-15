@@ -51,6 +51,27 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
+  // Sync auth state across tabs/windows by listening to storage events
+  useEffect(() => {
+    const handleStorage = (e) => {
+      if (e.key === "token") {
+        // token removed or changed in another tab
+        const newToken = e.newValue;
+        if (!newToken) {
+          console.log("Token removed in another tab. Logging out.");
+          logout();
+        }
+      }
+      if (e.key === "user" && e.newValue === null) {
+        // user removed
+        logout();
+      }
+    };
+
+    window.addEventListener("storage", handleStorage);
+    return () => window.removeEventListener("storage", handleStorage);
+  }, []);
+
   const login = (userData, authToken) => {
     if (!userData || !authToken) return;
 
