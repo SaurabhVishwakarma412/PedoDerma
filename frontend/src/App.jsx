@@ -19,6 +19,9 @@ import DoctorsList from "./pages/DoctorsList";
 import Messaging from "./pages/Messaging";
 import DoctorMessaging from "./pages/DoctorMessaging";
 import ReviewCase from "./pages/ReviewCase";
+import AdminLogin from "./pages/AdminLogin";
+import AdminDashboard from "./pages/AdminDashboard";
+import ForgotPassword from "./pages/ForgotPassword";
 
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
@@ -115,6 +118,10 @@ const AppContent = () => {
           <DoctorLogin />
         </AuthLayout>
       } />
+      <Route path="/admin/login" element={<AuthLayout><AdminLogin /></AuthLayout>} />
+      <Route path="/forgot-password" element={<AuthLayout><ForgotPassword /></AuthLayout>} />
+
+      <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={["admin"]}><AdminDashboard /></ProtectedRoute>} />
 
       {/* Parent Routes with Header & Footer */}
       <Route

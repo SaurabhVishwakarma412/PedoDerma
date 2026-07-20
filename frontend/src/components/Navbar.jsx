@@ -7,6 +7,7 @@ import Logo from "./Logo";
 const Navbar = () => {
   const { role, isAuthenticated, logout } = useAuth();
   const isDoctor = isAuthenticated && role === "doctor";
+  const dashboardPath = role === "parent" ? "/parent/dashboard" : role === "doctor" ? "/doctor/dashboard" : "/admin/dashboard";
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [darkMode, setDarkMode] = useState(false); // State for theme toggle
@@ -83,10 +84,10 @@ const Navbar = () => {
             ) : (
               <>
                 <NavLink
-                  to={role === "parent" ? "/parent/dashboard" : "/doctor/dashboard"}
+                  to={dashboardPath}
                   className={navClass}
                 >
-                  {role === "parent" ? "Patient Dashboard" : "Doctor Dashboard"}
+                  {role === "parent" ? "Patient Dashboard" : role === "doctor" ? "Doctor Dashboard" : "Admin Dashboard"}
                 </NavLink>
                 <button
                   onClick={logout}
@@ -202,11 +203,11 @@ const Navbar = () => {
             ) : (
               <>
                 <NavLink
-                  to={role === "parent" ? "/parent/dashboard" : "/doctor/dashboard"}
+                  to={dashboardPath}
                   className={navClass}
                   onClick={() => setOpen(false)}
                 >
-                  {role === "parent" ? "Patient Dashboard" : "Doctor Dashboard"}
+                  {role === "parent" ? "Patient Dashboard" : role === "doctor" ? "Doctor Dashboard" : "Admin Dashboard"}
                 </NavLink>
                 <button
                   onClick={() => {

@@ -14,6 +14,10 @@ const authMiddleware = async (req, res, next) => {
         ? await Doctor.findById(decoded.id).select("-password")
         : await User.findById(decoded.id).select("-password");
 
+    if (!req.user || req.user.role !== decoded.role) {
+      return res.status(401).json({ message: "Invalid user" });
+    }
+
     next();
   } catch (err) {
     if (err.name === "TokenExpiredError") {

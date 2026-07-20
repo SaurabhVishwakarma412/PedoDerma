@@ -7,7 +7,9 @@ const userSchema = new mongoose.Schema(
     childName: { type: String },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    role: { type: String, default: "parent" },
+    role: { type: String, enum: ["parent", "admin"], default: "parent" },
+    resetPasswordToken: { type: String, select: false },
+    resetPasswordExpires: { type: Date, select: false },
   },
   { timestamps: true }
 );
