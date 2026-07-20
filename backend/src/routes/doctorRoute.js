@@ -4,6 +4,7 @@ const auth = require("../middleware/authMiddleware");
 const role = require("../middleware/roleMiddleware");
 const {
   loginDoctor,
+  createDoctor,
   getDoctors,
   getDoctorById,
   getDoctorAppointments,
@@ -14,6 +15,7 @@ const {
 // PUBLIC
 router.get("/", getDoctors);
 router.post("/login", loginDoctor);
+router.post("/", auth, role(["admin"]), createDoctor);
 
 // PROTECTED
 router.get("/appointments", auth, role(["doctor"]), getDoctorAppointments);

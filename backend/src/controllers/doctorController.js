@@ -4,6 +4,35 @@ const Doctor = require("../models/Doctor");
 const Case = require("../models/Case");
 const generateToken = require("../utils/generateToken");
 
+// Admin-only doctor provisioning. Doctor credentials are never accepted from
+// the public registration endpoint.
+exports.createDoctor = async (req, res) => {
+  try {
+    const { name, email, password, specialization } = req.body;
+    if (!name?.trim() || !email?.trim() || !password || password.length < 6) {
+      return res.status(400).json({ message: "Name, email and a password of at least 6 characters are required" });
+    }
+
+    const existing = await Doctor.findOne({ email: email.trim().toLowerCase() });
+    if (existing) return res.status(409).json({ message: "A doctor with this email already exists" });
+
+    const doctor = await Doctor.create({
+      name: name.trim(),
+      email: email.trim().toLowerCase(),
+      password: await bcrypt.hash(password, 10),
+      specialization: specialization?.trim() || "Dermatology",
+    });
+
+    res.status(201).json({
+      message: "Doctor registered successfully",
+      doctor: { _id: doctor._id, name: doctor.name, email: doctor.email, specialization: doctor.specialization, role: "doctor" },
+    });
+  } catch (e) {
+    console.error("CreateDoctor ERROR:", e);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+
 // Doctor login function
 exports.loginDoctor = async (req, res) => {
   try {

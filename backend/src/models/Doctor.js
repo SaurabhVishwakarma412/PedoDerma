@@ -8,6 +8,8 @@ const doctorSchema = new mongoose.Schema(
     password: { type: String, required: true },
     role: { type: String, default: "doctor" },
     specialization: { type: String, default: "Dermatology" },
+    resetPasswordToken: { type: String, select: false },
+    resetPasswordExpires: { type: Date, select: false },
   },
   { timestamps: true }
 );

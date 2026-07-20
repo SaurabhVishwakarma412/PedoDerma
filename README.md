@@ -134,6 +134,19 @@ backend/
 
 - Parent → Login → JWT Created → Access Dashboard → Submit Case
 - Doctor → Login → JWT Created → Access Dashboard → Review Cases
+- Admin → Login → JWT Created → Admin Dashboard → Register doctor accounts
+
+### Admin setup
+
+Admin accounts are not publicly registered. Add these variables to `backend/.env`, then run `npm run seed:admin` from the `backend` directory:
+
+```env
+ADMIN_NAME=Platform Admin
+ADMIN_EMAIL=saurabhkv412@gmail.com
+ADMIN_PASSWORD=12345678
+```
+
+The admin can sign in at `/admin/login` and create doctor accounts from `/admin/dashboard`. The doctor creation API (`POST /api/doctors`) requires an admin JWT.
 
 
 ---

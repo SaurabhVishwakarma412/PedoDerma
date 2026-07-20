@@ -282,13 +282,14 @@ const Login = () => {
                   ? "Don't have an account? "
                   : "Not registered as a doctor? "}
                 <Link
-                  to={userType === "parent" ? "/register" : "/doctor/register"}
+                  to={userType === "parent" ? "/register" : "/admin/login"}
                   className="text-blue-600 font-semibold hover:text-blue-800 hover:underline disabled:opacity-50"
                   tabIndex={isLoading ? -1 : 0}
                 >
-                  {userType === "parent" ? "Create account" : "Register here"}
+                  {userType === "parent" ? "Create account" : "Admin portal"}
                 </Link>
               </p>
+              {userType === "parent" && <Link to="/admin/login" className="text-xs text-gray-500 hover:text-blue-600">Admin login</Link>}
             </div>
           </div>
 

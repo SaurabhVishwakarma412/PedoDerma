@@ -48,7 +48,7 @@ const DoctorLogin = () => {
         licenseInfo: licenseInfo || null
       };
       
-      login("doctor", doctorData, token);
+      login(doctorData, token);
       
       // Store remember me preference
       if (form.rememberMe) {
@@ -250,15 +250,13 @@ const DoctorLogin = () => {
 
             {/* Registration Link */}
             <div className="mt-10 pt-8 border-t border-gray-200 text-center">
-              <p className="text-gray-600 mb-2">
-                New to our platform?
-              </p>
+              <p className="text-gray-600 mb-2">Doctor accounts are created by an administrator.</p>
               <Link
-                to="/doctor/register"
+                to="/admin/login"
                 className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all shadow-md"
               >
                 <BriefcaseMedical className="w-5 h-5 mr-2" />
-                Register as Medical Provider
+                Admin portal
               </Link>
             </div>
           </div>
