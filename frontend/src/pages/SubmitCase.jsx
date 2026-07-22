@@ -689,13 +689,13 @@ const SubmitCase = () => {
                       Uploaded Photos ({images.length}/5)
                     </h4>
 
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {images.map((image, index) => (
                         <div key={index} className="relative group">
                           <img
                             src={image.preview}
                             alt={`Upload ${index + 1}`}
-                            className="w-full h-48 object-cover rounded-lg border"
+                            className="w-32 h-32 object-cover rounded-lg border"
                           />
 
                           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition rounded-lg flex items-center justify-center">
