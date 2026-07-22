@@ -1,5 +1,5 @@
 // frontend/src/pages/SubmitCase.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Upload,
@@ -14,7 +14,7 @@ import {
   Shield,
 } from "lucide-react";
 
-import { submitCase } from "../services/patientAPI";
+import { getDoctors, submitCase } from "../services/patientAPI";
 
 const SubmitCase = () => {
   const navigate = useNavigate();
@@ -52,7 +52,11 @@ const SubmitCase = () => {
     temperature: "",
     otherSymptoms: "",
     consentForSharing: false,
+    doctorId: "",
   });
+
+  const [doctors, setDoctors] = useState([]);
+  const [doctorsLoading, setDoctorsLoading] = useState(true);
 
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -60,6 +64,20 @@ const SubmitCase = () => {
   const [success, setSuccess] = useState("");
   const [activeStep, setActiveStep] = useState(1);
   const [uploadProgress, setUploadProgress] = useState(0);
+
+  useEffect(() => {
+    const loadDoctors = async () => {
+      try {
+        const response = await getDoctors();
+        setDoctors(response.data || []);
+      } catch {
+        setError("Unable to load doctors. Please try again shortly.");
+      } finally {
+        setDoctorsLoading(false);
+      }
+    };
+    loadDoctors();
+  }, []);
 
   const bodyParts = [
     "Face",
@@ -155,7 +173,7 @@ const SubmitCase = () => {
   const validateStep = (step) => {
     switch (step) {
       case 1:
-        if (!form.title || !form.patientAge || !form.patientGender || !form.patientName) {
+        if (!form.title || !form.patientAge || !form.patientGender || !form.patientName || !form.doctorId) {
           setError("Please fill in all required fields");
           return false;
         }
@@ -434,6 +452,32 @@ const SubmitCase = () => {
                   </div>
                 </div>
 
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Choose Your Doctor *
+                  </label>
+                  <select
+                    name="doctorId"
+                    value={form.doctorId}
+                    onChange={handleChange}
+                    required
+                    disabled={doctorsLoading}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition disabled:bg-gray-100 disabled:text-gray-500"
+                  >
+                    <option value="">
+                      {doctorsLoading ? "Loading doctors..." : "Select a doctor"}
+                    </option>
+                    {doctors.map((doctor) => (
+                      <option key={doctor._id} value={doctor._id}>
+                        {doctor.name} — {doctor.specialization || doctor.specialty || "Dermatology"}
+                      </option>
+                    ))}
+                  </select>
+                  {!doctorsLoading && doctors.length === 0 && (
+                    <p className="text-sm text-red-600 mt-1">No doctors are currently available.</p>
+                  )}
+                </div>
+
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -707,6 +751,12 @@ const SubmitCase = () => {
                       <div>
                         <p className="text-sm text-gray-600">Patient Gender</p>
                         <p className="font-medium capitalize">{form.patientGender}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600">Selected Doctor</p>
+                        <p className="font-medium">
+                          {doctors.find((doctor) => String(doctor._id) === form.doctorId)?.name || "Not selected"}
+                        </p>
                       </div>
                       <div>
                         <p className="text-sm text-gray-600">Visit Preference</p>

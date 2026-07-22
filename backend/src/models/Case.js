@@ -5,7 +5,8 @@ const caseSchema = new mongoose.Schema(
   {
     parentId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
 
-    doctorId: { type: mongoose.Schema.Types.ObjectId, ref: "Doctor", default: null },
+    // A case is routed to the doctor chosen by the patient when it is submitted.
+    doctorId: { type: mongoose.Schema.Types.ObjectId, ref: "Doctor", required: true },
 
     title: { type: String, required: true },
 

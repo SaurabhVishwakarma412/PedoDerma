@@ -1,5 +1,7 @@
 // backend/src/controllers/caseController.js
 const Case = require("../models/Case");
+const Doctor = require("../models/Doctor");
+const mongoose = require("mongoose");
 const cloudinary = require("../config/cloudinary");  // Import your cloudinary config
 const streamifier = require("streamifier");
 
@@ -32,10 +34,21 @@ exports.submitCase = async (req, res) => {
       }
     }
 
+    const { doctorId, ...caseData } = req.body;
+    if (!doctorId || !mongoose.isValidObjectId(doctorId)) {
+      return res.status(400).json({ message: "Please select a doctor for this case." });
+    }
+
+    const doctor = await Doctor.findById(doctorId).select("_id");
+    if (!doctor) {
+      return res.status(400).json({ message: "The selected doctor is not available." });
+    }
+
     const created = await Case.create({
       parentId: req.user._id,
+      doctorId: doctor._id,
       imageUrls: imageUrls,
-      ...req.body,
+      ...caseData,
     });
 
     res.json(created);
@@ -52,21 +65,33 @@ exports.getMyCases = async (req, res) => {
 
 // Get single case by ID (Parent & Doctor)
 exports.getCaseById = async (req, res) => {
-  res.json(await Case.findById(req.params.id));
+  const patientCase = await Case.findById(req.params.id);
+  if (!patientCase) return res.status(404).json({ message: "Case not found" });
+
+  const isOwner = req.user.role === "parent" && String(patientCase.parentId) === String(req.user._id);
+  const isAssignedDoctor = req.user.role === "doctor" && String(patientCase.doctorId) === String(req.user._id);
+  if (!isOwner && !isAssignedDoctor) {
+    return res.status(403).json({ message: "You do not have access to this case." });
+  }
+
+  res.json(patientCase);
 };
 
 // Get all cases for doctors (Doctor Dashboard)
 exports.getAllCases = async (req, res) => {
-  res.json(await Case.find());
+  res.json(await Case.find({ doctorId: req.user._id }));
 };
 
 // Review/update case (Doctor)
 exports.reviewCase = async (req, res) => {
   try {
-    const updateData = { ...req.body };
-    if (req.user && req.user.role === 'doctor') {
-      updateData.doctorId = req.user._id;
+    const patientCase = await Case.findOne({ _id: req.params.id, doctorId: req.user._id });
+    if (!patientCase) {
+      return res.status(404).json({ message: "Case not found or not assigned to you." });
     }
+
+    // A doctor can update clinical details, but can never reassign a case.
+    const { doctorId, parentId, ...updateData } = req.body;
 
     const { appointmentDate, timeSlot } = req.body;
     if (appointmentDate && timeSlot) {
@@ -81,8 +106,8 @@ exports.reviewCase = async (req, res) => {
       }
     }
 
-    const updated = await Case.findByIdAndUpdate(
-      req.params.id,
+    const updated = await Case.findOneAndUpdate(
+      { _id: req.params.id, doctorId: req.user._id },
       updateData,
       { new: true }
     );
