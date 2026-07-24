@@ -8,6 +8,7 @@ export const loginDoctor = (data) => api.post("/doctors/login", data);
 export const getAllCases = () => api.get("/cases/all");
 export const getCaseByIdDoctor = (id) => api.get(`/cases/${id}`);
 export const reviewCase = (id, data) => api.patch(`/cases/${id}/review`, data);
+export const completeCase = (id) => api.patch(`/cases/${id}/review`, { status: "completed" });
 
 // Doctor Dashboard Functions
 export const getDoctorAppointments = () => api.get("/doctors/appointments");

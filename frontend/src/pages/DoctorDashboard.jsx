@@ -93,6 +93,7 @@ const DoctorDashboard = () => {
   }, []);
 
   const filteredCases = cases.filter((c) => {
+    if (c.status === "completed") return false;
     const matchesFilter = filter === "all" ? true : c.status === filter;
     const matchesSearch =
       c.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -109,8 +110,9 @@ const DoctorDashboard = () => {
   });
 
   const todayAppointments = appointments.filter(a =>
-    a.date === new Date().toISOString().split('T')[0]
+    a.date === new Date().toISOString().split('T')[0] && a.status !== "completed"
   );
+  const completedAppointments = appointments.filter(a => a.status === "completed");
 
   const notifications = [
     { id: 1, type: 'urgent', message: '3 urgent cases waiting for review', time: '10 min ago' },
@@ -295,7 +297,6 @@ const DoctorDashboard = () => {
                       <option value="all">All Cases</option>
                       <option value="pending">Pending Review</option>
                       <option value="in_review">In Review</option>
-                      <option value="completed">Completed</option>
                       <option value="urgent">Urgent (24h)</option>
                     </select>
                   </div>
@@ -472,6 +473,43 @@ const DoctorDashboard = () => {
                   Add New Appointment
                 </Link>
               </div>
+            </div>
+
+            {/* Completed Schedules */}
+            <div className={`mt-6 rounded-xl shadow-lg p-6 transition-colors duration-300 ${
+              darkMode
+                ? "bg-gray-800/90 backdrop-blur-sm border border-gray-700/50"
+                : "bg-white border border-gray-100"
+            }`}>
+              <div className="flex items-center gap-2 mb-6">
+                <CheckCircle className={`w-5 h-5 ${darkMode ? "text-green-400" : "text-green-600"}`} />
+                <h3 className={`text-lg font-semibold ${darkMode ? "text-gray-200" : "text-gray-800"}`}>
+                  Completed Schedules
+                </h3>
+              </div>
+
+              {completedAppointments.length === 0 ? (
+                <p className={`text-center py-4 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
+                  No completed schedules yet
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {completedAppointments.map((appointment) => (
+                    <div key={appointment.id} className={`flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-4 rounded-lg ${
+                      darkMode ? "bg-green-900/10 border border-green-900/40" : "bg-green-50 border border-green-100"
+                    }`}>
+                      <div>
+                        <p className={`font-medium ${darkMode ? "text-gray-200" : "text-gray-800"}`}>{appointment.patientName}</p>
+                        <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-500"}`}>{appointment.reason}</p>
+                      </div>
+                      <div className={`flex items-center gap-2 text-sm ${darkMode ? "text-green-400" : "text-green-700"}`}>
+                        <Calendar className="w-4 h-4" />
+                        <span>{appointment.date} · {appointment.time}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
