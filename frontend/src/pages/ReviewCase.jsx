@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { getCaseByIdDoctor, reviewCase, getBookedSlots } from "../services/DoctorApi.js";
+import { getCaseByIdDoctor, reviewCase, completeCase, getBookedSlots } from "../services/DoctorApi.js";
 import { 
   ChevronLeft, 
   Calendar, 
@@ -125,6 +125,23 @@ const ReviewCase = () => {
       setTimeout(() => navigate("/doctor/dashboard"), 2000);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to submit review.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleComplete = async () => {
+    setSubmitting(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const response = await completeCase(id);
+      setCaseData(response.data);
+      setSuccess("Appointment marked as completed.");
+      setTimeout(() => navigate("/doctor/dashboard"), 1500);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to mark the appointment as completed.");
     } finally {
       setSubmitting(false);
     }
@@ -314,17 +331,36 @@ const ReviewCase = () => {
                 <span className="text-xs text-gray-500 dark:text-gray-400">
                   * Required fields
                 </span>
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className={`px-8 py-3 rounded-lg font-semibold text-white transition-all shadow-lg ${
-                    submitting
-                      ? "bg-blue-400 cursor-not-allowed"
-                      : "bg-blue-600 hover:bg-blue-700 transform hover:-translate-y-0.5"
-                  }`}
-                >
-                  {submitting ? "Processing..." : "Accept Request & Schedule Slot"}
-                </button>
+                <div className="flex flex-wrap justify-end gap-3">
+                  {caseData.status === "in_review" && (
+                    <button
+                      type="button"
+                      onClick={handleComplete}
+                      disabled={submitting}
+                      className={`px-5 py-3 rounded-lg font-semibold transition-all border ${
+                        submitting
+                          ? "border-green-300 text-green-400 cursor-not-allowed"
+                          : "border-green-600 text-green-700 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20"
+                      }`}
+                    >
+                      <span className="inline-flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4" />
+                        Mark as Completed
+                      </span>
+                    </button>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={submitting || caseData.status === "completed"}
+                    className={`px-8 py-3 rounded-lg font-semibold text-white transition-all shadow-lg ${
+                      submitting || caseData.status === "completed"
+                        ? "bg-blue-400 cursor-not-allowed"
+                        : "bg-blue-600 hover:bg-blue-700 transform hover:-translate-y-0.5"
+                    }`}
+                  >
+                    {caseData.status === "completed" ? "Appointment Completed" : submitting ? "Processing..." : "Accept Request & Schedule Slot"}
+                  </button>
+                </div>
               </div>
             </form>
           </div>
