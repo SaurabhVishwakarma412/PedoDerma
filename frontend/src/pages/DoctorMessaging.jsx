@@ -16,7 +16,6 @@ const DoctorMessaging = () => {
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [socket, setSocket] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState("");
   const [darkMode, setDarkMode] = useState(false);
@@ -24,6 +23,12 @@ const DoctorMessaging = () => {
   const [onlineStatus, setOnlineStatus] = useState({});
   const messagesEndRef = useRef(null);
   const typingTimeoutRef = useRef(null);
+  const socketRef = useRef(null);
+  const selectedPatientRef = useRef(null);
+
+  useEffect(() => {
+    selectedPatientRef.current = selectedPatient;
+  }, [selectedPatient]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -64,7 +69,7 @@ const DoctorMessaging = () => {
     });
 
     newSocket.on("typing", (data) => {
-      if (data.from === selectedPatient?._id) {
+      if (data.from === selectedPatientRef.current?._id) {
         setIsTyping(true);
         clearTimeout(typingTimeoutRef.current);
         typingTimeoutRef.current = setTimeout(() => setIsTyping(false), 2000);
@@ -76,8 +81,9 @@ const DoctorMessaging = () => {
       
       if (data.from === user._id) return;
       
-      const isFromSelectedPatient = selectedPatient && 
-        (data.from === selectedPatient._id || data.from === selectedPatient.userId);
+      const activePatient = selectedPatientRef.current;
+      const isFromSelectedPatient = activePatient &&
+        (data.from === activePatient._id || data.from === activePatient.userId);
       
       if (isFromSelectedPatient) {
         setMessages((prev) => {
@@ -118,12 +124,14 @@ const DoctorMessaging = () => {
       console.error("Socket.io connection error:", error);
     });
 
-    setSocket(newSocket);
+    socketRef.current = newSocket;
 
     return () => {
+      socketRef.current = null;
       newSocket.disconnect();
+      clearTimeout(typingTimeoutRef.current);
     };
-  }, [user, selectedPatient]);
+  }, [user?._id]);
 
   // Fetch conversations
   useEffect(() => {
@@ -136,7 +144,7 @@ const DoctorMessaging = () => {
         const conversationsList = response.data.data || [];
         setConversations(conversationsList);
         setError("");
-        if (conversationsList.length > 0 && conversationsList[0].patientInfo?.[0]) {
+        if (window.innerWidth >= 1024 && conversationsList.length > 0 && conversationsList[0].patientInfo?.[0]) {
           setSelectedPatient(conversationsList[0].patientInfo[0]);
         }
       } catch (error) {
@@ -205,8 +213,8 @@ const DoctorMessaging = () => {
 
     setMessages((prev) => [...prev, messageData]);
 
-    if (socket) {
-      socket.emit("send_message", {
+    if (socketRef.current) {
+      socketRef.current.emit("send_message", {
         from: user._id,
         to: selectedPatient._id,
         message: messageInput,
@@ -238,8 +246,8 @@ const DoctorMessaging = () => {
   const handleTyping = (e) => {
     setMessageInput(e.target.value);
     
-    if (socket && selectedPatient && e.target.value.length > 0) {
-      socket.emit("typing", {
+    if (socketRef.current && selectedPatient && e.target.value.length > 0) {
+      socketRef.current.emit("typing", {
         from: user._id,
         to: selectedPatient._id
       });
@@ -269,6 +277,7 @@ const DoctorMessaging = () => {
 
     return (
       <button
+        type="button"
         onClick={onClick}
         className={`w-full p-4 text-left transition-all duration-300 ${
           isSelected
@@ -354,7 +363,7 @@ const DoctorMessaging = () => {
       darkMode ? "bg-gray-900" : "bg-gradient-to-br from-gray-50 via-white to-blue-50/30"
     }`}>
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white">
+      <div className="hidden bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white lg:block">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
@@ -368,7 +377,7 @@ const DoctorMessaging = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="mx-auto max-w-7xl lg:px-4 lg:py-6">
         {error && (
           <div className={`mb-6 p-4 rounded-lg border ${
             darkMode 
@@ -379,15 +388,16 @@ const DoctorMessaging = () => {
           </div>
         )}
 
-        <div className={`rounded-xl shadow-xl overflow-hidden transition-colors duration-300 ${
+        <div className={`overflow-hidden transition-colors duration-300 lg:rounded-xl lg:shadow-xl ${
           darkMode 
             ? "bg-gray-800/90 backdrop-blur-sm border border-gray-700/50" 
             : "bg-white border border-gray-100"
         }`}>
-          <div className="grid h-[calc(100vh-200px)] min-h-[520px] overflow-hidden lg:grid-cols-3">
+          <div className="grid h-[100dvh] min-h-[520px] overflow-hidden lg:h-[calc(100vh-200px)] lg:grid-cols-3">
             {/* Conversations List Sidebar */}
-            <div className={`border-r ${darkMode ? "border-gray-700" : "border-gray-200"} flex h-full min-h-0 flex-col overflow-hidden`}>
-              <div className="shrink-0 p-4 border-b dark:border-gray-700">
+            <div className={`${selectedPatient ? "hidden lg:flex" : "flex"} border-r ${darkMode ? "border-gray-700" : "border-gray-200"} h-full min-h-0 flex-col overflow-hidden`}>
+              <div className={`shrink-0 border-b p-4 ${darkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-[#f0f2f5]"}`}>
+                <h1 className={`mb-4 text-xl font-bold ${darkMode ? "text-gray-100" : "text-gray-800"}`}>Chats</h1>
                 <div className="relative">
                   <Search className={`absolute left-3 top-2.5 w-5 h-5 ${darkMode ? "text-gray-500" : "text-gray-400"}`} />
                   <input
@@ -438,10 +448,11 @@ const DoctorMessaging = () => {
             {selectedPatient ? (
               <div className="relative flex h-full min-h-0 flex-col overflow-hidden lg:col-span-2">
                 {/* Chat Header */}
-                <div className={`p-4 border-b ${darkMode ? "border-gray-700 bg-gray-800/50" : "border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50"} shrink-0`}>
+                <div className={`border-b p-3 ${darkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-[#f0f2f5]"} shrink-0`}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <button
+                        type="button"
                         onClick={() => setSelectedPatient(null)}
                         className="lg:hidden p-2 rounded-lg transition hover:bg-white/20"
                       >
@@ -473,18 +484,18 @@ const DoctorMessaging = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <button className={`p-2 rounded-lg transition ${
+                    <div className="flex items-center gap-1">
+                      <button type="button" aria-label="Start phone call" className={`hidden p-2 rounded-lg transition sm:block ${
                         darkMode ? "hover:bg-gray-700" : "hover:bg-white"
                       }`}>
                         <Phone className={`w-5 h-5 ${darkMode ? "text-green-400" : "text-green-600"}`} />
                       </button>
-                      <button className={`p-2 rounded-lg transition ${
+                      <button type="button" aria-label="Start video call" className={`hidden p-2 rounded-lg transition sm:block ${
                         darkMode ? "hover:bg-gray-700" : "hover:bg-white"
                       }`}>
                         <Video className={`w-5 h-5 ${darkMode ? "text-blue-400" : "text-blue-600"}`} />
                       </button>
-                      <button className={`p-2 rounded-lg transition ${
+                      <button type="button" aria-label="More conversation options" className={`p-2 rounded-lg transition ${
                         darkMode ? "hover:bg-gray-700" : "hover:bg-white"
                       }`}>
                         <MoreVertical className={`w-5 h-5 ${darkMode ? "text-gray-400" : "text-gray-600"}`} />
@@ -494,7 +505,7 @@ const DoctorMessaging = () => {
                 </div>
 
                 {/* Messages Area */}
-                <div className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-4">
+                <div className={`min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain p-3 sm:p-4 ${darkMode ? "bg-gray-900" : "bg-[#efeae2]"}`}>
                   {loading && messages.length === 0 ? (
                     <div className="flex justify-center items-center h-full">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -520,11 +531,11 @@ const DoctorMessaging = () => {
                 </div>
 
                 {/* Message Input */}
-                <form onSubmit={handleSendMessage} className={`p-4 border-t ${darkMode ? "border-gray-700 bg-gray-800/50" : "border-gray-200 bg-gray-50"} shrink-0`}>
-                  <div className="flex gap-2">
+                <form onSubmit={handleSendMessage} className={`border-t p-2 sm:p-3 ${darkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-[#f0f2f5]"} shrink-0`}>
+                  <div className="flex items-center gap-1 sm:gap-2">
                     <button
                       type="button"
-                      className={`p-2 rounded-lg transition ${
+                      className={`hidden p-2 rounded-lg transition sm:block ${
                         darkMode ? "hover:bg-gray-700 text-gray-400" : "hover:bg-white text-gray-500"
                       }`}
                     >
@@ -543,7 +554,7 @@ const DoctorMessaging = () => {
                       value={messageInput}
                       onChange={handleTyping}
                       placeholder="Type your message..."
-                      className={`flex-1 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
+                      className={`min-w-0 flex-1 rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition ${
                         darkMode 
                           ? "bg-gray-700 border-gray-600 text-gray-200 placeholder-gray-500" 
                           : "bg-white border border-gray-300"
@@ -552,9 +563,10 @@ const DoctorMessaging = () => {
                     <button
                       type="submit"
                       disabled={!messageInput.trim()}
-                      className={`px-4 py-2 rounded-lg transition-all duration-300 ${
+                      aria-label="Send message"
+                      className={`rounded-full p-2.5 transition-all duration-300 ${
                         messageInput.trim()
-                          ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-lg transform hover:scale-105"
+                          ? "bg-[#00a884] text-white hover:bg-[#008f72]"
                           : darkMode ? "bg-gray-700 text-gray-500 cursor-not-allowed" : "bg-gray-300 text-gray-500 cursor-not-allowed"
                       }`}
                     >
