@@ -72,6 +72,8 @@ const MessagingPage = () => {
 
     newSocket.on("receive_message", (data) => {
       console.log("Received message:", data);
+      const activeDoctor = selectedDoctorRef.current;
+      if (!activeDoctor || String(data.from) !== String(activeDoctor._id)) return;
       setMessages((prev) => [...prev, {
         _id: Date.now(),
         from: data.from,
@@ -153,7 +155,7 @@ const MessagingPage = () => {
         setDoctors(assignedDoctors);
         setError("");
 
-        if (assignedDoctors.length > 0) {
+        if (window.innerWidth >= 1024 && assignedDoctors.length > 0) {
           setSelectedDoctor(assignedDoctors[0]);
         }
       } catch (err) {
@@ -273,6 +275,7 @@ const MessagingPage = () => {
   // Doctor Card Component
   const DoctorCard = ({ doctor, isSelected, onClick }) => (
     <button
+      type="button"
       onClick={onClick}
       className={`w-full p-4 text-left transition-all duration-300 ${
         isSelected
@@ -395,7 +398,7 @@ const MessagingPage = () => {
       darkMode ? "bg-gray-900" : "bg-gradient-to-br from-gray-50 via-white to-blue-50/30"
     }`}>
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white">
+      <div className="hidden bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white lg:block">
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
@@ -409,7 +412,7 @@ const MessagingPage = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="mx-auto max-w-7xl lg:px-4 lg:py-6">
         {error && (
           <div className={`mb-6 p-4 rounded-lg border ${
             darkMode 
@@ -420,15 +423,16 @@ const MessagingPage = () => {
           </div>
         )}
 
-        <div className={`rounded-xl shadow-xl overflow-hidden transition-colors duration-300 ${
+        <div className={`overflow-hidden transition-colors duration-300 lg:rounded-xl lg:shadow-xl ${
           darkMode 
             ? "bg-gray-800/90 backdrop-blur-sm border border-gray-700/50" 
             : "bg-white border border-gray-100"
         }`}>
-          <div className="grid h-[calc(100vh-200px)] min-h-[520px] overflow-hidden lg:grid-cols-3">
+          <div className="grid h-[100dvh] min-h-[520px] overflow-hidden lg:h-[calc(100vh-200px)] lg:grid-cols-3">
             {/* Doctors List Sidebar */}
-            <div className={`border-r ${darkMode ? "border-gray-700" : "border-gray-200"} flex h-full min-h-0 flex-col overflow-hidden`}>
-              <div className="shrink-0 p-4 border-b dark:border-gray-700">
+            <div className={`${selectedDoctor ? "hidden lg:flex" : "flex"} border-r ${darkMode ? "border-gray-700" : "border-gray-200"} h-full min-h-0 flex-col overflow-hidden`}>
+              <div className={`shrink-0 border-b p-4 ${darkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-[#f0f2f5]"}`}>
+                <h1 className={`mb-4 text-xl font-bold ${darkMode ? "text-gray-100" : "text-gray-800"}`}>Chats</h1>
                 <p className={`text-xs font-semibold uppercase tracking-wide mb-3 ${darkMode ? "text-gray-500" : "text-gray-400"}`}>
                   Your Doctors
                 </p>
@@ -481,10 +485,11 @@ const MessagingPage = () => {
             {selectedDoctor ? (
               <div className="relative flex h-full min-h-0 flex-col overflow-hidden lg:col-span-2">
                 {/* Chat Header */}
-                <div className={`p-4 border-b ${darkMode ? "border-gray-700 bg-gray-800/50" : "border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50"} shrink-0`}>
+                <div className={`border-b p-3 ${darkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-[#f0f2f5]"} shrink-0`}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <button
+                        type="button"
                         onClick={() => setSelectedDoctor(null)}
                         className="lg:hidden p-2 rounded-lg transition hover:bg-white/20"
                       >
@@ -520,18 +525,18 @@ const MessagingPage = () => {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <button className={`p-2 rounded-lg transition ${
+                    <div className="flex items-center gap-1">
+                      <button type="button" aria-label="Start phone call" className={`hidden p-2 rounded-lg transition sm:block ${
                         darkMode ? "hover:bg-gray-700" : "hover:bg-white"
                       }`}>
                         <Phone className={`w-5 h-5 ${darkMode ? "text-blue-400" : "text-blue-600"}`} />
                       </button>
-                      <button className={`p-2 rounded-lg transition ${
+                      <button type="button" aria-label="Start video call" className={`hidden p-2 rounded-lg transition sm:block ${
                         darkMode ? "hover:bg-gray-700" : "hover:bg-white"
                       }`}>
                         <Video className={`w-5 h-5 ${darkMode ? "text-blue-400" : "text-blue-600"}`} />
                       </button>
-                      <button className={`p-2 rounded-lg transition ${
+                      <button type="button" aria-label="More conversation options" className={`p-2 rounded-lg transition ${
                         darkMode ? "hover:bg-gray-700" : "hover:bg-white"
                       }`}>
                         <MoreVertical className={`w-5 h-5 ${darkMode ? "text-gray-400" : "text-gray-600"}`} />
@@ -541,7 +546,7 @@ const MessagingPage = () => {
                 </div>
 
                 {/* Messages Area */}
-                <div className="min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-4">
+                <div className={`min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain p-3 sm:p-4 ${darkMode ? "bg-gray-900" : "bg-[#efeae2]"}`}>
                   {loading ? (
                     <div className="flex justify-center items-center h-full">
                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -565,11 +570,11 @@ const MessagingPage = () => {
                 </div>
 
                 {/* Message Input */}
-                <form onSubmit={handleSendMessage} className={`p-4 border-t ${darkMode ? "border-gray-700 bg-gray-800/50" : "border-gray-200 bg-gray-50"} shrink-0`}>
-                  <div className="flex gap-2">
+                <form onSubmit={handleSendMessage} className={`border-t p-2 sm:p-3 ${darkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-[#f0f2f5]"} shrink-0`}>
+                  <div className="flex items-center gap-1 sm:gap-2">
                     <button
                       type="button"
-                      className={`p-2 rounded-lg transition ${
+                      className={`hidden p-2 rounded-lg transition sm:block ${
                         darkMode ? "hover:bg-gray-700 text-gray-400" : "hover:bg-white text-gray-500"
                       }`}
                     >
@@ -588,7 +593,7 @@ const MessagingPage = () => {
                       value={messageInput}
                       onChange={handleTyping}
                       placeholder="Type your message..."
-                      className={`flex-1 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
+                      className={`min-w-0 flex-1 rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition ${
                         darkMode 
                           ? "bg-gray-700 border-gray-600 text-gray-200 placeholder-gray-500" 
                           : "bg-white border border-gray-300"
@@ -597,9 +602,10 @@ const MessagingPage = () => {
                     <button
                       type="submit"
                       disabled={!messageInput.trim()}
-                      className={`px-4 py-2 rounded-lg transition-all duration-300 ${
+                      aria-label="Send message"
+                      className={`rounded-full p-2.5 transition-all duration-300 ${
                         messageInput.trim()
-                          ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-lg transform hover:scale-105"
+                          ? "bg-[#00a884] text-white hover:bg-[#008f72]"
                           : darkMode ? "bg-gray-700 text-gray-500 cursor-not-allowed" : "bg-gray-300 text-gray-500 cursor-not-allowed"
                       }`}
                     >
