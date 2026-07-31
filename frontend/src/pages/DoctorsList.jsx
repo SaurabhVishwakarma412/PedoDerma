@@ -15,9 +15,9 @@ const DoctorsList = () => {
   });
 
   const specialties = [
-    "Pediatric Dermatology",
     "General Dermatology",
-    "Pediatric Eczema Specialist",
+    "General Dermatology",
+    "Eczema and Dermatitis Care",
     "Acne Specialist",
     "Birthmark & Mole Specialist",
     "Allergy & Immunology"
@@ -77,8 +77,8 @@ const DoctorsList = () => {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Our Pediatric Dermatologists</h1>
-          <p className="text-gray-600">Board-certified specialists ready to help your child</p>
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">Dermaslot Dermatology Team</h1>
+          <p className="text-gray-600">Find a clinician for inflammatory, infectious, pigment, acne, and lesion-related concerns.</p>
         </div>
 
         {/* Filters */}
@@ -249,28 +249,28 @@ const DoctorsList = () => {
 
         {/* Info Section */}
         <div className="mt-12 bg-blue-50 rounded-lg p-6">
-          <h3 className="text-xl font-bold text-gray-800 mb-4">Why Choose Our Pediatric Dermatologists?</h3>
+          <h3 className="text-xl font-bold text-gray-800 mb-4">Why choose the Dermaslot team?</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
                 <Award className="w-6 h-6 text-blue-600" />
               </div>
               <h4 className="font-bold text-gray-800 mb-2">Board Certified</h4>
-              <p className="text-sm text-gray-600">All doctors are certified pediatric dermatologists</p>
+              <p className="text-sm text-gray-600">Review provider profiles, specialties, and availability before submitting a case.</p>
             </div>
             <div className="text-center">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
                 <Clock className="w-6 h-6 text-blue-600" />
               </div>
-              <h4 className="font-bold text-gray-800 mb-2">24/7 Access</h4>
-              <p className="text-sm text-gray-600">Consult from home at your convenience</p>
+              <h4 className="font-bold text-gray-800 mb-2">Photo-led case review</h4>
+              <p className="text-sm text-gray-600">Share a structured record of symptoms and visible changes from home.</p>
             </div>
             <div className="text-center">
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
                 <CheckCircle className="w-6 h-6 text-blue-600" />
               </div>
-              <h4 className="font-bold text-gray-800 mb-2">Free Follow-up</h4>
-              <p className="text-sm text-gray-600">7-day free follow-up included with every consultation</p>
+              <h4 className="font-bold text-gray-800 mb-2">Documented follow-up</h4>
+              <p className="text-sm text-gray-600">Keep updated photos, care notes, and questions connected to the same case.</p>
             </div>
           </div>
         </div>

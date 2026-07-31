@@ -53,7 +53,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition">
             <span className="text-xl font-bold text-blue-800 dark:text-blue-400 hidden sm:inline">
-              PedoDerma
+              Dermaslot
             </span>
             <Logo className="w-10 h-10" />
           </Link>
@@ -68,7 +68,7 @@ const Navbar = () => {
                 to="/cases/submit"
                 className={navClass}
               >
-                Book Online
+                Start a Skin Review
               </NavLink>
             )}
             {!isAuthenticated ? (
@@ -178,7 +178,7 @@ const Navbar = () => {
                 className={navClass}
                 onClick={() => setOpen(false)}
               >
-                Book Online
+                Start a Skin Review
               </NavLink>
             )}
             <NavLink to="/about" className={navClass} onClick={() => setOpen(false)}>

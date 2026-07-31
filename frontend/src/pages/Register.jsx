@@ -425,11 +425,11 @@ const Register = () => {
                   {
                     icon: "👨‍⚕️",
                     title: "Expert Dermatologists",
-                    desc: "Access board-certified skin care specialists for all age groups"
+                    desc: "Connect your account to skin-case updates, messages, and clinician availability"
                   },
                   {
                     icon: "📱",
-                    title: "24/7 Online Access",
+                    title: "Skin-case access",
                     desc: "Consult from home, upload photos, and track progress anytime"
                   },
                   {
@@ -439,8 +439,8 @@ const Register = () => {
                   },
                   {
                     icon: "🔄",
-                    title: "Free Follow-ups",
-                    desc: "7-day free follow-up consultations included"
+                    title: "Case follow-ups",
+                    desc: "Add progress updates and new photos to your existing skin case."
                   }
                 ].map((benefit, index) => (
                   <div key={index} className="flex items-start gap-4">
@@ -466,11 +466,11 @@ const Register = () => {
                   <span>1-800-DERM-CARE</span>
                 </div>
                 <a 
-                  href="mailto:support@dermacare.com" 
+                  href="mailto:support@dermaslot.com" 
                   className="flex items-center gap-2 text-blue-300 hover:text-blue-200 transition"
                 >
                   <Mail className="w-4 h-4" />
-                  support@dermacare.com
+                  support@dermaslot.com
                 </a>
               </div>
             </div>

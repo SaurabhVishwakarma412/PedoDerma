@@ -84,7 +84,7 @@ const Contact = () => {
       }
     } catch (error) {
       console.error("Error sending email:", error);
-      alert("Failed to send message. Please try again later or contact us directly at pedoderma@gmail.com");
+      alert("Failed to send message. Please try again later or contact Dermaslot support directly.");
     } finally {
       setIsSubmitting(false);
     }
@@ -135,17 +135,17 @@ const Contact = () => {
           <div className={`inline-flex items-center gap-2 rounded-full px-4 py-2 mb-6 ${darkMode ? "bg-blue-900/30" : "bg-blue-100"
             }`}>
             <MessageSquare className={`w-4 h-4 ${darkMode ? "text-blue-400" : "text-blue-600"}`} />
-            <span className={`text-sm font-medium ${darkMode ? "text-blue-300" : "text-blue-700"}`}>24/7 Support Available</span>
+            <span className={`text-sm font-medium ${darkMode ? "text-blue-300" : "text-blue-700"}`}>Dermaslot Support</span>
           </div>
           <h1 className={`text-4xl md:text-5xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-900"
             }`}>
             Contact Our{" "}
             <span className={`bg-gradient-to-r ${darkMode ? "from-blue-400 to-indigo-400" : "from-blue-600 to-indigo-600"} bg-clip-text text-transparent`}>
-              Pediatric Dermatology Team
+              Dermaslot Care Team
             </span>
           </h1>
           <p className={`text-lg max-w-2xl mx-auto ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
-            Have questions about your child's skin care? Our team is here to help you 24/7.
+            Have a question about a rash, flare, skin review, or your Dermaslot account? Send us a message.
           </p>
         </div>
 
@@ -168,7 +168,7 @@ const Contact = () => {
                     <div>
                       <h4 className={`font-semibold ${darkMode ? "text-green-400" : "text-green-800"}`}>Message Sent Successfully!</h4>
                       <p className={`text-sm ${darkMode ? "text-green-300" : "text-green-700"}`}>
-                        Thank you for reaching out. Our team will respond within 24 hours.
+                        Thank you for reaching out. Our support team will respond as soon as possible.
                       </p>
                     </div>
                   </div>
@@ -330,7 +330,7 @@ const Contact = () => {
               <div className="space-y-4">
                 <FAQItem
                   question="How quickly will I receive a response?"
-                  answer="We respond to all inquiries within 24 hours during business days. Emergency contacts are monitored 24/7."
+                  answer="We respond to support inquiries during published support hours. For urgent medical symptoms, contact local emergency services."
                 />
                 <FAQItem
                   question="Can I get medical advice through this form?"
@@ -367,9 +367,9 @@ const Contact = () => {
                 <ContactCard
                   icon={Mail}
                   title="Email Us"
-                  content="pedoderma@gmail.com"
-                  subtext="Response within 24 hours"
-                  href="mailto:pedoderma@gmail.com"
+                  content="support@dermaslot.com"
+                  subtext="Support response during service hours"
+                  href="mailto:support@dermaslot.com"
                   color="from-blue-500 to-cyan-500"
                 />
 
@@ -440,8 +440,8 @@ const Contact = () => {
               {
                 icon: Mail,
                 title: "Business Inquiries",
-                content: "pedoderma@gmail.com",
-                link: "mailto:pedoderma@gmail.com",
+                content: "support@dermaslot.com",
+                link: "mailto:support@dermaslot.com",
                 color: "from-blue-500 to-cyan-500"
               },
               {

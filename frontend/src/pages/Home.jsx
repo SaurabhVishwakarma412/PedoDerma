@@ -249,14 +249,14 @@ const Home = () => {
           </div>
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-4 text-white leading-tight drop-shadow-2xl">
-            Skip the Travel!
+            Dermaslot
             <span className="block bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-transparent">
-              Dermatology Online
+              Clearer answers for changing skin
             </span>
           </h1>
 
           <p className="text-xl md:text-2xl text-white/95 mb-8 max-w-3xl mx-auto drop-shadow-lg">
-            Expert care for your skin from board-certified dermatologists
+            Share clear photos and symptom details for eczema, acne, rashes, fungal infections, psoriasis, pigment changes, and more.
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-6">
@@ -264,7 +264,7 @@ const Home = () => {
               to="/cases/submit"
               className="group relative px-8 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold hover:shadow-2xl transition-all transform hover:scale-105 inline-flex items-center justify-center gap-2 overflow-hidden"
             >
-              <span className="relative z-10">Book Consultation Now</span>
+              <span className="relative z-10">Start a Skin Review</span>
               <ArrowRight size={20} className="relative z-10 group-hover:translate-x-1 transition-transform" />
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </Link>
@@ -278,10 +278,10 @@ const Home = () => {
 
           <div className="flex flex-wrap justify-center gap-4">
             {[
-              { icon: ShieldCheck, text: "Secure & Private", color: "text-green-400" },
-              { icon: Clock, text: "24/7 Access", color: "text-blue-300" },
-              { icon: Video, text: "Video Consultations", color: "text-purple-300" },
-              { icon: Award, text: "Board Certified", color: "text-yellow-300" }
+              { icon: ShieldCheck, text: "Private uploads", color: "text-green-400" },
+              { icon: Camera, text: "Photo-led review", color: "text-blue-300" },
+              { icon: MessageSquare, text: "Care-team messaging", color: "text-purple-300" },
+              { icon: Stethoscope, text: "Dermatology focused", color: "text-yellow-300" }
             ].map((item, idx) => (
               <div key={idx} className="flex items-center gap-2 text-white bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
                 <item.icon size={18} className={item.color} />
@@ -309,21 +309,21 @@ const Home = () => {
                 ? "bg-gradient-to-r from-white via-blue-400 to-white bg-clip-text text-transparent"
                 : "bg-gradient-to-r from-gray-900 via-blue-800 to-gray-900 bg-clip-text text-transparent"
             }`}>
-              Trusted by Thousands
+              Skin concerns deserve
               <br />
-              <span className={darkMode ? "text-blue-400" : "text-blue-600"}>of Happy Parents</span>
+              <span className={darkMode ? "text-blue-400" : "text-blue-600"}>careful clinical attention</span>
             </h2>
 
             <p className={`text-lg max-w-2xl mx-auto animate-fade-in-up animation-delay-300 ${
               darkMode ? "text-gray-400" : "text-gray-600"
             }`}>
-              Making dermatology accessible, affordable, and available for everyone
+              A secure path to document symptoms, share images, and follow each review in one place.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <AnimatedCounter number="20+" label="Dermatologists" icon={<Stethoscope size={32} />} desc="Board-certified specialists" delay={0} />
-            <AnimatedCounter number="12000+" label="Happy Patients" icon={<UsersRound size={32} />} desc="Satisfied patients served" delay={200} />
-            <AnimatedCounter number="98%" label="Satisfaction Rate" icon={<UserStar size={32} />} desc="Patient satisfaction score" delay={400} />
+            <AnimatedCounter number="6+" label="Skin concern categories" icon={<Stethoscope size={32} />} desc="Inflammatory, infectious, pigment, acne, and lesion concerns" delay={0} />
+            <AnimatedCounter number="3" label="Review steps" icon={<UsersRound size={32} />} desc="Document, connect, and follow your plan" delay={200} />
+            <AnimatedCounter number="100%" label="Photo-led cases" icon={<UserStar size={32} />} desc="Structured details alongside visible symptoms" delay={400} />
           </div>
         </div>
       </section>
@@ -341,37 +341,37 @@ const Home = () => {
               <span className={`text-sm font-medium ${darkMode ? "text-purple-300" : "text-purple-700"}`}>Why Patients Love Us</span>
             </div>
             <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? "text-blue-400" : "text-blue-600"}`}>
-              Why Choose Our Dermatology Care
+              A clearer dermatology workflow
             </h2>
             <p className={`text-lg max-w-2xl mx-auto ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
-              Specialized care designed specifically for your unique skin needs
+              Better clinical context for conditions that change in appearance, location, and severity.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <FeatureCard 
-              title="Verified Pediatric Dermatologists"
-              desc="Board-certified specialists in children's skin conditions"
+              title="Skin-specific intake"
+              desc="Capture location, duration, symptoms, triggers, and previous treatments."
               icon={Shield}
               gradient="from-blue-500 to-cyan-500"
               darkMode={darkMode}
             />
             <FeatureCard 
-              title="Digital Prescriptions"
-              desc="Get prescriptions specifically for pediatric medications"
+              title="Image-led context"
+              desc="Attach well-lit photos so reviewers can compare visible changes over time."
               icon={BriefcaseMedical}
               gradient="from-green-500 to-emerald-500"
               darkMode={darkMode}
             />
             <FeatureCard 
-              title="Free Follow-up"
-              desc="7-day free follow-up for treatment progress"
+              title="Review updates"
+              desc="Keep case notes, recommendations, and follow-up questions together."
               icon={MessageSquare}
               gradient="from-purple-500 to-pink-500"
               darkMode={darkMode}
             />
             <FeatureCard 
-              title="Patient-Friendly Care"
-              desc="Specialized in various skin conditions and treatments"
+              title="Focused guidance"
+              desc="Support for common inflammatory, infectious, and pigment-related concerns."
               icon={Smile}
               gradient="from-orange-500 to-red-500"
               darkMode={darkMode}
@@ -395,7 +395,7 @@ const Home = () => {
             <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? "text-blue-400" : "text-blue-600"}`}>
               Common Skin Concerns
             </h2>
-            <p className={`text-lg ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Expert care for your skin health</p>
+            <p className={`text-lg ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Structured reviews for visible symptoms and changing skin patterns.</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -411,7 +411,7 @@ const Home = () => {
               darkMode={darkMode}
             />
             <ConditionCard 
-              condition="Acne in Teens" 
+              condition="Acne, Breakouts & Folliculitis" 
               icon={Sparkles} 
               lightColor="bg-gradient-to-br from-gray-100 to-gray-200"
               darkColor="bg-gradient-to-br from-gray-800/50 to-gray-700/30"
@@ -422,7 +422,7 @@ const Home = () => {
               darkMode={darkMode}
             />
             <ConditionCard 
-              condition="Baby Rashes & Diaper Dermatitis" 
+              condition="Contact Rash & Irritant Dermatitis" 
               icon={Baby} 
               lightColor="bg-gradient-to-br from-pink-50 to-pink-100"
               darkColor="bg-gradient-to-br from-pink-900/30 to-pink-800/20"
@@ -433,7 +433,7 @@ const Home = () => {
               darkMode={darkMode}
             />
             <ConditionCard 
-              condition="Birthmarks & Moles" 
+              condition="Moles, Birthmarks & New Lesions" 
               icon={Gem} 
               lightColor="bg-gradient-to-br from-purple-50 to-purple-100"
               darkColor="bg-gradient-to-br from-purple-900/30 to-purple-800/20"
@@ -444,7 +444,7 @@ const Home = () => {
               darkMode={darkMode}
             />
             <ConditionCard 
-              condition="Viral Rashes" 
+              condition="Fungal, Viral & Bacterial Skin Infections" 
               icon={Bug} 
               lightColor="bg-gradient-to-br from-yellow-50 to-yellow-100"
               darkColor="bg-gradient-to-br from-yellow-900/30 to-yellow-800/20"
@@ -455,7 +455,7 @@ const Home = () => {
               darkMode={darkMode}
             />
             <ConditionCard 
-              condition="Allergic Reactions" 
+              condition="Psoriasis, Vitiligo & Pigment Changes" 
               icon={AlertCircle} 
               lightColor="bg-gradient-to-br from-orange-50 to-orange-100"
               darkColor="bg-gradient-to-br from-orange-900/30 to-orange-800/20"
@@ -485,14 +485,14 @@ const Home = () => {
               <span className={`text-sm font-medium ${darkMode ? "text-green-300" : "text-green-700"}`}>Simple Process</span>
             </div>
             <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? "text-blue-400" : "text-blue-600"}`}>
-              How Tele-Dermatology Works
+              How Dermaslot Works
             </h2>
-            <p className={`text-lg ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Three simple steps to expert care</p>
+            <p className={`text-lg ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Three steps from a skin concern to a documented care plan.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <StepCard step="01" title="Upload Photos & Symptoms" desc="Securely upload photos of your skin condition and describe symptoms" icon={Camera} gradient="from-blue-500 to-cyan-500" darkMode={darkMode} />
-            <StepCard step="02" title="Consult Specialist" desc="Connect with a board-certified dermatologist via secure video call" icon={Video} gradient="from-purple-500 to-pink-500" darkMode={darkMode} />
-            <StepCard step="03" title="Get Diagnosis & Treatment" desc="Receive personalized diagnosis, treatment plan, and digital prescription" icon={BriefcaseMedical} gradient="from-green-500 to-emerald-500" darkMode={darkMode} />
+            <StepCard step="01" title="Document the concern" desc="Add clear photos, the affected area, onset, symptoms, and treatments already tried." icon={Camera} gradient="from-blue-500 to-cyan-500" darkMode={darkMode} />
+            <StepCard step="02" title="Connect with your reviewer" desc="A dermatology professional reviews the information and may arrange a consultation." icon={Video} gradient="from-purple-500 to-pink-500" darkMode={darkMode} />
+            <StepCard step="03" title="Follow the care plan" desc="View notes, recommended next steps, and follow-up details in your case record." icon={BriefcaseMedical} gradient="from-green-500 to-emerald-500" darkMode={darkMode} />
           </div>
         </div>
       </section>
@@ -510,15 +510,15 @@ const Home = () => {
               <span className={`text-sm font-medium ${darkMode ? "text-indigo-300" : "text-indigo-700"}`}>Why It Works</span>
             </div>
             <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? "text-blue-400" : "text-blue-600"}`}>
-              Benefits of Tele-Dermatology
+              Why photo-led dermatology helps
             </h2>
-            <p className={`text-lg ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Modern care designed for you</p>
+            <p className={`text-lg ${darkMode ? "text-gray-400" : "text-gray-600"}`}>More useful information for the symptoms you can see and feel.</p>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
-            <BenefitCard title="Consult Top Dermatologists 24x7" desc="Connect instantly with skin specialists from the comfort of your home" icon={Clock} color="from-blue-500 to-blue-600" darkMode={darkMode} />
-            <BenefitCard title="Patient-Friendly & Convenient" desc="No travel, no waiting rooms - perfect for your comfort and schedule" icon={Smile} color="from-green-500 to-green-600" darkMode={darkMode} />
-            <BenefitCard title="100% Safe & Private Consultations" desc="HIPAA-compliant platform ensuring complete privacy for your health data" icon={ShieldCheck} color="from-purple-500 to-purple-600" darkMode={darkMode} />
-            <BenefitCard title="Specialized Care" desc="Doctors experienced in treating all specific skin conditions and concerns" icon={Stethoscope} color="from-orange-500 to-orange-600" darkMode={darkMode} />
+            <BenefitCard title="Track visible change" desc="Photos and timelines help record whether a rash, spot, or patch is spreading, fading, or recurring." icon={Clock} color="from-blue-500 to-blue-600" darkMode={darkMode} />
+            <BenefitCard title="Bring the right details" desc="Symptoms such as itch, pain, scaling, fever, or product exposure are captured with the case." icon={Smile} color="from-green-500 to-green-600" darkMode={darkMode} />
+            <BenefitCard title="Keep cases private" desc="Your submitted health information and images stay connected to your secure account." icon={ShieldCheck} color="from-purple-500 to-purple-600" darkMode={darkMode} />
+            <BenefitCard title="Condition-aware reviews" desc="The intake is shaped around common dermatology concerns rather than a generic health form." icon={Stethoscope} color="from-orange-500 to-orange-600" darkMode={darkMode} />
           </div>
         </div>
       </section>
@@ -547,7 +547,7 @@ const Home = () => {
             {[
               {
                 question: "Is tele-dermatology safe for children?",
-                answer: "Yes. Our platform follows strict medical privacy standards (HIPAA-compliant), ensuring your medical information and photos remain secure and confidential. All our doctors are board-certified dermatologists with years of experience."
+                answer: "Your account keeps submitted photos, symptoms, and case updates together. Review the platform privacy policy and your clinician's credentials before starting care."
               },
               {
                 question: "Can I get a prescription online?",

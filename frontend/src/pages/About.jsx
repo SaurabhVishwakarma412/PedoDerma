@@ -35,12 +35,10 @@ const About = () => {
               What is Tele-Dermatology?
             </h2>
             <p className="text-gray-700 text-lg leading-relaxed">
-              Tele-Dermatology is a modern, technology-driven healthcare solution that
-              allows patients of all ages to connect with board-certified dermatologists without
-              visiting a clinic. Using secure digital platforms, patients can upload clear images of
-              their skin condition, describe symptoms, and receive expert consultation
-              from the comfort of home. This reduces travel and waiting time while ensuring
-              timely and professional care for everyone.
+              Dermaslot is a dermatology-focused case platform for concerns that are visible,
+              uncomfortable, or changing. Upload photographs of the affected area, record symptoms
+              such as itch, pain, scaling, or discharge, and build a clearer clinical picture before
+              a consultation. It supports informed next steps and does not replace emergency care.
             </p>
           </div>
 
@@ -65,13 +63,10 @@ const About = () => {
           <div>
             <h2 className="text-4xl font-bold text-blue-900 mb-5">Conditions We Treat</h2>
             <p className="text-gray-700 text-lg leading-relaxed">
-              Our skilled dermatologists diagnose and treat a wide range of
-              skin conditions including eczema, acne, psoriasis, vitiligo,
-              fungal infections, contact dermatitis, sunburn reactions, allergic skin reactions,
-              and various other skin conditions for patients of all ages.
-              Each treatment plan is tailored considering the patient's age,
-              symptoms, skin sensitivity, and medical history, ensuring a safe and effective
-              healing process.
+              Dermaslot cases can describe eczema and atopic dermatitis, acne and folliculitis,
+              psoriasis, vitiligo, contact reactions, fungal infections, hives, recurring rashes,
+              and new or changing lesions. Record where it appears, when it began, how it has changed,
+              possible triggers, and treatments already tried.
             </p>
           </div>
         </div>
@@ -111,13 +106,12 @@ const About = () => {
 
           {/* TEXT RIGHT */}
           <div>
-            <h2 className="text-4xl font-bold text-blue-900 mb-5">Board-Certified Dermatologists</h2>
+            <h2 className="text-4xl font-bold text-blue-900 mb-5">Dermatology Review Context</h2>
             <p className="text-gray-700 text-lg leading-relaxed">
-              Our team consists of highly trained, board-certified dermatologists who
-              specialize in diagnosing and treating a broad spectrum of skin conditions for all ages. Each
-              doctor undergoes rigorous training and certification, ensuring you receive
-              expert-level care. We offer both male and female dermatologists, allowing patients to
-              choose based on comfort and preference during the consultation process.
+              Dermatology reviews depend on good context. Dermaslot gives clinicians a chronological
+              record of symptoms and images, helping them assess pattern, distribution, severity, and
+              response to earlier care. Provider credentials and availability are presented in the
+              doctor directory for each user to review.
             </p>
           </div>
         </div>
@@ -130,11 +124,9 @@ const About = () => {
           <div>
             <h2 className="text-4xl font-bold text-blue-900 mb-5">Accessible, Fast & Secure</h2>
             <p className="text-gray-700 text-lg leading-relaxed">
-              Our telehealth platform is designed with advanced security, ensuring your
-              medical details and images remain encrypted and protected. No long queues, no travel,
-              and no exposure to crowded waiting rooms. Whether using a laptop, a tablet, or a
-              mobile phone, you can book appointments, upload medical records, and consult
-              securely anytime, from anywhere.
+              Your case connects photos, health details, messages, appointment notes, and follow-up
+              guidance in one account. Use a phone or computer to add updates when a flare changes,
+              a new area is involved, or a treatment causes a reaction.
             </p>
           </div>
 
@@ -160,7 +152,7 @@ const About = () => {
             <h2 className="text-4xl font-bold text-blue-900 mb-5">Get Started Today</h2>
             <p className="text-gray-700 text-lg leading-relaxed">
               Traditional dermatology waitlists can stretch over several months, delaying essential
-              treatment for patients who need timely care. With DermaCare Tele-Dermatology,
+              treatment for patients who need timely care. With Dermaslot,
               you can access expert help within days—sometimes even on the same day. Start your
               journey toward healthier skin now.
             </p>
