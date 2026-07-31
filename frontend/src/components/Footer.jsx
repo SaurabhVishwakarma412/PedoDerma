@@ -11,12 +11,11 @@ const Footer = () => {
         {/* Logo & About */}
         <div className="">
           <h2 className="text-3xl font-bold text-blue-600 mb-2">
-            PedoDerma
+            Dermaslot
           </h2>
           <p className="text-lg leading-relaxed mb-4">
-            PedoDerma is a digital healthcare platform connecting patients with
-            qualified doctors for all dermatological concerns. Trusted by families
-            and medical professionals to provide timely and secure consultations.
+            Dermaslot is a digital dermatology platform for secure reviews of rashes,
+            eczema, acne, fungal infections, pigment changes, and other skin concerns.
           </p>
 
           {/* Social Media Links */}
@@ -72,23 +71,23 @@ const Footer = () => {
           <h3 className="font-semibold text-xl text-gray-50 mb-3">
             Contact
           </h3>
-          <p>PedoDerma Health Services Pvt. Ltd.</p>
+          <p>Dermaslot Dermatology Services</p>
           <p>Jalandhar, Punjab, India</p>
           <p className="mt-2">📞 +91 94352 00024</p>
           <p className="mt-2">
             <span className="font-medium">Customer Support:</span><br />
-            support@pedoderma.com
+            support@dermaslot.com
           </p>
           <p className="mt-2">
             <span className="font-medium">Official Queries:</span><br />
-            info@pedoderma.com
+            care@dermaslot.com
           </p>
         </div>
       </div>
 
       {/* Bottom Bar */}
       <div className="border-t py-4 text-center text-sm text-gray-50 dark:text-gray-400">
-        © {new Date().getFullYear()} PedoDerma. All rights reserved.
+        Copyright {new Date().getFullYear()} Dermaslot. All rights reserved.
         <br />
         <Link to="/terms" className="hover:text-blue-600">Terms & Conditions</Link>
         {" | "}

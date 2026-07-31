@@ -68,7 +68,7 @@ const DoctorLogin = () => {
   // Handle demo doctor login
   const handleDemoLogin = async () => {
     setForm({
-      email: "demo.doctor@pediatricderm.com",
+      email: "demo.doctor@dermaslot.com",
       password: "demo123",
       rememberMe: false
     });
@@ -93,7 +93,7 @@ const DoctorLogin = () => {
             Doctor Portal Access
           </h1>
           <p className="text-gray-600 max-w-xl mx-auto">
-            Secure login for board-certified pediatric dermatologists and healthcare providers
+            Secure access for dermatology professionals reviewing skin cases and follow-up notes
           </p>
         </div>
 
@@ -273,7 +273,7 @@ const DoctorLogin = () => {
                 {[
                   {
                     title: "Patient Management",
-                    desc: "Access and manage pediatric dermatology cases with full medical history"
+                    desc: "Access and manage dermatology cases with structured symptom and image history"
                   },
                   {
                     title: "Telemedicine Tools",
@@ -340,11 +340,11 @@ const DoctorLogin = () => {
               </p>
               <div className="space-y-3">
                 <a 
-                  href="mailto:doctorsupport@pediatricderm.com" 
+                  href="mailto:doctorsupport@dermaslot.com" 
                   className="flex items-center gap-2 text-blue-300 hover:text-blue-200 transition"
                 >
                   <Mail className="w-4 h-4" />
-                  doctorsupport@pediatricderm.com
+                  doctorsupport@dermaslot.com
                 </a>
                 <div className="flex items-center gap-2">
                   <Stethoscope className="w-4 h-4" />
@@ -396,7 +396,7 @@ const DoctorLogin = () => {
             <Link to="/privacy" className="text-blue-600 hover:underline">Privacy Policy</Link>.
           </p>
           <div className="mt-4 flex flex-wrap justify-center gap-4 text-xs text-gray-400">
-            <span>© 2024 Pediatric Dermatology Platform</span>
+            <span>Copyright 2026 Dermaslot</span>
             <span>•</span>
             <span>Medical License Verification Required</span>
             <span>•</span>

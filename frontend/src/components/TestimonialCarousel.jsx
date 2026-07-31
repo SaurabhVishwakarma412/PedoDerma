@@ -19,7 +19,7 @@ const TestimonialCarousel = () => {
     {
       name: "Abhishek Verma",
       role: "Parent of Shyam (8)",
-      content: "Finally found a pediatric dermatologist who understands kids. The video consultation was convenient and thorough. Highly recommended!",
+      content: "The symptom checklist helped me document the flare clearly before speaking with the care team.",
       rating: 5,
       avatar: "👨",
       location: "Patna, Bihar"

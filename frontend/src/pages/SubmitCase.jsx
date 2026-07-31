@@ -258,7 +258,7 @@ const SubmitCase = () => {
       setUploadProgress(100);
 
       setSuccess(
-        "Case submitted successfully! A dermatologist will review your case within 24 hours.",
+        "Skin case submitted successfully. You can track review updates from your dashboard.",
       );
 
       setTimeout(() => navigate("/parent/dashboard"), 3000);
@@ -291,7 +291,7 @@ const SubmitCase = () => {
                 Submit New Dermatology Case
               </h1>
               <p className="text-gray-600">
-                Share your skin condition with board-certified dermatologists
+                Document symptoms, affected areas, and clear images for a focused dermatology review
               </p>
             </div>
           </div>
@@ -889,18 +889,16 @@ const SubmitCase = () => {
             </div>
             <div className="bg-white p-4 rounded-lg">
               <div className="text-blue-600 font-bold text-lg mb-2">2</div>
-              <h5 className="font-medium text-gray-800 mb-2">Response Time</h5>
+              <h5 className="font-medium text-gray-800 mb-2">Review Updates</h5>
               <p className="text-sm text-gray-600">
-                Most cases are reviewed within 24 hours. Urgent cases receive
-                priority attention.
+                Track your case status in Dermaslot. Review timing depends on clinician availability.
               </p>
             </div>
             <div className="bg-white p-4 rounded-lg">
               <div className="text-blue-600 font-bold text-lg mb-2">3</div>
               <h5 className="font-medium text-gray-800 mb-2">Follow-up Care</h5>
               <p className="text-sm text-gray-600">
-                You'll receive a 7-day free follow-up to track progress and
-                adjust treatment if needed.
+                Add new photos and symptom changes to keep your clinical history current.
               </p>
             </div>
           </div>

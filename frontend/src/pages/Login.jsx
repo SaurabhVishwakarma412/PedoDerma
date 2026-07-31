@@ -312,7 +312,7 @@ const Login = () => {
                   <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center mt-0.5">
                     <span className="text-xs">✓</span>
                   </div>
-                  <span>Schedule appointments with pediatric dermatologists</span>
+                  <span>Submit photo-led skin cases and schedule dermatology follow-up</span>
                 </li>
                 <li className="flex items-start gap-3">
                   <div className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center mt-0.5">
