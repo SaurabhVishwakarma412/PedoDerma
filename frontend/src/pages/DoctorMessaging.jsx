@@ -1,20 +1,20 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import { 
-  MessageSquare, Send, Phone, Video, MoreVertical, Search, ArrowLeft,
-  Users, Clock, CheckCheck, Check, Smile, Paperclip, Mic, User,
+  MessageSquare, Phone, Video, MoreVertical, Search, ArrowLeft,
+  Users, Clock, CheckCheck, Check, Mic, User,
   Star, Shield, Activity, Calendar, PhoneCall, VideoIcon, Circle,
   CircleOff, Award, Briefcase, Mail, MapPin
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
 import API from "../services/api";
+import ChatComposer from "../components/ChatComposer";
 
 const DoctorMessaging = () => {
   const { user } = useAuth();
   const [conversations, setConversations] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [messageInput, setMessageInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState("");
@@ -196,15 +196,14 @@ const DoctorMessaging = () => {
     }
   }, [selectedPatient, fetchChatHistory]);
 
-  const handleSendMessage = async (e) => {
-    e.preventDefault();
-    if (!messageInput.trim() || !selectedPatient) return;
+  const handleSendMessage = async (message) => {
+    if (!message || !selectedPatient) return false;
 
     const tempId = Date.now().toString();
     const messageData = {
       from: user._id,
       to: selectedPatient._id,
-      message: messageInput,
+      message,
       timestamp: new Date(),
       isOwn: true,
       tempId: tempId,
@@ -217,7 +216,7 @@ const DoctorMessaging = () => {
       socketRef.current.emit("send_message", {
         from: user._id,
         to: selectedPatient._id,
-        message: messageInput,
+        message,
         timestamp: new Date(),
         tempId: tempId
       });
@@ -227,7 +226,7 @@ const DoctorMessaging = () => {
       await API.post("/messages/send", {
         from: user._id,
         to: selectedPatient._id,
-        message: messageInput
+        message
       });
       
       setMessages(prev => prev.map(msg => 
@@ -240,13 +239,11 @@ const DoctorMessaging = () => {
       ));
     }
 
-    setMessageInput("");
+    return true;
   };
 
-  const handleTyping = (e) => {
-    setMessageInput(e.target.value);
-    
-    if (socketRef.current && selectedPatient && e.target.value.length > 0) {
+  const handleTyping = () => {
+    if (socketRef.current && selectedPatient) {
       socketRef.current.emit("typing", {
         from: user._id,
         to: selectedPatient._id
@@ -531,49 +528,7 @@ const DoctorMessaging = () => {
                 </div>
 
                 {/* Message Input */}
-                <form onSubmit={handleSendMessage} className={`border-t p-2 sm:p-3 ${darkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-[#f0f2f5]"} shrink-0`}>
-                  <div className="flex items-center gap-1 sm:gap-2">
-                    <button
-                      type="button"
-                      className={`hidden p-2 rounded-lg transition sm:block ${
-                        darkMode ? "hover:bg-gray-700 text-gray-400" : "hover:bg-white text-gray-500"
-                      }`}
-                    >
-                      <Paperclip className="w-5 h-5" />
-                    </button>
-                    <button
-                      type="button"
-                      className={`p-2 rounded-lg transition ${
-                        darkMode ? "hover:bg-gray-700 text-gray-400" : "hover:bg-white text-gray-500"
-                      }`}
-                    >
-                      <Smile className="w-5 h-5" />
-                    </button>
-                    <input
-                      type="text"
-                      value={messageInput}
-                      onChange={handleTyping}
-                      placeholder="Type your message..."
-                      className={`min-w-0 flex-1 rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition ${
-                        darkMode 
-                          ? "bg-gray-700 border-gray-600 text-gray-200 placeholder-gray-500" 
-                          : "bg-white border border-gray-300"
-                      }`}
-                    />
-                    <button
-                      type="submit"
-                      disabled={!messageInput.trim()}
-                      aria-label="Send message"
-                      className={`rounded-full p-2.5 transition-all duration-300 ${
-                        messageInput.trim()
-                          ? "bg-[#00a884] text-white hover:bg-[#008f72]"
-                          : darkMode ? "bg-gray-700 text-gray-500 cursor-not-allowed" : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      }`}
-                    >
-                      <Send className="w-5 h-5" />
-                    </button>
-                  </div>
-                </form>
+                <ChatComposer key={selectedPatient._id} darkMode={darkMode} onSend={handleSendMessage} onTyping={handleTyping} recipientId={selectedPatient._id} />
               </div>
             ) : (
               <div className="lg:col-span-2 flex flex-col items-center justify-center">

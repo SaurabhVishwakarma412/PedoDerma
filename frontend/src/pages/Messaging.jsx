@@ -3,20 +3,20 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { Link } from "react-router-dom";
 import { 
-  MessageSquare, Send, Phone, Video, MoreVertical, Search, ArrowLeft, 
-  Users, Clock, CheckCheck, Check, Smile, Paperclip, 
+  MessageSquare, Phone, Video, MoreVertical, Search, ArrowLeft,
+  Users, Clock, CheckCheck, Check,
   Star, Award, Shield, CircleOff, Stethoscope, Plus
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext.jsx";
 import API from "../services/api";
 import { getMyCases } from "../services/patientAPI";
+import ChatComposer from "../components/ChatComposer";
 
 const MessagingPage = () => {
   const { user } = useAuth();
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [messageInput, setMessageInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingDoctors, setLoadingDoctors] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -27,7 +27,6 @@ const MessagingPage = () => {
   const [onlineStatus, setOnlineStatus] = useState({});
   const messagesEndRef = useRef(null);
   const typingTimeoutRef = useRef(null);
-  const typingEmitTimeoutRef = useRef(null);
   const socketRef = useRef(null);
   const selectedDoctorRef = useRef(null);
 
@@ -110,7 +109,6 @@ const MessagingPage = () => {
       socketRef.current = null;
       newSocket.disconnect();
       clearTimeout(typingTimeoutRef.current);
-      clearTimeout(typingEmitTimeoutRef.current);
     };
   }, [user]);
 
@@ -195,16 +193,15 @@ const MessagingPage = () => {
     }
   }, [selectedDoctor, fetchChatHistory]);
 
-  const handleSendMessage = async (e) => {
-    e.preventDefault();
-    if (!messageInput.trim() || !selectedDoctor) return;
+  const handleSendMessage = async (message) => {
+    if (!message || !selectedDoctor) return false;
 
     const tempId = Date.now();
     const messageData = {
       _id: tempId,
       from: user._id,
       to: selectedDoctor._id,
-      message: messageInput,
+      message,
       timestamp: new Date(),
       isOwn: true,
       status: 'sending'
@@ -216,7 +213,7 @@ const MessagingPage = () => {
       socketRef.current.emit("send_message", {
         from: user._id,
         to: selectedDoctor._id,
-        message: messageInput,
+        message,
         timestamp: new Date()
       });
     }
@@ -225,7 +222,7 @@ const MessagingPage = () => {
       await API.post("/messages/send", {
         from: user._id,
         to: selectedDoctor._id,
-        message: messageInput
+        message
       });
       
       setMessages(prev => prev.map(msg => 
@@ -238,21 +235,12 @@ const MessagingPage = () => {
       ));
     }
 
-    setMessageInput("");
+    return true;
   };
 
-  const handleTyping = (e) => {
-    const value = e.target.value;
-    setMessageInput(value);
-    
-    if (socketRef.current && selectedDoctor && value.length > 0) {
-      clearTimeout(typingEmitTimeoutRef.current);
-      typingEmitTimeoutRef.current = setTimeout(() => {
-        socketRef.current?.emit("typing", {
-          from: user._id,
-          to: selectedDoctor._id
-        });
-      }, 300);
+  const handleTyping = () => {
+    if (socketRef.current && selectedDoctor) {
+      socketRef.current.emit("typing", { from: user._id, to: selectedDoctor._id });
     }
   };
 
@@ -570,49 +558,7 @@ const MessagingPage = () => {
                 </div>
 
                 {/* Message Input */}
-                <form onSubmit={handleSendMessage} className={`border-t p-2 sm:p-3 ${darkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-[#f0f2f5]"} shrink-0`}>
-                  <div className="flex items-center gap-1 sm:gap-2">
-                    <button
-                      type="button"
-                      className={`hidden p-2 rounded-lg transition sm:block ${
-                        darkMode ? "hover:bg-gray-700 text-gray-400" : "hover:bg-white text-gray-500"
-                      }`}
-                    >
-                      <Paperclip className="w-5 h-5" />
-                    </button>
-                    <button
-                      type="button"
-                      className={`p-2 rounded-lg transition ${
-                        darkMode ? "hover:bg-gray-700 text-gray-400" : "hover:bg-white text-gray-500"
-                      }`}
-                    >
-                      <Smile className="w-5 h-5" />
-                    </button>
-                    <input
-                      type="text"
-                      value={messageInput}
-                      onChange={handleTyping}
-                      placeholder="Type your message..."
-                      className={`min-w-0 flex-1 rounded-full px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition ${
-                        darkMode 
-                          ? "bg-gray-700 border-gray-600 text-gray-200 placeholder-gray-500" 
-                          : "bg-white border border-gray-300"
-                      }`}
-                    />
-                    <button
-                      type="submit"
-                      disabled={!messageInput.trim()}
-                      aria-label="Send message"
-                      className={`rounded-full p-2.5 transition-all duration-300 ${
-                        messageInput.trim()
-                          ? "bg-[#00a884] text-white hover:bg-[#008f72]"
-                          : darkMode ? "bg-gray-700 text-gray-500 cursor-not-allowed" : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      }`}
-                    >
-                      <Send className="w-5 h-5" />
-                    </button>
-                  </div>
-                </form>
+                <ChatComposer key={selectedDoctor._id} darkMode={darkMode} onSend={handleSendMessage} onTyping={handleTyping} recipientId={selectedDoctor._id} />
               </div>
             ) : (
               <div className="lg:col-span-2 flex flex-col items-center justify-center">
