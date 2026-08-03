@@ -74,7 +74,7 @@ const AnimatedCounter = ({ number, label, icon, desc, delay = 0 }) => {
       ref={ref}
       className={`group relative rounded-2xl overflow-hidden transition-all duration-500 hover:-translate-y-2 ${
         darkMode 
-          ? "bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-sm border border-gray-700/50 shadow-xl hover:shadow-2xl" 
+          ? "bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-indigo-950/90 backdrop-blur-sm border border-cyan-300/10 shadow-xl shadow-black/30 hover:border-cyan-300/25 hover:shadow-cyan-950/40"
           : "bg-gradient-to-br from-white to-gray-50 shadow-lg hover:shadow-2xl border border-gray-100"
       }`}
     >
@@ -110,7 +110,7 @@ const AnimatedCounter = ({ number, label, icon, desc, delay = 0 }) => {
 const FeatureCard = ({ title, desc, icon: Icon, gradient, darkMode }) => (
   <div className={`group relative rounded-2xl transition-all duration-500 overflow-hidden ${
     darkMode 
-      ? "bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-sm border border-gray-700/50 shadow-xl hover:shadow-2xl hover:-translate-y-2" 
+      ? "bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-indigo-950/90 backdrop-blur-sm border border-cyan-300/10 shadow-xl shadow-black/30 hover:border-cyan-300/25 hover:shadow-cyan-950/40 hover:-translate-y-2"
       : "bg-white shadow-lg hover:shadow-2xl hover:-translate-y-2 border border-gray-100"
   }`}>
     <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-10 dark:group-hover:opacity-20 transition-opacity duration-500`}></div>
@@ -154,7 +154,7 @@ const StepCard = ({ step, title, desc, icon: Icon, gradient, darkMode }) => (
   <div className="relative">
     <div className={`rounded-2xl shadow-xl p-8 text-center transition-all duration-300 hover:-translate-y-2 ${
       darkMode 
-        ? "bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-sm border border-gray-700/50 hover:shadow-2xl" 
+        ? "bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-indigo-950/90 backdrop-blur-sm border border-cyan-300/10 shadow-black/30 hover:border-cyan-300/25 hover:shadow-cyan-950/40 hover:shadow-2xl"
         : "bg-white border border-gray-100 hover:shadow-2xl"
     }`}>
       <div className="relative mb-6">
@@ -180,7 +180,7 @@ const StepCard = ({ step, title, desc, icon: Icon, gradient, darkMode }) => (
 const BenefitCard = ({ title, desc, icon: Icon, color, darkMode }) => (
   <div className={`group rounded-2xl p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 ${
     darkMode 
-      ? "bg-gradient-to-br from-gray-800/90 to-gray-900/90 backdrop-blur-sm border border-gray-700/50 hover:shadow-2xl" 
+      ? "bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-indigo-950/90 backdrop-blur-sm border border-cyan-300/10 shadow-black/30 hover:border-cyan-300/25 hover:shadow-cyan-950/40 hover:shadow-2xl"
       : "bg-white hover:shadow-2xl border border-gray-100"
   }`}>
     <div className="flex items-start gap-5">
@@ -214,12 +214,12 @@ const Home = () => {
 
   return (
     <main className={`w-full overflow-x-hidden transition-colors duration-300 ${
-      darkMode ? "bg-gray-900" : "bg-gradient-to-br from-gray-50 via-white to-blue-50/30"
+      darkMode ? "bg-[#07111f]" : "bg-gradient-to-br from-gray-50 via-white to-blue-50/30"
     }`}>
       
       {/* Hero Section */}
       <section className={`relative min-h-[90vh] flex items-center justify-center overflow-hidden ${
-        darkMode ? "bg-gray-900" : "bg-white"
+        darkMode ? "bg-[#07111f]" : "bg-white"
       }`}>
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat transform scale-105"
@@ -294,7 +294,7 @@ const Home = () => {
 
       {/* Stats Section */}
       <section className={`py-20 relative transition-colors duration-300 ${
-        darkMode ? "bg-gray-900" : "bg-white"
+        darkMode ? "bg-gradient-to-br from-[#081525] via-[#0a1930] to-[#10122a]" : "bg-white"
       }`}>
         <div className={`absolute inset-0 bg-grid-pattern opacity-5 ${darkMode ? "brightness-50" : ""}`}></div>
         <div className="relative max-w-7xl mx-auto px-4">
@@ -330,7 +330,7 @@ const Home = () => {
 
       {/* Why Choose Us */}
       <section className={`py-20 transition-colors duration-300 ${
-        darkMode ? "bg-gray-800/50" : "bg-gradient-to-br from-blue-50/50 via-white to-purple-50/30"
+        darkMode ? "bg-gradient-to-br from-[#0d1730] via-[#091a2b] to-[#10142c]" : "bg-gradient-to-br from-blue-50/50 via-white to-purple-50/30"
       }`}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
@@ -382,7 +382,7 @@ const Home = () => {
 
       {/* Common Concerns */}
       <section className={`py-20 transition-colors duration-300 ${
-        darkMode ? "bg-gray-900" : "bg-white"
+        darkMode ? "bg-gradient-to-br from-[#07111f] via-[#0a1729] to-[#0b1530]" : "bg-white"
       }`}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
@@ -471,7 +471,7 @@ const Home = () => {
 
       {/* How It Works */}
       <section className={`py-20 relative transition-colors duration-300 ${
-        darkMode ? "bg-gray-800/50" : "bg-gradient-to-br from-blue-50/50 via-white to-indigo-50/30"
+        darkMode ? "bg-gradient-to-br from-[#10142c] via-[#0b1e31] to-[#111735]" : "bg-gradient-to-br from-blue-50/50 via-white to-indigo-50/30"
       }`}>
         <div className={`absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-30 ${
           darkMode ? "dark:opacity-5" : ""
@@ -499,7 +499,7 @@ const Home = () => {
 
       {/* Benefits */}
       <section className={`py-20 transition-colors duration-300 ${
-        darkMode ? "bg-gray-900" : "bg-white"
+        darkMode ? "bg-gradient-to-br from-[#07111f] via-[#0b1730] to-[#091a2b]" : "bg-white"
       }`}>
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
@@ -528,7 +528,7 @@ const Home = () => {
 
       {/* FAQs */}
       <section id="faq" className={`py-20 transition-colors duration-300 ${
-        darkMode ? "bg-gray-800/50" : "bg-gradient-to-br from-gray-50 via-white to-blue-50/30"
+        darkMode ? "bg-gradient-to-br from-[#11142d] via-[#0b1c30] to-[#10142b]" : "bg-gradient-to-br from-gray-50 via-white to-blue-50/30"
       }`}>
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center mb-16">
@@ -568,7 +568,7 @@ const Home = () => {
             ].map((faq, index) => (
               <details key={index} className={`group rounded-xl transition-all duration-300 ${
                 darkMode 
-                  ? "bg-gray-800/90 backdrop-blur-sm border border-gray-700/50 hover:bg-gray-800" 
+                  ? "bg-slate-900/80 backdrop-blur-sm border border-cyan-300/10 hover:bg-slate-800/90 hover:border-cyan-300/25"
                   : "bg-white border border-gray-200 hover:shadow-md"
               }`}>
                 <summary className={`cursor-pointer p-6 font-semibold text-lg list-none flex items-center justify-between ${
@@ -576,13 +576,13 @@ const Home = () => {
                 }`}>
                   <span>{faq.question}</span>
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center group-open:rotate-180 transition-transform duration-300 ${
-                    darkMode ? "bg-blue-900/50" : "bg-blue-100"
+                    darkMode ? "bg-cyan-400/10 border border-cyan-300/15" : "bg-blue-100"
                   }`}>
                     <ArrowRight className={`w-4 h-4 rotate-90 ${darkMode ? "text-blue-400" : "text-blue-600"}`} />
                   </div>
                 </summary>
                 <div className={`px-6 pb-6 leading-relaxed border-t pt-4 ${
-                  darkMode ? "text-gray-400 border-gray-700" : "text-gray-600 border-gray-200"
+                  darkMode ? "text-slate-300 border-cyan-300/10" : "text-gray-600 border-gray-200"
                 }`}>
                   {faq.answer}
                 </div>
@@ -595,7 +595,7 @@ const Home = () => {
       {/* Final CTA */}
       <section className={`py-20 relative overflow-hidden transition-colors duration-300 ${
         darkMode 
-          ? "bg-gradient-to-br from-gray-800 to-gray-900" 
+          ? "bg-gradient-to-br from-[#111a38] via-[#17154a] to-[#0a3150]"
           : "bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600"
       }`}>
         <div className={`absolute inset-0 animate-gradient ${
