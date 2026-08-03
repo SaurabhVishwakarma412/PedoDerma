@@ -245,18 +245,18 @@ const Home = () => {
         }`}>
           <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
             <Sparkles className="w-4 h-4 text-yellow-300" />
-            <span className="text-white text-sm font-medium">Expert Dermatological Care — Available 24/7</span>
+            <span className="text-white text-sm font-medium">Online dermatology consultations, made simple</span>
           </div>
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-4 text-white leading-tight drop-shadow-2xl">
             Dermaslot
             <span className="block bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-transparent">
-              Clearer answers for changing skin
+              Expert skin care, from wherever you are
             </span>
           </h1>
 
           <p className="text-xl md:text-2xl text-white/95 mb-8 max-w-3xl mx-auto drop-shadow-lg">
-            Share clear photos and symptom details for eczema, acne, rashes, fungal infections, psoriasis, pigment changes, and more.
+            Start a secure online consultation by sharing photos and details about your skin concern. Connect with a dermatology professional and keep your care plan in one place.
           </p>
 
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-6">
@@ -264,7 +264,7 @@ const Home = () => {
               to="/cases/submit"
               className="group relative px-8 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold hover:shadow-2xl transition-all transform hover:scale-105 inline-flex items-center justify-center gap-2 overflow-hidden"
             >
-              <span className="relative z-10">Start a Skin Review</span>
+              <span className="relative z-10">Start Your Consultation</span>
               <ArrowRight size={20} className="relative z-10 group-hover:translate-x-1 transition-transform" />
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-700 opacity-0 group-hover:opacity-100 transition-opacity"></div>
             </Link>
@@ -272,16 +272,16 @@ const Home = () => {
               to="/about"
               className="px-8 py-4 rounded-xl bg-white/10 backdrop-blur-sm text-white font-semibold hover:bg-white/20 transition-all border border-white/30 hover:border-white/50"
             >
-              Learn More →
+              How It Works
             </Link>
           </div>
 
           <div className="flex flex-wrap justify-center gap-4">
             {[
-              { icon: ShieldCheck, text: "Private uploads", color: "text-green-400" },
-              { icon: Camera, text: "Photo-led review", color: "text-blue-300" },
-              { icon: MessageSquare, text: "Care-team messaging", color: "text-purple-300" },
-              { icon: Stethoscope, text: "Dermatology focused", color: "text-yellow-300" }
+              { icon: ShieldCheck, text: "Secure case details", color: "text-green-400" },
+              { icon: Camera, text: "Share photos easily", color: "text-blue-300" },
+              { icon: MessageSquare, text: "Online consultation", color: "text-purple-300" },
+              { icon: Stethoscope, text: "Dermatology care", color: "text-yellow-300" }
             ].map((item, idx) => (
               <div key={idx} className="flex items-center gap-2 text-white bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
                 <item.icon size={18} className={item.color} />
@@ -309,21 +309,21 @@ const Home = () => {
                 ? "bg-gradient-to-r from-white via-blue-400 to-white bg-clip-text text-transparent"
                 : "bg-gradient-to-r from-gray-900 via-blue-800 to-gray-900 bg-clip-text text-transparent"
             }`}>
-              Skin concerns deserve
+              Care that fits
               <br />
-              <span className={darkMode ? "text-blue-400" : "text-blue-600"}>careful clinical attention</span>
+              <span className={darkMode ? "text-blue-400" : "text-blue-600"}>into your day</span>
             </h2>
 
             <p className={`text-lg max-w-2xl mx-auto animate-fade-in-up animation-delay-300 ${
               darkMode ? "text-gray-400" : "text-gray-600"
             }`}>
-              A secure path to document symptoms, share images, and follow each review in one place.
+              Consult online, share what matters, and follow your case from the comfort of home.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <AnimatedCounter number="6+" label="Skin concern categories" icon={<Stethoscope size={32} />} desc="Inflammatory, infectious, pigment, acne, and lesion concerns" delay={0} />
-            <AnimatedCounter number="3" label="Review steps" icon={<UsersRound size={32} />} desc="Document, connect, and follow your plan" delay={200} />
-            <AnimatedCounter number="100%" label="Photo-led cases" icon={<UserStar size={32} />} desc="Structured details alongside visible symptoms" delay={400} />
+            <AnimatedCounter number="3" label="Simple steps" icon={<Stethoscope size={32} />} desc="Share, consult, and follow up online" delay={0} />
+            <AnimatedCounter number="1" label="Secure place for your case" icon={<UsersRound size={32} />} desc="Your details, messages, and care notes together" delay={200} />
+            <AnimatedCounter number="24" label="Hours to submit" icon={<UserStar size={32} />} desc="Start your case whenever it is convenient for you" delay={400} />
           </div>
         </div>
       </section>
@@ -338,40 +338,40 @@ const Home = () => {
               darkMode ? "bg-purple-900/30" : "bg-purple-100"
             }`}>
               <Sparkles className={`w-4 h-4 ${darkMode ? "text-purple-400" : "text-purple-600"}`} />
-              <span className={`text-sm font-medium ${darkMode ? "text-purple-300" : "text-purple-700"}`}>Why Patients Love Us</span>
+              <span className={`text-sm font-medium ${darkMode ? "text-purple-300" : "text-purple-700"}`}>Designed for online care</span>
             </div>
             <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? "text-blue-400" : "text-blue-600"}`}>
-              A clearer dermatology workflow
+              A better way to begin a consultation
             </h2>
             <p className={`text-lg max-w-2xl mx-auto ${darkMode ? "text-gray-400" : "text-gray-600"}`}>
-              Better clinical context for conditions that change in appearance, location, and severity.
+              Give your clinician useful context before you meet, without the hassle of an in-person first visit.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <FeatureCard 
-              title="Skin-specific intake"
-              desc="Capture location, duration, symptoms, triggers, and previous treatments."
+              title="Guided intake"
+              desc="Tell us where it is, when it started, what you feel, and what you have already tried."
               icon={Shield}
               gradient="from-blue-500 to-cyan-500"
               darkMode={darkMode}
             />
             <FeatureCard 
-              title="Image-led context"
-              desc="Attach well-lit photos so reviewers can compare visible changes over time."
+              title="Share photos securely"
+              desc="Upload clear images to help your clinician understand visible changes."
               icon={BriefcaseMedical}
               gradient="from-green-500 to-emerald-500"
               darkMode={darkMode}
             />
             <FeatureCard 
-              title="Review updates"
-              desc="Keep case notes, recommendations, and follow-up questions together."
+              title="Stay connected"
+              desc="Keep consultation updates, questions, and next steps with your case."
               icon={MessageSquare}
               gradient="from-purple-500 to-pink-500"
               darkMode={darkMode}
             />
             <FeatureCard 
-              title="Focused guidance"
-              desc="Support for common inflammatory, infectious, and pigment-related concerns."
+              title="Care that continues"
+              desc="Return to your case to review guidance and manage follow-up care."
               icon={Smile}
               gradient="from-orange-500 to-red-500"
               darkMode={darkMode}
@@ -390,12 +390,12 @@ const Home = () => {
               darkMode ? "bg-blue-900/30" : "bg-blue-100"
             }`}>
               <Droplets className={`w-4 h-4 ${darkMode ? "text-blue-400" : "text-blue-600"}`} />
-              <span className={`text-sm font-medium ${darkMode ? "text-blue-300" : "text-blue-700"}`}>We Treat</span>
+              <span className={`text-sm font-medium ${darkMode ? "text-blue-300" : "text-blue-700"}`}>Common concerns</span>
             </div>
             <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? "text-blue-400" : "text-blue-600"}`}>
               Common Skin Concerns
             </h2>
-            <p className={`text-lg ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Structured reviews for visible symptoms and changing skin patterns.</p>
+            <p className={`text-lg ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Begin an online consultation for a range of everyday skin concerns.</p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -485,14 +485,14 @@ const Home = () => {
               <span className={`text-sm font-medium ${darkMode ? "text-green-300" : "text-green-700"}`}>Simple Process</span>
             </div>
             <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? "text-blue-400" : "text-blue-600"}`}>
-              How Dermaslot Works
+              How your online consultation works
             </h2>
-            <p className={`text-lg ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Three steps from a skin concern to a documented care plan.</p>
+            <p className={`text-lg ${darkMode ? "text-gray-400" : "text-gray-600"}`}>A straightforward way to share your concern and receive guided next steps.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <StepCard step="01" title="Document the concern" desc="Add clear photos, the affected area, onset, symptoms, and treatments already tried." icon={Camera} gradient="from-blue-500 to-cyan-500" darkMode={darkMode} />
-            <StepCard step="02" title="Connect with your reviewer" desc="A dermatology professional reviews the information and may arrange a consultation." icon={Video} gradient="from-purple-500 to-pink-500" darkMode={darkMode} />
-            <StepCard step="03" title="Follow the care plan" desc="View notes, recommended next steps, and follow-up details in your case record." icon={BriefcaseMedical} gradient="from-green-500 to-emerald-500" darkMode={darkMode} />
+            <StepCard step="01" title="Tell us what is happening" desc="Add photos, the affected area, symptoms, and any treatments you have already tried." icon={Camera} gradient="from-blue-500 to-cyan-500" darkMode={darkMode} />
+            <StepCard step="02" title="Meet online with your clinician" desc="Your case gives the clinician context for a focused online consultation." icon={Video} gradient="from-purple-500 to-pink-500" darkMode={darkMode} />
+            <StepCard step="03" title="Review your next steps" desc="Find your consultation notes, care guidance, and follow-up details in your case record." icon={BriefcaseMedical} gradient="from-green-500 to-emerald-500" darkMode={darkMode} />
           </div>
         </div>
       </section>
@@ -510,15 +510,15 @@ const Home = () => {
               <span className={`text-sm font-medium ${darkMode ? "text-indigo-300" : "text-indigo-700"}`}>Why It Works</span>
             </div>
             <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? "text-blue-400" : "text-blue-600"}`}>
-              Why photo-led dermatology helps
+              Online care with the details that matter
             </h2>
-            <p className={`text-lg ${darkMode ? "text-gray-400" : "text-gray-600"}`}>More useful information for the symptoms you can see and feel.</p>
+            <p className={`text-lg ${darkMode ? "text-gray-400" : "text-gray-600"}`}>A more informed conversation starts with a complete picture of your concern.</p>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
-            <BenefitCard title="Track visible change" desc="Photos and timelines help record whether a rash, spot, or patch is spreading, fading, or recurring." icon={Clock} color="from-blue-500 to-blue-600" darkMode={darkMode} />
-            <BenefitCard title="Bring the right details" desc="Symptoms such as itch, pain, scaling, fever, or product exposure are captured with the case." icon={Smile} color="from-green-500 to-green-600" darkMode={darkMode} />
-            <BenefitCard title="Keep cases private" desc="Your submitted health information and images stay connected to your secure account." icon={ShieldCheck} color="from-purple-500 to-purple-600" darkMode={darkMode} />
-            <BenefitCard title="Condition-aware reviews" desc="The intake is shaped around common dermatology concerns rather than a generic health form." icon={Stethoscope} color="from-orange-500 to-orange-600" darkMode={darkMode} />
+            <BenefitCard title="Save time before you meet" desc="Share the key details in advance, so your online consultation can focus on your concern." icon={Clock} color="from-blue-500 to-blue-600" darkMode={darkMode} />
+            <BenefitCard title="Make your concern clearer" desc="Photos and symptoms give your clinician a fuller picture of what you are experiencing." icon={Smile} color="from-green-500 to-green-600" darkMode={darkMode} />
+            <BenefitCard title="Keep everything together" desc="Your submitted information, consultation notes, and follow-up details stay with your case." icon={ShieldCheck} color="from-purple-500 to-purple-600" darkMode={darkMode} />
+            <BenefitCard title="Get guidance for next steps" desc="Use your consultation record to understand the care guidance and follow-up recommended for you." icon={Stethoscope} color="from-orange-500 to-orange-600" darkMode={darkMode} />
           </div>
         </div>
       </section>
@@ -536,34 +536,34 @@ const Home = () => {
               darkMode ? "bg-yellow-900/30" : "bg-yellow-100"
             }`}>
               <MessageSquare className={`w-4 h-4 ${darkMode ? "text-yellow-400" : "text-yellow-600"}`} />
-              <span className={`text-sm font-medium ${darkMode ? "text-yellow-300" : "text-yellow-700"}`}>Got Questions?</span>
+              <span className={`text-sm font-medium ${darkMode ? "text-yellow-300" : "text-yellow-700"}`}>Questions answered</span>
             </div>
             <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-900"}`}>
               Frequently Asked Questions
             </h2>
-            <p className={`text-lg ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Everything you need to know</p>
+            <p className={`text-lg ${darkMode ? "text-gray-400" : "text-gray-600"}`}>Helpful information before you start your online consultation.</p>
           </div>
           <div className="space-y-4">
             {[
               {
-                question: "Is tele-dermatology safe for children?",
-                answer: "Your account keeps submitted photos, symptoms, and case updates together. Review the platform privacy policy and your clinician's credentials before starting care."
+                question: "Who can use Dermaslot?",
+                answer: "Dermaslot is designed for people seeking online dermatology guidance. A parent or guardian should submit and manage a case for a child."
               },
               {
-                question: "Can I get a prescription online?",
-                answer: "Absolutely. After the dermatologist reviews your case, you receive a digital prescription for medications that can be purchased at any pharmacy. We also offer direct pharmacy delivery in select areas."
+                question: "What do I need to start?",
+                answer: "You will need clear photos of the concern and a few details, such as when it started, where it appears, symptoms, and treatments you have already tried."
               },
               {
                 question: "What conditions can be treated online?",
-                answer: "Common skin conditions such as eczema, rashes, acne, birthmarks, fungal infections, allergies, and dermatitis can be diagnosed and treated online. For emergency cases, we'll guide you to the nearest care facility."
+                answer: "You can start with common concerns such as eczema, rashes, acne, birthmarks, fungal infections, allergies, dermatitis, and changes in skin pigmentation. Your clinician will advise if an in-person visit is more appropriate."
               },
               {
-                question: "How long does it take to receive a diagnosis?",
-                answer: "Most cases are reviewed within a few hours. Urgent cases are prioritized and may receive faster responses depending on availability. Our average response time is under 2 hours during business hours."
+                question: "When will I hear back?",
+                answer: "Response times depend on clinician availability and the details of your case. You can check your case record for consultation updates and next steps."
               },
               {
-                question: "Do I need a prior appointment?",
-                answer: "No appointment is required. You can start anytime by uploading photos and details, and a dermatologist will respond as soon as your case is reviewed. We offer both immediate and scheduled consultations."
+                question: "Is this suitable for urgent or emergency care?",
+                answer: "No. If you have severe symptoms, trouble breathing, rapidly spreading swelling or rash, high fever, or any medical emergency, seek immediate in-person medical care or contact local emergency services."
               },
             ].map((faq, index) => (
               <details key={index} className={`group rounded-xl transition-all duration-300 ${
@@ -607,10 +607,10 @@ const Home = () => {
         <div className="absolute inset-0 bg-[radial-gradient(circle,_rgba(255,255,255,0.1)_1px,_transparent_1px)] [background-size:24px_24px] opacity-10"></div>
         <div className="relative max-w-5xl mx-auto px-4 text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Ready to Get Expert Care for Your Skin?
+            Ready to start your online consultation?
           </h2>
           <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Join thousands of patients who trust our dermatologists
+            Share your concern today and take the next step toward clearer skin care guidance.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-5">
             <Link
@@ -621,29 +621,29 @@ const Home = () => {
                   : "bg-white text-blue-600 hover:shadow-xl"
               }`}
             >
-              Book Consultation Now
+              Start Your Consultation
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </Link>
             <Link
               to="/doctors"
               className="px-10 py-4 rounded-xl bg-transparent text-white border-2 border-white font-bold hover:bg-white/10 transition-all inline-flex items-center justify-center gap-2"
             >
-              Meet Our Doctors
+              View Our Doctors
               <ArrowRight size={20} />
             </Link>
           </div>
           <div className="mt-12 flex flex-wrap justify-center gap-6 text-white/80 text-sm">
             <div className="flex items-center gap-2">
               <CheckCircle size={16} className="text-green-300" />
-              <span>No Hidden Fees</span>
+              <span>Easy online intake</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle size={16} className="text-green-300" />
-              <span>Cancel Anytime</span>
+              <span>Secure case record</span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle size={16} className="text-green-300" />
-              <span>Money-Back Guarantee</span>
+              <span>Care from home</span>
             </div>
           </div>
         </div>
