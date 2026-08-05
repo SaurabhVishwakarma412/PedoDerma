@@ -243,12 +243,12 @@ const Home = () => {
         <div className={`relative z-10 max-w-5xl mx-auto px-4 text-center transform transition-all duration-1000 ${
           isHeroLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
         }`}>
-          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+          <div className="inline-flex m-2 items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
             <Sparkles className="w-4 h-4 text-yellow-300" />
             <span className="text-white text-sm font-medium">Online dermatology consultations, made simple</span>
           </div>
 
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-4 text-white leading-tight drop-shadow-2xl">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold  text-white leading-tight drop-shadow-2xl">
             Dermaslot
             <span className="block bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-transparent">
               Expert skin care, from wherever you are
@@ -259,7 +259,7 @@ const Home = () => {
             Start a secure online consultation by sharing photos and details about your skin concern. Connect with a dermatology professional and keep your care plan in one place.
           </p>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-4">
             <Link
               to="/cases/submit"
               className="group relative px-8 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold hover:shadow-2xl transition-all transform hover:scale-105 inline-flex items-center justify-center gap-2 overflow-hidden"
@@ -276,7 +276,7 @@ const Home = () => {
             </Link>
           </div>
 
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap m-2 justify-center gap-4">
             {[
               { icon: ShieldCheck, text: "Secure case details", color: "text-green-400" },
               { icon: Camera, text: "Share photos easily", color: "text-blue-300" },
