@@ -1,6 +1,7 @@
 // frontend/src/pages/Home.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import {
   CheckCircle, Clock, Shield, Video, MessageSquare, Star, ArrowRight,
   UsersRound, Stethoscope, UserStar, BriefcaseMedical, Camera,
@@ -196,6 +197,8 @@ const BenefitCard = ({ title, desc, icon: Icon, color, darkMode }) => (
 );
 
 const Home = () => {
+  const { role } = useAuth();
+  const consultationPath = role === "doctor" ? "/doctor/dashboard" : "/cases/submit";
   const [isHeroLoaded, setIsHeroLoaded] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
@@ -261,7 +264,7 @@ const Home = () => {
 
           <div className="flex flex-col sm:flex-row justify-center gap-4 mb-4">
             <Link
-              to="/cases/submit"
+              to={consultationPath}
               className="group relative px-8 py-4 rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold hover:shadow-2xl transition-all transform hover:scale-105 inline-flex items-center justify-center gap-2 overflow-hidden"
             >
               <span className="relative z-10">Start Your Consultation</span>
@@ -614,7 +617,7 @@ const Home = () => {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-5">
             <Link
-              to="/cases/submit"
+              to={consultationPath}
               className={`group px-10 py-4 rounded-xl font-bold hover:shadow-2xl transition-all transform hover:scale-105 inline-flex items-center justify-center gap-2 ${
                 darkMode 
                   ? "bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:shadow-blue-500/25" 
