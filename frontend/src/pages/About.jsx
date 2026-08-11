@@ -20,22 +20,23 @@ const About = () => {
     });
 
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
+    setDarkMode(document.documentElement.classList.contains("dark"));
 
     return () => observer.disconnect();
   }, []);
 
   return (
-    <main className={`mx-auto px-4 py-12 text-base ${darkMode ? "bg-gray-900 text-gray-100" : ""}`}>
+    <main className={`min-h-screen mx-auto px-4 py-12 text-base transition-colors duration-300 ${darkMode ? "bg-gray-900 text-gray-100" : "bg-white"}`}>
       
       {/* SECTION 1 */}
       <section className="m-4 lg:mx-24 md:mx-12 my-20">
         <div className="grid md:grid-cols-2 gap-10 items-center">
           {/* TEXT LEFT */}
           <div>
-            <h2 className="text-4xl font-bold text-blue-900 mb-5">
+            <h2 className={`text-4xl font-bold mb-5 ${darkMode ? "text-blue-300" : "text-blue-900"}`}>
               What is Tele-Dermatology?
             </h2>
-            <p className="text-gray-700 text-lg leading-relaxed">
+            <p className={`text-lg leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
               Dermaslot is a dermatology-focused case platform for concerns that are visible,
               uncomfortable, or changing. Upload photographs of the affected area, record symptoms
               such as itch, pain, scaling, or discharge, and build a clearer clinical picture before
@@ -62,8 +63,8 @@ const About = () => {
 
           {/* TEXT RIGHT */}
           <div>
-            <h2 className="text-4xl font-bold text-blue-900 mb-5">Conditions We Treat</h2>
-            <p className="text-gray-700 text-lg leading-relaxed">
+            <h2 className={`text-4xl font-bold mb-5 ${darkMode ? "text-blue-300" : "text-blue-900"}`}>Conditions We Treat</h2>
+            <p className={`text-lg leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
               Dermaslot cases can describe eczema and atopic dermatitis, acne and folliculitis,
               psoriasis, vitiligo, contact reactions, fungal infections, hives, recurring rashes,
               and new or changing lesions. Record where it appears, when it began, how it has changed,
@@ -78,8 +79,8 @@ const About = () => {
         <div className="grid md:grid-cols-2 gap-10 items-center">
           {/* TEXT LEFT */}
           <div>
-            <h2 className="text-4xl font-bold text-blue-900 mb-5">Consultation Options</h2>
-            <p className="text-gray-700 text-lg leading-relaxed">
+            <h2 className={`text-4xl font-bold mb-5 ${darkMode ? "text-blue-300" : "text-blue-900"}`}>Consultation Options</h2>
+            <p className={`text-lg leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
               We offer flexible consultation modes that fit your unique needs.
               Patients can attend a fully online consultation from home or schedule an
               in-person visit. Most consultations are confirmed within
@@ -107,8 +108,8 @@ const About = () => {
 
           {/* TEXT RIGHT */}
           <div>
-            <h2 className="text-4xl font-bold text-blue-900 mb-5">Dermatology Review Context</h2>
-            <p className="text-gray-700 text-lg leading-relaxed">
+            <h2 className={`text-4xl font-bold mb-5 ${darkMode ? "text-blue-300" : "text-blue-900"}`}>Dermatology Review Context</h2>
+            <p className={`text-lg leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
               Dermatology reviews depend on good context. Dermaslot gives clinicians a chronological
               record of symptoms and images, helping them assess pattern, distribution, severity, and
               response to earlier care. Provider credentials and availability are presented in the
@@ -123,8 +124,8 @@ const About = () => {
         <div className="grid md:grid-cols-2 gap-10 items-center">
           {/* TEXT LEFT */}
           <div>
-            <h2 className="text-4xl font-bold text-blue-900 mb-5">Accessible, Fast & Secure</h2>
-            <p className="text-gray-700 text-lg leading-relaxed">
+            <h2 className={`text-4xl font-bold mb-5 ${darkMode ? "text-blue-300" : "text-blue-900"}`}>Accessible, Fast & Secure</h2>
+            <p className={`text-lg leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
               Your case connects photos, health details, messages, appointment notes, and follow-up
               guidance in one account. Use a phone or computer to add updates when a flare changes,
               a new area is involved, or a treatment causes a reaction.
@@ -150,8 +151,8 @@ const About = () => {
 
           {/* TEXT RIGHT */}
           <div>
-            <h2 className="text-4xl font-bold text-blue-900 mb-5">Get Started Today</h2>
-            <p className="text-gray-700 text-lg leading-relaxed">
+            <h2 className={`text-4xl font-bold mb-5 ${darkMode ? "text-blue-300" : "text-blue-900"}`}>Get Started Today</h2>
+            <p className={`text-lg leading-relaxed ${darkMode ? "text-gray-300" : "text-gray-700"}`}>
               Traditional dermatology waitlists can stretch over several months, delaying essential
               treatment for patients who need timely care. With Dermaslot,
               you can access expert help within days—sometimes even on the same day. Start your
