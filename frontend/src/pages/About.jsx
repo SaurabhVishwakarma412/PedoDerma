@@ -1,6 +1,7 @@
 // frontend/src/pages/About.jsx
 
 import React from "react";
+import { Link } from "react-router-dom";
 
 // Import your images
 import image1 from "../assets/what.jpg";
@@ -157,9 +158,12 @@ const About = () => {
               journey toward healthier skin now.
             </p>
 
-            <button className="mt-6 px-6 py-3 bg-blue-700 text-white text-lg rounded hover:scale-105 transition">
-              Call Us to Get Started ✆
-            </button>
+            <Link
+              to="/contact"
+              className="inline-block mt-6 px-6 py-3 bg-blue-700 text-white text-lg rounded hover:scale-105 transition"
+            >
+              Contact Us to Get Started ✆
+            </Link>
           </div>
         </div>
       </section>
