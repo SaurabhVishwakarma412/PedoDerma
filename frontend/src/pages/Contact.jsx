@@ -253,7 +253,7 @@ const Contact = () => {
                       onChange={handleChange}
                       required
                       className={`w-full px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition ${darkMode
-                        ? "bg-gray-700 text-gray-100 border-gray-600"
+                        ? "bg-gray-700 text-gray-100 border-gray-600 placeholder:text-gray-400"
                         : "bg-gray-50 border border-gray-300"
                         }`}
                     >
@@ -275,7 +275,7 @@ const Contact = () => {
                       onChange={handleChange}
                       required
                       className={`w-full px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition resize-y ${darkMode
-                        ? "bg-gray-700 text-gray-100 border-gray-600"
+                        ? "bg-gray-700 text-gray-100 border-gray-600 placeholder:text-gray-400"
                         : "bg-gray-50 border border-gray-300"
                         }`}
                       placeholder={
@@ -309,7 +309,7 @@ const Contact = () => {
                       </>
                     )}
                   </button>
-                  <p className={`text-sm mt-3 ${darkMode ? "text-gray-500" : "text-gray-500"}`}>
+                  <p className={`text-sm mt-3 ${darkMode ? "text-gray-400" : "text-gray-500"}`}>
                     By submitting, you agree to our Privacy Policy and Terms of Service.
                   </p>
                 </div>
@@ -478,7 +478,7 @@ const Contact = () => {
               <div className="text-center">
                 <Globe className={`w-12 h-12 mx-auto mb-2 ${darkMode ? "text-gray-500" : "text-gray-400"}`} />
                 <p className={darkMode ? "text-gray-400" : "text-gray-500"}>Interactive Map View</p>
-                <p className={`text-sm ${darkMode ? "text-gray-500" : "text-gray-400"}`}>LPU, Phagwara, Punjab</p>
+                <p className={`text-sm ${darkMode ? "text-gray-400" : "text-gray-400"}`}>LPU, Phagwara, Punjab</p>
               </div>
             </div>
           </div>
