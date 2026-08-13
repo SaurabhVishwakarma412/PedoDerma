@@ -45,13 +45,14 @@ io.on("connection", (socket) => {
   });
 
   // Handle sending messages
-  socket.on("send_message", async (data) => {
+  socket.on("send_message", async (data, acknowledgement) => {
     const { from, to, message, timestamp } = data;
     console.log(`Message received from ${from} to ${to}`);
 
     // Save message to database
+    let newMessage;
     try {
-      const newMessage = new Message({
+      newMessage = new Message({
         from,
         to,
         message,
@@ -61,6 +62,10 @@ io.on("connection", (socket) => {
       console.log("Message saved to database");
     } catch (err) {
       console.error("Error saving message:", err);
+      if (typeof acknowledgement === "function") {
+        acknowledgement({ success: false });
+      }
+      return;
     }
 
     // Send to recipient if online
@@ -68,13 +73,19 @@ io.on("connection", (socket) => {
     if (recipientSocketId) {
       console.log(`Sending message to recipient socket ${recipientSocketId}`);
       io.to(recipientSocketId).emit("receive_message", {
+        _id: newMessage._id,
         from,
+        to,
         message,
         timestamp,
         senderSocketId: socket.id
       });
     } else {
       console.log(`Recipient ${to} is not online. Message saved to DB.`);
+    }
+
+    if (typeof acknowledgement === "function") {
+      acknowledgement({ success: true, data: newMessage });
     }
   });
 

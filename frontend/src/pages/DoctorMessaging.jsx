@@ -9,6 +9,7 @@ import {
 import { useAuth } from "../context/AuthContext.jsx";
 import API from "../services/api";
 import ChatComposer from "../components/ChatComposer";
+import { deduplicateChatMessages } from "../utils/chatMessages";
 
 const DoctorMessaging = () => {
   const { user } = useAuth();
@@ -167,14 +168,7 @@ const DoctorMessaging = () => {
         headers: { "x-doctor-id": user._id }
       });
       
-      const seenMessages = new Set();
-      const formattedMessages = response.data.data
-        .filter((msg) => {
-          const messageKey = `${msg.message}_${new Date(msg.timestamp).getTime()}`;
-          if (seenMessages.has(messageKey)) return false;
-          seenMessages.add(messageKey);
-          return true;
-        })
+      const formattedMessages = deduplicateChatMessages(response.data.data)
         .map((msg) => ({
           ...msg,
           isOwn: msg.from === user._id || msg.from?._id === user._id,
@@ -212,31 +206,36 @@ const DoctorMessaging = () => {
 
     setMessages((prev) => [...prev, messageData]);
 
-    if (socketRef.current) {
+    if (socketRef.current?.connected) {
       socketRef.current.emit("send_message", {
         from: user._id,
         to: selectedPatient._id,
         message,
         timestamp: new Date(),
         tempId: tempId
+      }, (response) => {
+        setMessages(prev => prev.map(msg =>
+          msg.tempId === tempId
+            ? { ...msg, _id: response?.data?._id || msg._id, status: response?.success ? 'delivered' : 'error' }
+            : msg
+        ));
       });
-    }
-
-    try {
-      await API.post("/messages/send", {
-        from: user._id,
-        to: selectedPatient._id,
-        message
-      });
-      
-      setMessages(prev => prev.map(msg => 
-        msg.tempId === tempId ? { ...msg, status: 'delivered' } : msg
-      ));
-    } catch (error) {
-      console.error("Error saving message:", error);
-      setMessages(prev => prev.map(msg => 
-        msg.tempId === tempId ? { ...msg, status: 'error' } : msg
-      ));
+    } else {
+      try {
+        await API.post("/messages/send", {
+          from: user._id,
+          to: selectedPatient._id,
+          message
+        });
+        setMessages(prev => prev.map(msg =>
+          msg.tempId === tempId ? { ...msg, status: 'delivered' } : msg
+        ));
+      } catch (error) {
+        console.error("Error saving message:", error);
+        setMessages(prev => prev.map(msg =>
+          msg.tempId === tempId ? { ...msg, status: 'error' } : msg
+        ));
+      }
     }
 
     return true;

@@ -11,6 +11,7 @@ import { useAuth } from "../context/AuthContext.jsx";
 import API from "../services/api";
 import { getMyCases } from "../services/patientAPI";
 import ChatComposer from "../components/ChatComposer";
+import { deduplicateChatMessages } from "../utils/chatMessages";
 
 const MessagingPage = () => {
   const { user } = useAuth();
@@ -173,7 +174,7 @@ const MessagingPage = () => {
       const response = await API.get(`/messages/chat/${selectedDoctor._id}`, {
         headers: { "x-parent-id": user._id }
       });
-      const formattedMessages = response.data.data.map((msg) => ({
+      const formattedMessages = deduplicateChatMessages(response.data.data).map((msg) => ({
         ...msg,
         isOwn: msg.from === user._id || msg.from?.toString() === user._id?.toString(),
         status: 'read'
@@ -209,30 +210,35 @@ const MessagingPage = () => {
 
     setMessages((prev) => [...prev, messageData]);
 
-    if (socketRef.current) {
+    if (socketRef.current?.connected) {
       socketRef.current.emit("send_message", {
         from: user._id,
         to: selectedDoctor._id,
         message,
         timestamp: new Date()
+      }, (response) => {
+        setMessages(prev => prev.map(msg =>
+          msg._id === tempId
+            ? { ...msg, _id: response?.data?._id || msg._id, status: response?.success ? 'delivered' : 'error' }
+            : msg
+        ));
       });
-    }
-
-    try {
-      await API.post("/messages/send", {
-        from: user._id,
-        to: selectedDoctor._id,
-        message
-      });
-      
-      setMessages(prev => prev.map(msg => 
-        msg._id === tempId ? { ...msg, status: 'delivered' } : msg
-      ));
-    } catch (error) {
-      console.error("Error saving message:", error);
-      setMessages(prev => prev.map(msg => 
-        msg._id === tempId ? { ...msg, status: 'error' } : msg
-      ));
+    } else {
+      try {
+        await API.post("/messages/send", {
+          from: user._id,
+          to: selectedDoctor._id,
+          message
+        });
+        setMessages(prev => prev.map(msg =>
+          msg._id === tempId ? { ...msg, status: 'delivered' } : msg
+        ));
+      } catch (error) {
+        console.error("Error saving message:", error);
+        setMessages(prev => prev.map(msg =>
+          msg._id === tempId ? { ...msg, status: 'error' } : msg
+        ));
+      }
     }
 
     return true;
