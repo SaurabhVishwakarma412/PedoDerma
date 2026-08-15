@@ -45,7 +45,7 @@ const ChatComposer = ({ darkMode, onSend, onTyping, recipientId }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={`border-t p-2 sm:p-3 ${darkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-[#f0f2f5]"} shrink-0`}>
+    <form onSubmit={handleSubmit} className={`relative z-50 border-t p-2 sm:p-3 ${darkMode ? "border-gray-700 bg-gray-800" : "border-gray-200 bg-[#f0f2f5]"} shrink-0`}>
       <div className="relative flex items-center gap-1 sm:gap-2">
         <button type="button" className={`hidden p-2 rounded-lg transition sm:block ${darkMode ? "hover:bg-gray-700 text-gray-400" : "hover:bg-white text-gray-500"}`}><Paperclip className="w-5 h-5" /></button>
         <div className="relative">
@@ -59,9 +59,9 @@ const ChatComposer = ({ darkMode, onSend, onTyping, recipientId }) => {
             <Smile className="w-5 h-5" />
           </button>
           {showEmojiPicker && (
-            <div className={`absolute bottom-full left-0 z-10 mb-2 grid grid-cols-4 gap-1 rounded-xl border p-2 shadow-lg ${darkMode ? "border-gray-600 bg-gray-800" : "border-gray-200 bg-white"}`} role="group" aria-label="Emoji picker">
+            <div className={`absolute bottom-full left-0 z-50 mb-2 grid w-fit grid-cols-4 gap-1 rounded-xl border p-2 shadow-lg ${darkMode ? "border-gray-600 bg-gray-800" : "border-gray-200 bg-white"}`} role="group" aria-label="Emoji picker">
               {emojis.map((emoji) => (
-                <button key={emoji} type="button" onClick={() => insertEmoji(emoji)} className={`rounded p-1.5 text-xl transition ${darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100"}`} aria-label={`Add ${emoji}`}>
+                <button key={emoji} type="button" onClick={() => insertEmoji(emoji)} className={`flex h-10 w-10 items-center justify-center text-xl leading-none transition ${darkMode ? "bg-gray-700 hover:bg-gray-600" : "bg-gray-100 hover:bg-gray-200"}`} aria-label={`Add ${emoji}`}>
                   {emoji}
                 </button>
               ))}
