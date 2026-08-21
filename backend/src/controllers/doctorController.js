@@ -46,7 +46,8 @@ exports.loginDoctor = async (req, res) => {
     }
     
     // Generate token and return
-    const token = generateToken(doctor._id, "doctor");
+    const deviceId = req.headers["x-device-id"] || "";
+    const token = generateToken(doctor._id, "doctor", deviceId);
     
     res.json({
       token,

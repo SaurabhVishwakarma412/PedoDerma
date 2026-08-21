@@ -9,6 +9,13 @@ const authMiddleware = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    // Enforce device-specific session
+    const requestDeviceId = req.headers["x-device-id"] || "";
+    if (decoded.deviceId !== requestDeviceId) {
+      return res.status(401).json({ message: "Session belongs to a different device. Please log in again." });
+    }
+
     req.user =
       decoded.role === "doctor"
         ? await Doctor.findById(decoded.id).select("-password")

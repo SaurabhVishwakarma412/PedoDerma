@@ -1,5 +1,16 @@
 import axios from "axios";
 
+// Retrieve or generate a unique device ID
+let deviceId = localStorage.getItem("deviceId");
+if (!deviceId) {
+  try {
+    deviceId = typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
+  } catch (e) {
+    deviceId = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
+  }
+  localStorage.setItem("deviceId", deviceId);
+}
+
 const api = axios.create({
   baseURL: "https://pedoderma-backend.onrender.com/api",
   withCredentials: true,
@@ -13,6 +24,9 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    // Attach device ID to all outgoing requests
+    config.headers["X-Device-ID"] = deviceId;
 
     return config;
   },

@@ -13,6 +13,11 @@ export const loginParent = (data) => {
   return api.post("/patients/login", data);
 };
 
+// Send registration OTP
+export const sendOtp = (email) => {
+  return api.post("/patients/send-otp", { email });
+};
+
 // case management ----
 // Get logged-in parent's cases
 export const getMyCases = () => {

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
-import { 
+import {
   MessageSquare, Phone, Video, MoreVertical, Search, ArrowLeft,
   Users, Clock, CheckCheck, Check, Mic, User,
   Star, Shield, Activity, Calendar, PhoneCall, VideoIcon, Circle,
@@ -79,20 +79,20 @@ const DoctorMessaging = () => {
 
     newSocket.on("receive_message", (data) => {
       console.log("Received message:", data);
-      
+
       if (data.from === user._id) return;
-      
+
       const activePatient = selectedPatientRef.current;
       const isFromSelectedPatient = activePatient &&
         (data.from === activePatient._id || data.from === activePatient.userId);
-      
+
       if (isFromSelectedPatient) {
         setMessages((prev) => {
-          const isDuplicate = prev.some(msg => 
-            msg.message === data.message && 
+          const isDuplicate = prev.some(msg =>
+            msg.message === data.message &&
             Math.abs(new Date(msg.timestamp).getTime() - new Date(data.timestamp).getTime()) < 1000
           );
-          
+
           if (!isDuplicate) {
             return [...prev, {
               from: data.from,
@@ -167,14 +167,14 @@ const DoctorMessaging = () => {
       const response = await API.get(`/messages/doctor/chat/${selectedPatient._id}`, {
         headers: { "x-doctor-id": user._id }
       });
-      
+
       const formattedMessages = deduplicateChatMessages(response.data.data)
         .map((msg) => ({
           ...msg,
           isOwn: msg.from === user._id || msg.from?._id === user._id,
           status: 'read'
         }));
-      
+
       setMessages(formattedMessages);
     } catch (error) {
       console.error("Error fetching chat history:", error);
@@ -257,7 +257,7 @@ const DoctorMessaging = () => {
   );
 
   const getMessageStatusIcon = (status) => {
-    switch(status) {
+    switch (status) {
       case 'sending': return <Clock className="w-3 h-3" />;
       case 'delivered': return <Check className="w-3 h-3" />;
       case 'read': return <CheckCheck className="w-3 h-3" />;
@@ -275,24 +275,22 @@ const DoctorMessaging = () => {
       <button
         type="button"
         onClick={onClick}
-        className={`w-full p-4 text-left transition-all duration-300 ${
-          isSelected
-            ? darkMode 
-              ? "bg-blue-900/30 border-l-4 border-blue-500" 
+        className={`w-full p-4 text-left transition-all duration-300 ${isSelected
+            ? darkMode
+              ? "bg-blue-900/30 border-l-4 border-blue-500"
               : "bg-blue-50 border-l-4 border-blue-600"
             : darkMode
               ? "hover:bg-gray-700/50 border-l-4 border-transparent"
               : "hover:bg-gray-50 border-l-4 border-transparent"
-        } ${darkMode ? "border-b border-gray-700" : "border-b border-gray-100"}`}
+          } ${darkMode ? "border-b border-gray-700" : "border-b border-gray-100"}`}
       >
         <div className="flex items-center gap-3">
           <div className="relative">
             <div className={`w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 text-white flex items-center justify-center text-lg font-semibold shadow-lg`}>
               {patient.name?.charAt(0) || "P"}
             </div>
-            <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 ${
-              darkMode ? "border-gray-800" : "border-white"
-            } ${onlineStatus[patient._id] ? "bg-green-500" : "bg-gray-400"}`}></div>
+            <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 ${darkMode ? "border-gray-800" : "border-white"
+              } ${onlineStatus[patient._id] ? "bg-green-500" : "bg-gray-400"}`}></div>
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between">
@@ -312,11 +310,11 @@ const DoctorMessaging = () => {
               {conversation.lastMessage}
             </p>
           </div>
-          {conversation.unreadCount > 0 && (
+          {/* {conversation.unreadCount > 0 && (
             <span className="px-2 py-1 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full animate-pulse">
               {conversation.unreadCount}
             </span>
-          )}
+          )} */}
         </div>
       </button>
     );
@@ -325,22 +323,19 @@ const DoctorMessaging = () => {
   // Message Bubble Component
   const MessageBubble = ({ message }) => (
     <div className={`flex ${message.isOwn ? "justify-end" : "justify-start"} animate-fade-in-up`}>
-      <div className={`max-w-xs lg:max-w-md relative ${
-        message.isOwn ? "ml-auto" : "mr-auto"
-      }`}>
+      <div className={`max-w-xs lg:max-w-md relative ${message.isOwn ? "ml-auto" : "mr-auto"
+        }`}>
         <div
-          className={`px-4 py-2 rounded-2xl ${
-            message.isOwn
+          className={`px-4 py-2 rounded-2xl ${message.isOwn
               ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-br-sm"
               : darkMode
                 ? "bg-gray-700 text-gray-200 rounded-bl-sm"
                 : "bg-gray-100 text-gray-800 rounded-bl-sm"
-          }`}
+            }`}
         >
           <p className="text-sm break-words">{message.message}</p>
-          <div className={`flex items-center justify-end gap-1 mt-1 ${
-            message.isOwn ? "text-blue-100" : darkMode ? "text-gray-400" : "text-gray-500"
-          }`}>
+          <div className={`flex items-center justify-end gap-1 mt-1 ${message.isOwn ? "text-blue-100" : darkMode ? "text-gray-400" : "text-gray-500"
+            }`}>
             <span className="text-xs">
               {new Date(message.timestamp).toLocaleTimeString([], {
                 hour: "2-digit",
@@ -355,9 +350,8 @@ const DoctorMessaging = () => {
   );
 
   return (
-    <main className={`min-h-screen transition-colors duration-300 ${
-      darkMode ? "bg-gray-900" : "bg-gradient-to-br from-gray-50 via-white to-blue-50/30"
-    }`}>
+    <main className={`min-h-screen transition-colors duration-300 ${darkMode ? "bg-gray-900" : "bg-gradient-to-br from-gray-50 via-white to-blue-50/30"
+      }`}>
       {/* Header */}
       <div className="hidden bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white lg:block">
         <div className="max-w-7xl mx-auto px-4 py-8">
@@ -375,20 +369,18 @@ const DoctorMessaging = () => {
 
       <div className="mx-auto max-w-7xl lg:px-4 lg:py-6">
         {error && (
-          <div className={`mb-6 p-4 rounded-lg border ${
-            darkMode 
-              ? "bg-red-900/20 border-red-800" 
+          <div className={`mb-6 p-4 rounded-lg border ${darkMode
+              ? "bg-red-900/20 border-red-800"
               : "bg-red-50 border-red-200"
-          }`}>
+            }`}>
             <p className={darkMode ? "text-red-400" : "text-red-700"}>⚠️ {error}</p>
           </div>
         )}
 
-        <div className={`overflow-hidden transition-colors duration-300 lg:rounded-xl lg:shadow-xl ${
-          darkMode 
-            ? "bg-gray-800/90 backdrop-blur-sm border border-gray-700/50" 
+        <div className={`overflow-hidden transition-colors duration-300 lg:rounded-xl lg:shadow-xl ${darkMode
+            ? "bg-gray-800/90 backdrop-blur-sm border border-gray-700/50"
             : "bg-white border border-gray-100"
-        }`}>
+          }`}>
           <div className="grid h-[100dvh] min-h-[520px] overflow-hidden lg:h-[calc(100vh-200px)] lg:grid-cols-3">
             {/* Conversations List Sidebar */}
             <div className={`${selectedPatient ? "hidden lg:flex" : "flex"} border-r ${darkMode ? "border-gray-700" : "border-gray-200"} h-full min-h-0 flex-col overflow-hidden`}>
@@ -401,11 +393,10 @@ const DoctorMessaging = () => {
                     placeholder="Search patients..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className={`w-full pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${
-                      darkMode 
-                        ? "bg-gray-700 border-gray-600 text-gray-200 placeholder-gray-500" 
+                    className={`w-full pl-10 pr-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition ${darkMode
+                        ? "bg-gray-700 border-gray-600 text-gray-200 placeholder-gray-500"
                         : "bg-gray-50 border border-gray-300"
-                    }`}
+                      }`}
                   />
                 </div>
               </div>
@@ -459,9 +450,8 @@ const DoctorMessaging = () => {
                         <div className={`w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 text-white flex items-center justify-center text-lg font-semibold shadow-lg`}>
                           {selectedPatient.name?.charAt(0) || "P"}
                         </div>
-                        <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 ${
-                          darkMode ? "border-gray-800" : "border-white"
-                        } ${onlineStatus[selectedPatient._id] ? "bg-green-500" : "bg-gray-400"}`}></div>
+                        <div className={`absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 ${darkMode ? "border-gray-800" : "border-white"
+                          } ${onlineStatus[selectedPatient._id] ? "bg-green-500" : "bg-gray-400"}`}></div>
                       </div>
 
                       <div>
@@ -481,19 +471,16 @@ const DoctorMessaging = () => {
                     </div>
 
                     <div className="flex items-center gap-1">
-                      <button type="button" aria-label="Start phone call" className={`hidden p-2 rounded-lg transition sm:block ${
-                        darkMode ? "hover:bg-gray-700" : "hover:bg-white"
-                      }`}>
+                      <button type="button" aria-label="Start phone call" className={`hidden p-2 rounded-lg transition sm:block ${darkMode ? "hover:bg-gray-700" : "hover:bg-white"
+                        }`}>
                         <Phone className={`w-5 h-5 ${darkMode ? "text-green-400" : "text-green-600"}`} />
                       </button>
-                      <button type="button" aria-label="Start video call" className={`hidden p-2 rounded-lg transition sm:block ${
-                        darkMode ? "hover:bg-gray-700" : "hover:bg-white"
-                      }`}>
+                      <button type="button" aria-label="Start video call" className={`hidden p-2 rounded-lg transition sm:block ${darkMode ? "hover:bg-gray-700" : "hover:bg-white"
+                        }`}>
                         <Video className={`w-5 h-5 ${darkMode ? "text-blue-400" : "text-blue-600"}`} />
                       </button>
-                      <button type="button" aria-label="More conversation options" className={`p-2 rounded-lg transition ${
-                        darkMode ? "hover:bg-gray-700" : "hover:bg-white"
-                      }`}>
+                      <button type="button" aria-label="More conversation options" className={`p-2 rounded-lg transition ${darkMode ? "hover:bg-gray-700" : "hover:bg-white"
+                        }`}>
                         <MoreVertical className={`w-5 h-5 ${darkMode ? "text-gray-400" : "text-gray-600"}`} />
                       </button>
                     </div>
