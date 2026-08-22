@@ -171,6 +171,19 @@ Parent Sees Diagnosis Report
 ### Clone the repository
 - git clone https://github.com/SaurabhVishwakarma412/PedoDerma.git
 
+### Run locally
+
+Install dependencies in both applications, then run the backend and frontend in separate terminals:
+
+```bash
+npm install --prefix backend
+npm install --prefix frontend
+npm run backend:dev
+npm run frontend
+```
+
+The frontend uses `frontend/.env` and sends API requests to `http://localhost:5000/api` by default. For a deployed frontend, set `VITE_API_URL` to the public backend URL in the hosting provider's environment variables; `localhost` only points to the visitor's own computer.
+
 
 ---
 
