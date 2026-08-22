@@ -5,18 +5,9 @@ const connectDB = require("./config/db.js");
 const Message = require("./models/Message");
 const app = require("./app");
 const PORT = process.env.PORT || 5000;
-const cors = require("cors");
 const contactRoutes = require("./routes/contactRoutes");
 
 connectDB();
-
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://pedo-derma.vercel.app"
-  ],
-  credentials: true
-}));
 
 app.use("/api", contactRoutes);
 
@@ -24,9 +15,10 @@ const server = http.createServer(app);
 const io = socketIO(server, {
   cors: {
     origin: [
-  "http://localhost:5173",
-  "https://pedo-derma.vercel.app"
-],
+      "http://localhost:5173",
+      "http://127.0.0.1:5173",
+      "https://pedo-derma.vercel.app"
+    ],
     credentials: true
   }
 });
