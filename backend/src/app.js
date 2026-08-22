@@ -24,5 +24,6 @@ app.use("/api/cases", require("./routes/caseRoutes"));
 app.use("/api/doctors", require("./routes/doctorRoute"));
 app.use("/api/messages", require("./routes/messageRoutes"));
 app.use("/api/appointments", require("./routes/appointmentRoutes"));
+app.use("/api", require("./routes/contactRoutes"));
 
 module.exports = app;

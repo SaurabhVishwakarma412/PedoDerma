@@ -13,12 +13,14 @@ const sendContactEmail = async (req, res) => {
     return res.status(400).json({ error: "All required fields must be filled." });
   }
 
-  const mailUser = process.env.MAIL_USER;
-  const mailPass = process.env.MAIL_PASS;
-  const mailTo = process.env.CONTACT_EMAIL || mailUser;
+  const smtpHost = process.env.SMTP_SERVER;
+  const smtpPort = Number(process.env.SMTP_PORT || 587);
+  const smtpUser = process.env.SMTP_LOGIN;
+  const smtpPassword = process.env.SMTP_KEY;
+  const mailTo = process.env.CONTACT_EMAIL || smtpUser;
 
-  if (!nodemailer || !mailUser || !mailPass || !mailTo) {
-    console.warn("Contact email is not configured. Set MAIL_USER, MAIL_PASS, and install nodemailer.");
+  if (!nodemailer || !smtpHost || !smtpUser || !smtpPassword || !mailTo) {
+    console.warn("Contact email is not configured. Set SMTP_SERVER, SMTP_PORT, SMTP_LOGIN, SMTP_KEY, and CONTACT_EMAIL.");
     return res.status(503).json({
       error: "Contact email is not configured on the server.",
     });
@@ -26,15 +28,17 @@ const sendContactEmail = async (req, res) => {
 
   try {
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpPort === 465,
       auth: {
-        user: mailUser,
-        pass: mailPass,
+        user: smtpUser,
+        pass: smtpPassword,
       },
     });
 
     const mailOptions = {
-      from: mailUser,
+      from: smtpUser,
       replyTo: email,
       to: mailTo,
       subject: `Contact Form Submission: ${subject}`,

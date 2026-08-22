@@ -5,14 +5,14 @@ let deviceId = localStorage.getItem("deviceId");
 if (!deviceId) {
   try {
     deviceId = typeof crypto !== "undefined" && crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
-  } catch (e) {
+  } catch {
     deviceId = Math.random().toString(36).substring(2) + Math.random().toString(36).substring(2);
   }
   localStorage.setItem("deviceId", deviceId);
 }
 
 const api = axios.create({
-  baseURL: "https://pedoderma-backend.onrender.com/api",
+  baseURL: `${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api`,
   withCredentials: true,
 });
 
@@ -45,7 +45,7 @@ api.interceptors.response.use(
       try {
         const evt = new CustomEvent("unauthorized", { detail: 401 });
         window.dispatchEvent(evt);
-      } catch (e) {
+      } catch {
         // fallback for older browsers
         window.dispatchEvent(new Event("unauthorized"));
       }

@@ -194,3 +194,25 @@ exports.sendOtp = async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 };
+
+exports.verifyOtp = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    if (!email || !otp) {
+      return res.status(400).json({ message: "Email and OTP are required" });
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+
+    const validOtp = await Otp.findOne({ email: normalizedEmail }).sort({ createdAt: -1 });
+    if (!validOtp || validOtp.otp !== otp.trim()) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    // OTP is valid — don't delete it; it will be consumed during /register
+    res.json({ message: "OTP verified successfully." });
+  } catch (e) {
+    console.error("VerifyOtp ERROR:", e);
+    res.status(500).json({ message: "Server Error" });
+  }
+};

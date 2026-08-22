@@ -1,30 +1,28 @@
 const nodemailer = require("nodemailer");
 
 const sendEmail = async ({ to, subject, text, html }) => {
-  const mailUser = process.env.MAIL_USER;
-  const mailPass = process.env.MAIL_PASS;
+  const mailUser = process.env.MAIL_USER || process.env.SMTP_LOGIN;
+  const mailPass = process.env.MAIL_PASS || process.env.SMTP_KEY;
+  const smtpHost = process.env.SMTP_SERVER;
+  const smtpPort = Number(process.env.SMTP_PORT || 587);
+  const fromAddress = process.env.MAIL_FROM || mailUser;
 
   if (!mailUser || !mailPass) {
-    console.log("\n=======================================================");
-    console.log("             [DEVELOPMENT] OUTGOING EMAIL LOG          ");
-    console.log("=======================================================");
-    console.log(`TO:      ${to}`);
-    console.log(`SUBJECT: ${subject}`);
-    console.log(`CONTENT:\n${text}`);
-    console.log("=======================================================\n");
-    return { success: true, loggedToConsole: true };
+    throw new Error("SMTP is not configured. Set MAIL_USER/MAIL_PASS or SMTP_LOGIN/SMTP_KEY.");
   }
 
-  const transporter = nodemailer.createTransport({
+  const transporter = nodemailer.createTransport(smtpHost ? {
+    host: smtpHost,
+    port: smtpPort,
+    secure: smtpPort === 465,
+    auth: { user: mailUser, pass: mailPass },
+  } : {
     service: "gmail",
-    auth: {
-      user: mailUser,
-      pass: mailPass,
-    },
+    auth: { user: mailUser, pass: mailPass },
   });
 
   const mailOptions = {
-    from: mailUser,
+    from: fromAddress,
     to,
     subject,
     text,

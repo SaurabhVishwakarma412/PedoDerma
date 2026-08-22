@@ -18,6 +18,11 @@ export const sendOtp = (email) => {
   return api.post("/patients/send-otp", { email });
 };
 
+// Verify OTP (without consuming it)
+export const verifyOtp = (email, otp) => {
+  return api.post("/patients/verify-otp", { email, otp });
+};
+
 // case management ----
 // Get logged-in parent's cases
 export const getMyCases = () => {

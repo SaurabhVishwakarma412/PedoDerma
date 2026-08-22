@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Mail, Phone, MapPin, Clock, Send, CheckCircle, MessageSquare, HelpCircle, Building2, Globe } from "lucide-react";
 import Input from "../components/Input";
-import emailjs from '@emailjs/browser';
+import api from "../services/api";
 
 const Contact = () => {
   const [form, setForm] = useState({
@@ -48,27 +48,14 @@ const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // EmailJS parameters - Make sure to replace these with your actual credentials
-    const emailParams = {
-      to_email: "saurabhkv412@gmail.com", // Replace with your email where you want to receive complaints
-      from_name: form.name,
-      from_email: form.email,
-      phone: form.phone || "Not provided",
-      subject: `[${form.subject}] - ${form.name}`,
-      message: form.message,
-      user_type: form.userType,
-      reply_to: form.email
-    };
-
     try {
-      // Initialize EmailJS with your public key
-      emailjs.init('YOUR_PUBLIC_KEY'); // Replace with your actual EmailJS public key
-      
-      const result = await emailjs.send(
-        'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
-        'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
-        emailParams
-      );
+      const result = await api.post("/contact", {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        subject: form.subject,
+        message: form.message,
+      });
 
       if (result.status === 200) {
         setSent(true);

@@ -1,9 +1,9 @@
 // frontend/src/pages/Register.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Eye, EyeOff, User, Mail, Lock, Phone, AlertCircle, CheckCircle, Shield, UserPlus } from "lucide-react";
 import Input from "../components/Input";
-import { registerParent } from "../services/patientAPI";
+import { registerParent, sendOtp, verifyOtp } from "../services/patientAPI";
 
 const Register = () => {
   const [form, setForm] = useState({
@@ -30,9 +30,18 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [activeStep, setActiveStep] = useState(1); // Multi-step form (now only 2 steps)
+  const [otp, setOtp] = useState("");
+  const [otpCooldown, setOtpCooldown] = useState(0);
+  const [activeStep, setActiveStep] = useState(1);
   
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (otpCooldown <= 0) return undefined;
+
+    const timer = setTimeout(() => setOtpCooldown((seconds) => seconds - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [otpCooldown]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -63,6 +72,12 @@ const Register = () => {
         }
         return true;
       case 2:
+        if (!/^\d{6}$/.test(otp)) {
+          setError("Please enter the 6-digit verification code sent to your email");
+          return false;
+        }
+        return true;
+      case 3:
         if (!form.agreeToTerms) {
           setError("You must agree to the Terms of Service and Privacy Policy");
           return false;
@@ -73,14 +88,48 @@ const Register = () => {
     }
   };
 
-  const nextStep = () => {
-    if (validateStep(activeStep)) {
-      setError("");
-      if (activeStep < 2) {
-        setActiveStep(activeStep + 1);
-      } else {
-        handleSubmit();
+  const nextStep = async () => {
+    if (!validateStep(activeStep)) return;
+
+    setError("");
+    if (activeStep === 1) {
+      setIsLoading(true);
+      try {
+        await sendOtp(form.email.trim());
+        setOtpCooldown(60);
+        setActiveStep(2);
+      } catch (err) {
+        setError(err.response?.data?.message || "Could not send the verification code. Please try again.");
+      } finally {
+        setIsLoading(false);
       }
+    } else if (activeStep === 2) {
+      setIsLoading(true);
+      try {
+        await verifyOtp(form.email.trim(), otp.trim());
+        setActiveStep(3);
+      } catch (err) {
+        setError(err.response?.data?.message || "Invalid or expired OTP. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      handleSubmit();
+    }
+  };
+
+  const resendOtp = async () => {
+    if (otpCooldown > 0) return;
+
+    setIsLoading(true);
+    setError("");
+    try {
+      await sendOtp(form.email.trim());
+      setOtpCooldown(60);
+    } catch (err) {
+      setError(err.response?.data?.message || "Could not resend the verification code. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -96,7 +145,6 @@ const Register = () => {
     setError("");
 
     try {
-      // Prepare registration data (removed child information)
       const registrationData = {
         name: form.name,
         email: form.email,
@@ -107,7 +155,8 @@ const Register = () => {
         state: form.state,
         zipCode: form.zipCode,
         subscribeToUpdates: form.subscribeToUpdates,
-        childName: "" // Optional field added to match backend
+        childName: "",
+        otp
       };
 
       await registerParent(registrationData);
@@ -130,10 +179,10 @@ const Register = () => {
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Left Side - Registration Form */}
           <div className="bg-white rounded-2xl shadow-2xl p-8 border border-blue-100">
-            {/* Progress Steps - Updated to 2 steps */}
+            {/* Progress Steps */}
             <div className="mb-8">
               <div className="flex justify-around items-center mb-4">
-                {[1, 2].map((step) => (
+                {[1, 2, 3].map((step) => (
                   <div key={step} className="flex flex-col items-center">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg ${
                       step === activeStep 
@@ -145,7 +194,7 @@ const Register = () => {
                       {step < activeStep ? <CheckCircle size={20} /> : step}
                     </div>
                     <span className="text-xs mt-2 text-gray-600">
-                      {step === 1 ? 'Account' : 'Complete'}
+                      {step === 1 ? 'Account' : step === 2 ? 'Verify email' : 'Complete'}
                     </span>
                   </div>
                 ))}
@@ -153,7 +202,7 @@ const Register = () => {
               <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
                 <div 
                   className="h-full bg-blue-600 transition-all duration-300"
-                  style={{ width: `${((activeStep - 1) / 1) * 100}%` }}
+                  style={{ width: `${((activeStep - 1) / 2) * 100}%` }}
                 ></div>
               </div>
             </div>
@@ -290,8 +339,43 @@ const Register = () => {
                 </>
               )}
 
-              {/* Step 2: Terms & Address (Removed Child Information) */}
+              {/* Step 2: Email Verification */}
               {activeStep === 2 && (
+                <>
+                  <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <Shield className="w-6 h-6 text-blue-600" />
+                    Verify Your Email
+                  </h2>
+
+                  <div className="space-y-4">
+                    <p className="text-gray-600">
+                      We sent a 6-digit verification code to <strong>{form.email}</strong>. The code expires in 5 minutes.
+                    </p>
+                    <input
+                      type="text"
+                      name="otp"
+                      value={otp}
+                      onChange={(event) => setOtp(event.target.value.replace(/\D/g, "").slice(0, 6))}
+                      inputMode="numeric"
+                      autoComplete="one-time-code"
+                      maxLength={6}
+                      placeholder="Enter 6-digit code"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg tracking-[0.35em] text-center text-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                    />
+                    <button
+                      type="button"
+                      onClick={resendOtp}
+                      disabled={isLoading || otpCooldown > 0}
+                      className="text-sm text-blue-600 hover:text-blue-800 disabled:text-gray-400"
+                    >
+                      {otpCooldown > 0 ? `Resend code in ${otpCooldown}s` : "Resend verification code"}
+                    </button>
+                  </div>
+                </>
+              )}
+
+              {/* Step 3: Terms & Address */}
+              {activeStep === 3 && (
                 <>
                   <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
                     <Shield className="w-6 h-6 text-blue-600" />
@@ -392,8 +476,10 @@ const Register = () => {
                       <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3 inline-block"></div>
                       Processing...
                     </>
-                  ) : activeStep === 2 ? (
+                  ) : activeStep === 3 ? (
                     'Complete Registration'
+                  ) : activeStep === 2 ? (
+                    'Verify & Continue →'
                   ) : (
                     'Continue →'
                   )}
