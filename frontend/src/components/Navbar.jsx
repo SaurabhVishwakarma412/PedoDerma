@@ -6,7 +6,6 @@ import Logo from "./Logo";
 
 const Navbar = () => {
   const { role, isAuthenticated, logout } = useAuth();
-  const isDoctor = isAuthenticated && role === "doctor";
   const dashboardPath = role === "parent" ? "/parent/dashboard" : role === "doctor" ? "/doctor/dashboard" : "/admin/dashboard";
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);

@@ -11,6 +11,8 @@ import API from "../services/api";
 import ChatComposer from "../components/ChatComposer";
 import { deduplicateChatMessages } from "../utils/chatMessages";
 
+const socketURL = import.meta.env.VITE_SOCKET_URL || import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const DoctorMessaging = () => {
   const { user } = useAuth();
   const [conversations, setConversations] = useState([]);
@@ -47,7 +49,7 @@ const DoctorMessaging = () => {
 
   // Socket.io connection
   useEffect(() => {
-    const newSocket = io("http://localhost:5000", {
+    const newSocket = io(socketURL, {
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
@@ -132,7 +134,7 @@ const DoctorMessaging = () => {
       newSocket.disconnect();
       clearTimeout(typingTimeoutRef.current);
     };
-  }, [user?._id]);
+  }, [user]);
 
   // Fetch conversations
   useEffect(() => {

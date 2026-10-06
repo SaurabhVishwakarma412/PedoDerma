@@ -2,15 +2,13 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const { isAllowedOrigin } = require("./config/cors");
 
 const app = express();
 
-const allowedOrigins = ["https://pedo-derma.vercel.app"];
-
-
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin) || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+    if (isAllowedOrigin(origin)) {
       return callback(null, true);
     }
 
@@ -22,6 +20,8 @@ app.use(cors({
 app.use(express.json());
 
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+app.get("/", (req, res) => res.json({ message: "Dermaslot API is running" }));
+app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
 // Routes
 app.use("/api/patients", require("./routes/authRoutes"));

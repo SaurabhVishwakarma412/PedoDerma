@@ -30,7 +30,7 @@ const formatCaseId = (id) => {
   return `CASE-${numericId}`;
 };
 
-const CaseCard = ({ caseData, onClickOverride, showPriority }) => {
+const CaseCard = ({ caseData, onClickOverride }) => {
   const [darkMode, setDarkMode] = React.useState(false);
   const navigate = useNavigate();
   const baseURL = import.meta.env.VITE_API_URL;

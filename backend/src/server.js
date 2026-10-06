@@ -4,21 +4,22 @@ const socketIO = require("socket.io");
 const connectDB = require("./config/db.js");
 const Message = require("./models/Message");
 const app = require("./app");
+const { getAllowedOrigins, isAllowedOrigin } = require("./config/cors");
 const PORT = process.env.PORT || 5000;
-const contactRoutes = require("./routes/contactRoutes");
 
 connectDB();
-
-app.use("/api", contactRoutes);
 
 const server = http.createServer(app);
 const io = socketIO(server, {
   cors: {
-    origin: [
-      "http://localhost:5173",
-      "http://127.0.0.1:5173",
-      "https://pedo-derma.vercel.app"
-    ],
+    origin: (origin, callback) => {
+      if (isAllowedOrigin(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Origin is not allowed by CORS"));
+    },
+    methods: ["GET", "POST"],
     credentials: true
   }
 });
@@ -94,5 +95,5 @@ io.on("connection", (socket) => {
 });
 
 server.listen(PORT, () =>
-  console.log(`Server running on port ${PORT}`)
+  console.log(`Server running on port ${PORT}. Allowed origins: ${getAllowedOrigins().join(", ")}`)
 );
